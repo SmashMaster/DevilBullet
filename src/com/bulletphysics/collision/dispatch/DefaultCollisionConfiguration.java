@@ -24,11 +24,11 @@
 package com.bulletphysics.collision.dispatch;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
+import static com.bulletphysics.collision.broadphase.BroadphaseNativeType.*;
 import com.bulletphysics.collision.narrowphase.ConvexPenetrationDepthSolver;
 import com.bulletphysics.collision.narrowphase.GjkEpaPenetrationDepthSolver;
 import com.bulletphysics.collision.narrowphase.VoronoiSimplexSolver;
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
-import static com.bulletphysics.collision.broadphase.BroadphaseNativeType.*;
 
 /**
  * Default implementation of {@link CollisionConfiguration}. Provides all core

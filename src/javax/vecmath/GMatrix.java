@@ -31,8 +31,6 @@
 
 package javax.vecmath;
 
-import java.lang.Math;
-
 /**
  * A double precision, general, dynamically-resizable,
  * two-dimensional matrix class.  Row and column numbering begins with

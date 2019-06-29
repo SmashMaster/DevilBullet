@@ -24,10 +24,10 @@
 package com.bulletphysics.collision.broadphase;
 
 import com.bulletphysics.BulletStats;
-import com.bulletphysics.util.ObjectPool;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
+import com.bulletphysics.util.ObjectPool;
 
 /**
  * Hash-space based {@link OverlappingPairCache}.

@@ -31,8 +31,6 @@
 
 package javax.vecmath;
 
-import java.lang.Math;
-
 /**
  * A generic 2-element tuple that is represented by double-precision  
  * floating point x,y coordinates.

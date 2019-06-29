@@ -31,8 +31,6 @@
 
 package javax.vecmath;
 
-import java.lang.Math;
-
 /**
  * A 4 element tuple represented by double precision floating point 
  * x,y,z,w coordinates.

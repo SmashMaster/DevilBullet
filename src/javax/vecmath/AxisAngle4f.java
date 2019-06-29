@@ -31,8 +31,6 @@
 
 package javax.vecmath;
 
-import java.lang.Math;
-
 /**
  * A four-element axis angle represented by single-precision floating point 
  * x,y,z,angle components.  An axis angle is a rotation of angle (radians)

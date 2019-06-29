@@ -31,8 +31,6 @@
 
 package javax.vecmath;
 
-import java.lang.Math;
-
 /**
  * A double precision, general, dynamically-resizable,
  * one-dimensional vector class.  Index numbering begins with zero.

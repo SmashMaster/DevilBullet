@@ -23,7 +23,6 @@
 
 package com.bulletphysics.dynamics;
 
-import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;

@@ -31,8 +31,6 @@
 
 package javax.vecmath;
 
-import java.lang.Math;
-
 /**
  * A double precision floating point 3 by 3 matrix.
  * Primarily to support 3D rotations.
