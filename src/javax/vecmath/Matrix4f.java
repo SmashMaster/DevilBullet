@@ -2628,7 +2628,7 @@ public class Matrix4f implements java.io.Serializable, Cloneable {
    * @param vec  the single precision vector to be transformed
    * @param vecOut  the vector into which the transformed values are placed
    */
-    public final void transform(Tuple4f vec, Tuple4f vecOut)
+    public final void transform(Vector4f vec, Vector4f vecOut)
     {
            float x,y,z;
            x = m00*vec.x + m01*vec.y
@@ -2650,7 +2650,7 @@ public class Matrix4f implements java.io.Serializable, Cloneable {
    * result back into vec.
    * @param vec  the single precision vector to be transformed
    */
-    public final void transform(Tuple4f vec)
+    public final void transform(Vector4f vec)
     {
          float x,y,z;
  

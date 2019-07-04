@@ -36,7 +36,7 @@ package javax.vecmath;
  * point x,y,z,w coordinates.  The quaternion is always normalized.
  *
  */
-public class Quat4f extends Tuple4f implements java.io.Serializable {
+public class Quat4f implements java.io.Serializable {
 
   // Combatible with 1.1
   static final long serialVersionUID = 2675933778405442383L;
@@ -44,6 +44,27 @@ public class Quat4f extends Tuple4f implements java.io.Serializable {
   final static double EPS = 0.000001;
   final static double EPS2 = 1.0e-30;
   final static double PIO2 = 1.57079632679;
+  
+  /**
+   * The x coordinate.
+   */
+  public	float	x;
+
+  /**
+   * The y coordinate.
+   */
+  public	float	y;
+
+  /**
+   * The z coordinate.
+   */
+  public	float	z;
+
+  /**
+   * The w coordinate.
+   */
+  public	float	w;
+
 
   /**
    * Constructs and initializes a Quat4f from the specified xyzw coordinates.
@@ -85,14 +106,17 @@ public class Quat4f extends Tuple4f implements java.io.Serializable {
    */
   public Quat4f(Quat4f q1)
   {
-       super(q1);
+       this.x = q1.x;
+        this.y = q1.y;
+        this.z = q1.z;
+        this.w = q1.w;
   }
 
     /** 
      * Constructs and initializes a Quat4f from the specified Tuple4f. 
      * @param t1 the Tuple4f containing the initialization x y z w data 
      */  
-    public Quat4f(Tuple4f t1)  
+    public Quat4f(Vector4f t1)  
     { 
       float mag;
       mag = (float)(1.0/Math.sqrt( t1.x*t1.x + t1.y*t1.y + t1.z*t1.z + t1.w*t1.w ));
@@ -110,6 +134,24 @@ public class Quat4f extends Tuple4f implements java.io.Serializable {
   {
       super();
   }
+  
+  
+
+    /**
+     * Sets the value of this tuple to the specified xyzw coordinates.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     * @param w the w coordinate
+     */
+    public final void set(float x, float y, float z, float w)
+    {
+	this.x = x;
+	this.y = y;
+	this.z = z;
+	this.w = w;
+    }
+
 
 
   /**

@@ -1905,7 +1905,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
     * back into the tuple (t = this*t).
     * @param t  the tuple to be multiplied by this matrix and then replaced
     */
-    public final void transform(Tuple3f t) {
+    public final void transform(Vector3f t) {
      float x,y,z;
      x = m00* t.x + m01*t.y + m02*t.z; 
      y = m10* t.x + m11*t.y + m12*t.z; 
@@ -1919,7 +1919,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
     * @param t  the tuple to be multiplied by this matrix
     * @param result  the tuple into which the product is placed
     */
-    public final void transform(Tuple3f t, Tuple3f result) { 
+    public final void transform(Vector3f t, Vector3f result) { 
      float x,y,z;
      x = m00* t.x + m01*t.y + m02*t.z; 
      y = m10* t.x + m11*t.y + m12*t.z;

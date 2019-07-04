@@ -26,7 +26,7 @@
 package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Tuple3f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector3f;
 
 /**
@@ -40,11 +40,11 @@ public abstract class VertexData {
 
 	public abstract int getIndexCount();
 
-	public abstract <T extends Tuple3f> T getVertex(int idx, T out);
+	public abstract <T extends Vector3f> T getVertex(int idx, T out);
 
 	public abstract void setVertex(int idx, float x, float y, float z);
 
-	public void setVertex(int idx, Tuple3f t) {
+	public void setVertex(int idx, Vector3f t) {
 		setVertex(idx, t.x, t.y, t.z);
 	}
 
