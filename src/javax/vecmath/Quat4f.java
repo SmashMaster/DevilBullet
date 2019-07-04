@@ -337,64 +337,6 @@ public class Quat4f implements java.io.Serializable {
     }
   }
 
-
-  /**
-   * Sets the value of this quaternion to the rotational component of
-   * the passed matrix.
-   * @param m1 the Matrix4f
-   */
-   public final void set(Matrix4f m1) 
-   {
-       float ww = 0.25f*(m1.m00 + m1.m11 + m1.m22 + m1.m33);
-
-       if (ww >= 0) {
-	   if (ww >= EPS2) {
-	       this.w = (float) Math.sqrt((double)ww);
-	       ww =  0.25f/this.w;
-	       this.x = (m1.m21 - m1.m12)*ww;
-	       this.y = (m1.m02 - m1.m20)*ww;
-	       this.z = (m1.m10 - m1.m01)*ww;
-	       return;
-	   } 
-       } else {
-	   this.w = 0;
-	   this.x = 0;
-	   this.y = 0;
-	   this.z = 1;
-	   return;
-       }
-
-       this.w = 0;
-       ww = -0.5f*(m1.m11 + m1.m22);
-       
-       if (ww >= 0) {
-	   if (ww >= EPS2) {
-	       this.x = (float) Math.sqrt((double) ww);
-	       ww = 1.0f/(2.0f*this.x);
-	       this.y = m1.m10*ww;
-	       this.z = m1.m20*ww;
-	       return;
-	   }
-       } else {
-	   this.x = 0;
-	   this.y = 0;
-	   this.z = 1;
-	   return;
-       }
-     
-       this.x = 0;
-       ww = 0.5f*(1.0f - m1.m22);
-
-       if (ww >= EPS2) {
-	   this.y = (float) Math.sqrt((double) ww);
-	   this.z = m1.m21/(2.0f*this.y);
-	   return;
-       }
-     
-       this.y = 0;
-       this.z = 1;
-   }
-
     /**
      * Sets the value of this quaternion to the rotational component of
      * the passed matrix.

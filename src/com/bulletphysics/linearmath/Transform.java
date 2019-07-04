@@ -27,7 +27,6 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.shapes.UniformScalingShape;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
 
@@ -57,10 +56,6 @@ public class Transform {
 		basis.set(mat);
 	}
 
-	public Transform(Matrix4f mat) {
-		set(mat);
-	}
-
 	public Transform(Transform tr) {
 		set(tr);
 	}
@@ -75,11 +70,6 @@ public class Transform {
 		origin.set(0f, 0f, 0f);
 	}
 
-	public void set(Matrix4f mat) {
-		mat.getRotationScale(basis);
-		origin.set(mat.m03, mat.m13, mat.m23);
-	}
-	
 	public void transform(Vector3f v) {
 		basis.transform(v);
 		v.add(origin);
@@ -145,14 +135,6 @@ public class Transform {
 		m[13] = origin.y;
 		m[14] = origin.z;
 		m[15] = 1f;
-	}
-
-	public Matrix4f getMatrix(Matrix4f out) {
-		out.set(basis);
-		out.m03 = origin.x;
-		out.m13 = origin.y;
-		out.m23 = origin.z;
-		return out;
 	}
 
 	@Override
