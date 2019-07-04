@@ -2315,35 +2315,6 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
        return true;
     } 
 
-    /**
-     * Returns a hash code value based on the data values in this
-     * object.  Two different Matrix4d objects with identical data values
-     * (i.e., Matrix4d.equals returns true) will return the same hash
-     * code value.  Two objects with different data members may return the
-     * same hash value, although this is not likely.
-     * @return the integer hash code value
-     */  
-    public int hashCode() {
-	long bits = 1L;
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m00);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m01);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m02);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m03);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m10);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m11);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m12);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m13);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m20);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m21);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m22);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m23);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m30);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m31);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m32);
-	bits = 31L * bits + VecMathUtil.doubleToLongBits(m33);
-	return (int) (bits ^ (bits >> 32));
-    }
-
   /**
    * Transform the vector vec using this Matrix4d and place the
    * result into vecOut.

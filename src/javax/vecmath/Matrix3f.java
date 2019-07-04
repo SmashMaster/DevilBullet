@@ -1841,30 +1841,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 
     }
 
-
-    /**
-     * Returns a hash code value based on the data values in this
-     * object.  Two different Matrix3f objects with identical data values
-     * (i.e., Matrix3f.equals returns true) will return the same hash
-     * code value.  Two objects with different data members may return the
-     * same hash value, although this is not likely.
-     * @return the integer hash code value
-     */  
-    public int hashCode() {
-	long bits = 1L;
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m00);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m01);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m02);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m10);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m11);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m12);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m20);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m21);
-	bits = 31L * bits + (long)VecMathUtil.floatToIntBits(m22);
-	return (int) (bits ^ (bits >> 32));
-    }
-
-
   /**
     *  Sets this matrix to all zeros.
     */
