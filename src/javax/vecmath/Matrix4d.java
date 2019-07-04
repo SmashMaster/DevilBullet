@@ -352,7 +352,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 		this.m03 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
@@ -372,7 +372,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 		this.m13 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
@@ -392,7 +392,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 		this.m23 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
@@ -412,12 +412,12 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 		this.m33 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
 	  default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	  }
     }
 
@@ -497,7 +497,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 	  default:
 	    break;
 	  }
-	throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d1"));
+	throw new ArrayIndexOutOfBoundsException();
     }
 
     /**   
@@ -528,7 +528,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 		v[3] = m33;
         } else {
 
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d2"));
+          throw new ArrayIndexOutOfBoundsException();
         }
     }
  
@@ -560,7 +560,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
            v[2] = m23;
            v[3] = m33;
         } else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d3"));
+          throw new ArrayIndexOutOfBoundsException();
 
         }
 
@@ -802,7 +802,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default: 
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d4"));
+            throw new ArrayIndexOutOfBoundsException();
 
 	}
     }
@@ -844,7 +844,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d4"));
+            throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -888,7 +888,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d7"));
+            throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -929,7 +929,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix4d7"));
+            throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -1389,7 +1389,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 	// Calculate LU decomposition: Is the matrix singular? 
 	if (!luDecomposition(tmp, row_perm)) {
 	    // Matrix has no inverse 
-	    throw new SingularMatrixException(VecMathI18N.getString("Matrix4d10"));
+	    throw new SingularMatrixException();
 	}
 
 	// Perform back substitution on the identity matrix 
@@ -1528,7 +1528,7 @@ public class Matrix4d implements java.io.Serializable, Cloneable {
 		}
 
 		if (imax < 0) {
-		    throw new RuntimeException(VecMathI18N.getString("Matrix4d11"));
+		    throw new RuntimeException();
 		}
 
 		// Is a row exchange necessary? 

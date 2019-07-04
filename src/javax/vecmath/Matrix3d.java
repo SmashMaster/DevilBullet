@@ -284,7 +284,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 		this.m02 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
@@ -301,7 +301,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 		this.m12 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
@@ -319,12 +319,12 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 		this.m22 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
 	  default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d0"));
+		throw new ArrayIndexOutOfBoundsException();
 	  }
     }
 
@@ -384,7 +384,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	    break;
 	  }
 
-	throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d1"));
+	throw new ArrayIndexOutOfBoundsException();
     }
 
     /**
@@ -406,7 +406,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
            v[1] = m21;
            v[2] = m22;
         } else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d2"));
+          throw new ArrayIndexOutOfBoundsException();
         }
 
     }
@@ -431,7 +431,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
            v[1] = m12;
            v[2] = m22;
         }else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d4"));
+          throw new ArrayIndexOutOfBoundsException();
         }
 
     }
@@ -466,7 +466,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	  throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d6"));
+	  throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -497,7 +497,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d6"));
+            throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -530,7 +530,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d9"));
+            throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -561,7 +561,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d9"));
+            throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -880,7 +880,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	// Calculate LU decomposition: Is the matrix singular?
 	if (!luDecomposition(tmp, row_perm)) {
 	    // Matrix has no inverse
-	    throw new SingularMatrixException(VecMathI18N.getString("Matrix3d12"));
+	    throw new SingularMatrixException();
 	}
 
 	// Perform back substitution on the identity matrix
@@ -1011,7 +1011,7 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 		}
 
 		if (imax < 0) {
-		    throw new RuntimeException(VecMathI18N.getString("Matrix3d13"));
+		    throw new RuntimeException();
 		}
 
 		// Is a row exchange necessary?

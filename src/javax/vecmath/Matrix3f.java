@@ -287,7 +287,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 		this.m02 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
@@ -304,7 +304,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 		this.m12 = value;
 		break;
 	      default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 	  
@@ -322,12 +322,12 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 		break;
 	      default:
 
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f0"));
+		throw new ArrayIndexOutOfBoundsException();
 	      }
 	    break;
 
 	  default:
-		throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f0"));
+		throw new ArrayIndexOutOfBoundsException();
 	  }
     }
 
@@ -350,7 +350,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
            v.y = m21;
            v.z = m22;
         } else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f1"));
+          throw new ArrayIndexOutOfBoundsException();
         }
 
     }
@@ -374,7 +374,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
            v[1] = m21;
            v[2] = m22;
         } else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f1"));
+          throw new ArrayIndexOutOfBoundsException();
         }
 
     }
@@ -399,7 +399,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
            v.y = m12;
            v.z = m22;
         } else {
-           throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f3"));
+           throw new ArrayIndexOutOfBoundsException();
         }
 
     }
@@ -424,7 +424,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
            v[1] = m12;
            v[2] = m22;
         }else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f3"));
+          throw new ArrayIndexOutOfBoundsException();
         }
     }
 
@@ -483,7 +483,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	  default:
             break;
 	  }
-       throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f5"));
+       throw new ArrayIndexOutOfBoundsException();
     }
 
     /**
@@ -515,7 +515,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	  throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f6"));
+	  throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -546,7 +546,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	  throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f6"));
+	  throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -577,7 +577,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	    throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f6"));
+	    throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -610,7 +610,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	    throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f9"));
+	    throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -641,7 +641,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	    throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f9"));
+	    throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -672,7 +672,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	    break;
 
 	default:
-	    throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3f9"));
+	    throw new ArrayIndexOutOfBoundsException();
 	}
     }
 
@@ -992,7 +992,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	// Calculate LU decomposition: Is the matrix singular? 
 	if (!luDecomposition(temp, row_perm)) {
 	    // Matrix has no inverse 
-	    throw new SingularMatrixException(VecMathI18N.getString("Matrix3f12"));
+	    throw new SingularMatrixException();
 	}
 
 	// Perform back substitution on the identity matrix 
@@ -1123,7 +1123,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 		}
 
 		if (imax < 0) {
-		    throw new RuntimeException(VecMathI18N.getString("Matrix3f13"));
+		    throw new RuntimeException();
 		}
 
 		// Is a row exchange necessary? 
