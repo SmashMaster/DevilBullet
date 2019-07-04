@@ -44,7 +44,6 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Color3f;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
@@ -884,7 +883,7 @@ public abstract class DemoApplication {
 
 	private final Transform m = new Transform();
 	private Vector3f wireColor = new Vector3f();
-	protected Color3f TEXT_COLOR = new Color3f(0f, 0f, 0f);
+	protected Vector3f TEXT_COLOR = new Vector3f(0f, 0f, 0f);
 	private StringBuilder buf = new StringBuilder();
 
 	public void renderme() {
@@ -1195,7 +1194,7 @@ public abstract class DemoApplication {
 		this.idle = idle;
 	}
 	
-	public void drawString(CharSequence s, int x, int y, Color3f color) {
+	public void drawString(CharSequence s, int x, int y, Vector3f color) {
 		gl.drawString(s, x, y, color.x, color.y, color.z);
 	}
 	
