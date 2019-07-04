@@ -102,20 +102,6 @@ public abstract class Tuple4f implements java.io.Serializable, Cloneable {
     this.w = t1.w;
   }
 
-
-  /**
-   * Constructs and initializes a Tuple4f from the specified Tuple4d.
-   * @param t1 the Tuple4d containing the initialization x y z w data
-   */
-  public Tuple4f(Tuple4d t1)
-  {
-    this.x = (float) t1.x;
-    this.y = (float) t1.y;
-    this.z = (float) t1.z;
-    this.w = (float) t1.w;
-  }
-
-
   /**
    * Constructs and initializes a Tuple4f to (0,0,0,0).
    */
@@ -169,20 +155,6 @@ public abstract class Tuple4f implements java.io.Serializable, Cloneable {
 	this.z = t1.z;
 	this.w = t1.w;
     }
-
-
-    /**
-     * Sets the value of this tuple to the value of tuple t1.
-     * @param t1 the tuple to be copied
-     */
-    public final void set(Tuple4d t1)
-    {
-	this.x = (float) t1.x;
-	this.y = (float) t1.y;
-	this.z = (float) t1.z;
-	this.w = (float) t1.w;
-    }
-
 
     /**
      * Copies the values of this tuple into the array t.

@@ -88,16 +88,6 @@ public class Quat4f extends Tuple4f implements java.io.Serializable {
        super(q1);
   }
 
-  /**
-   * Constructs and initializes a Quat4f from the specified Quat4d.
-   * @param q1 the Quat4d containing the initialization x y z w data
-   */
-  public Quat4f(Quat4d q1)
-  {
-      super(q1);
-  }
-
-
     /** 
      * Constructs and initializes a Quat4f from the specified Tuple4f. 
      * @param t1 the Tuple4f containing the initialization x y z w data 
@@ -112,22 +102,6 @@ public class Quat4f extends Tuple4f implements java.io.Serializable {
       w =  t1.w*mag;
 
     }
- 
- 
-    /** 
-     * Constructs and initializes a Quat4f from the specified Tuple4d.  
-     * @param t1 the Tuple4d containing the initialization x y z w data 
-     */  
-    public Quat4f(Tuple4d t1)
-    {
-      double mag;
-      mag = 1.0/Math.sqrt( t1.x*t1.x + t1.y*t1.y + t1.z*t1.z + t1.w*t1.w );
-      x =  (float)(t1.x*mag);
-      y =  (float)(t1.y*mag);
-      z =  (float)(t1.z*mag);
-      w =  (float)(t1.w*mag);
-    }
-
 
   /**
    * Constructs and initializes a Quat4f to (0.0,0.0,0.0,0.0).
@@ -545,61 +519,6 @@ public class Quat4f extends Tuple4f implements java.io.Serializable {
      
 	this.y = 0;
 	this.z = 1;
-    }
-
-
-    /**
-     * Sets the value of this quaternion to the equivalent rotation
-     * of the AxisAngle argument.
-     * @param a  the AxisAngle to be emulated
-     */
-    public final void set(AxisAngle4f a)
-    {
-	float mag,amag;
-	// Quat = cos(theta/2) + sin(theta/2)(roation_axis) 
-	amag = (float)Math.sqrt( a.x*a.x + a.y*a.y + a.z*a.z);
-	if (amag < EPS ) {
-	    w = 0.0f;
-	    x = 0.0f;
-	    y = 0.0f;
-	    z = 0.0f;
-	} else {  
-	    amag = 1.0f/amag; 
-	    mag = (float)Math.sin(a.angle/2.0);
-	    w = (float)Math.cos(a.angle/2.0);
-	    x = a.x*amag*mag;
-	    y = a.y*amag*mag;
-	    z = a.z*amag*mag;
-	}
-    }
-
-
-    /**
-     * Sets the value of this quaternion to the equivalent rotation
-     * of the AxisAngle argument.
-     * @param a  the AxisAngle to be emulated
-     */
-    public final void set(AxisAngle4d a)
-    {
-	float mag,amag;
-	// Quat = cos(theta/2) + sin(theta/2)(roation_axis) 
-	
-	amag = (float)(1.0/Math.sqrt( a.x*a.x + a.y*a.y + a.z*a.z));
-	
-	if (amag < EPS ) {
-	    w = 0.0f;
-	    x = 0.0f;
-	    y = 0.0f;
-	    z = 0.0f;
-	} else {  
-	    amag = 1.0f/amag; 
-	    mag = (float)Math.sin(a.angle/2.0);
-	    w = (float)Math.cos(a.angle/2.0);
-	    x = (float)a.x*amag*mag;
-	    y = (float)a.y*amag*mag;
-	    z = (float)a.z*amag*mag;
-	}
-	
     }
     
 

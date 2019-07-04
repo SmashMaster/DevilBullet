@@ -93,19 +93,6 @@ public abstract class Tuple3f implements java.io.Serializable, Cloneable {
 	this.z = t1.z;
     }
 
-
-    /**
-     * Constructs and initializes a Tuple3f from the specified Tuple3d.
-     * @param t1 the Tuple3d containing the initialization x y z data
-     */
-    public Tuple3f(Tuple3d t1)
-    {
-	this.x = (float) t1.x;
-	this.y = (float) t1.y;
-	this.z = (float) t1.z;
-    }
-
-
     /**
      * Constructs and initializes a Tuple3f to (0,0,0).
      */
@@ -164,19 +151,6 @@ public abstract class Tuple3f implements java.io.Serializable, Cloneable {
 	this.y = t1.y;
 	this.z = t1.z;
     }
-
-
-    /**
-     * Sets the value of this tuple to the value of tuple t1.
-     * @param t1 the tuple to be copied
-     */
-    public final void set(Tuple3d t1)
-    {
-	this.x = (float) t1.x;
-	this.y = (float) t1.y;
-	this.z = (float) t1.z;
-    }
-
 
    /** 
      * Gets the value of this tuple and copies the values into t.

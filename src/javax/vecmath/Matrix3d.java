@@ -388,30 +388,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
     }
 
     /**
-     * Copies the matrix values in the specified row into the vector parameter.
-     * @param row  the matrix row
-     * @param v    the vector into which the matrix row values will be copied
-     */
-    public final void getRow(int row, Vector3d v) {
-        if( row == 0 ) {
-           v.x = m00;
-           v.y = m01;
-           v.z = m02;
-        } else if(row == 1) {
-           v.x = m10;
-           v.y = m11;
-           v.z = m12;
-        } else if(row == 2) {
-           v.x = m20;
-           v.y = m21;
-           v.z = m22;
-        } else {
-          throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d2"));
-        }
-
-    }
-
-    /**
      * Copies the matrix values in the specified row into the array parameter.
      * @param row  the matrix row
      * @param v    the array into which the matrix row values will be copied
@@ -431,31 +407,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
            v[2] = m22;
         } else {
           throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d2"));
-        }
-
-    }
-
-    /**
-     * Copies the matrix values in the specified column into the vector
-     * parameter.
-     * @param column  the matrix column
-     * @param v    the vector into which the matrix row values will be copied
-     */
-    public final void getColumn(int column, Vector3d v) {
-        if( column == 0 ) {
-           v.x = m00;
-           v.y = m10;
-           v.z = m20;
-        } else if(column == 1) {
-           v.x = m01;
-           v.y = m11;
-           v.z = m21;
-        }else if(column == 2){
-           v.x = m02;
-           v.y = m12;
-           v.z = m22;
-        } else {
-           throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d4"));
         }
 
     }
@@ -520,37 +471,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
     }
 
     /**
-     * Sets the specified row of this matrix3d to the Vector provided.
-     * @param row the row number to be modified (zero indexed)
-     * @param v the replacement row
-     */
-    public final void setRow(int row, Vector3d v)
-    {
-	switch (row) {
-	case 0:
-	    this.m00 = v.x;
-	    this.m01 = v.y;
-	    this.m02 = v.z;
-	    break;
-
-	case 1:
-	    this.m10 = v.x;
-	    this.m11 = v.y;
-	    this.m12 = v.z;
-	    break;
-
-	case 2:
-	    this.m20 = v.x;
-	    this.m21 = v.y;
-	    this.m22 = v.z;
-	    break;
-
-	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d6"));
-	}
-    }
-
-    /**
      * Sets the specified row of this matrix3d to the three values provided.
      * @param row the row number to be modified (zero indexed)
      * @param v the replacement row
@@ -607,37 +527,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	    this.m02 = x;
 	    this.m12 = y;
 	    this.m22 = z;
-	    break;
-
-	default:
-            throw new ArrayIndexOutOfBoundsException(VecMathI18N.getString("Matrix3d9"));
-	}
-    }
-
-    /**
-     * Sets the specified column of this matrix3d to the vector provided.
-     * @param column the column number to be modified (zero indexed)
-     * @param v the replacement column
-     */
-    public final void setColumn(int column, Vector3d v)
-    {
-	switch (column) {
-	case 0:
-	    this.m00 = v.x;
-	    this.m10 = v.y;
-	    this.m20 = v.z;
-	    break;
-
-	case 1:
-	    this.m01 = v.x;
-	    this.m11 = v.y;
-	    this.m21 = v.z;
-	    break;
-
-	case 2:
-	    this.m02 = v.x;
-	    this.m12 = v.y;
-	    this.m22 = v.z;
 	    break;
 
 	default:
@@ -859,75 +748,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 
     /**
      * Sets the value of this matrix to the matrix conversion of the
-     * double precision quaternion argument.
-     * @param q1 the quaternion to be converted
-     */
-    public final void set(Quat4d q1)
-    {
-	this.m00 = (1.0 - 2.0*q1.y*q1.y - 2.0*q1.z*q1.z);
-	this.m10 = (2.0*(q1.x*q1.y + q1.w*q1.z));
-	this.m20 = (2.0*(q1.x*q1.z - q1.w*q1.y));
-
-	this.m01 = (2.0*(q1.x*q1.y - q1.w*q1.z));
-	this.m11 = (1.0 - 2.0*q1.x*q1.x - 2.0*q1.z*q1.z);
-	this.m21 = (2.0*(q1.y*q1.z + q1.w*q1.x));
-
-	this.m02 = (2.0*(q1.x*q1.z + q1.w*q1.y));
-	this.m12 = (2.0*(q1.y*q1.z - q1.w*q1.x));
-	this.m22 = (1.0 - 2.0*q1.x*q1.x - 2.0*q1.y*q1.y);
-    }
-
-    /**
-     * Sets the value of this matrix to the matrix conversion of the
-     * double precision axis and angle argument.
-     * @param a1 the axis and angle to be converted
-     */
-    public final void set(AxisAngle4d a1)
-    {
-      double mag = Math.sqrt( a1.x*a1.x + a1.y*a1.y + a1.z*a1.z);
-
-      if( mag < EPS ) {
-	m00 = 1.0;
-	m01 = 0.0;
-	m02 = 0.0;
-
-	m10 = 0.0;
-	m11 = 1.0;
-	m12 = 0.0;
-
-	m20 = 0.0;
-	m21 = 0.0;
-	m22 = 1.0;
-      } else {
-	mag = 1.0/mag;
-        double ax = a1.x*mag;
-        double ay = a1.y*mag;
-        double az = a1.z*mag;
-
-        double sinTheta = Math.sin(a1.angle);
-        double cosTheta = Math.cos(a1.angle);
-        double t = 1.0 - cosTheta;
-
-        double xz = ax * az;
-        double xy = ax * ay;
-        double yz = ay * az;
-
-        m00 = t * ax * ax + cosTheta;
-        m01 = t * xy - sinTheta * az;
-        m02 = t * xz + sinTheta * ay;
-
-        m10 = t * xy + sinTheta * az;
-        m11 = t * ay * ay + cosTheta;
-        m12 = t * yz - sinTheta * ax;
-
-        m20 = t * xz - sinTheta * ay;
-        m21 = t * yz + sinTheta * ax;
-        m22 = t * az * az + cosTheta;
-      }
-    }
-
-    /**
-     * Sets the value of this matrix to the matrix conversion of the
      * single precision quaternion argument.
      * @param q1 the quaternion to be converted
      */
@@ -944,53 +764,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
 	this.m02 = (2.0*(q1.x*q1.z + q1.w*q1.y));
 	this.m12 = (2.0*(q1.y*q1.z - q1.w*q1.x));
 	this.m22 = (1.0 - 2.0*q1.x*q1.x - 2.0*q1.y*q1.y);
-    }
-
-    /**
-     * Sets the value of this matrix to the matrix conversion of the
-     * single precision axis and angle argument.
-     * @param a1 the axis and angle to be converted
-     */
-    public final void set(AxisAngle4f a1)
-    {
-      double mag = Math.sqrt( a1.x*a1.x + a1.y*a1.y + a1.z*a1.z);
-      if( mag < EPS ) {
-	m00 = 1.0;
-	m01 = 0.0;
-	m02 = 0.0;
-
-	m10 = 0.0;
-	m11 = 1.0;
-	m12 = 0.0;
-
-	m20 = 0.0;
-	m21 = 0.0;
-	m22 = 1.0;
-      } else {
-	mag = 1.0/mag;
-        double ax = a1.x*mag;
-        double ay = a1.y*mag;
-        double az = a1.z*mag;
-        double sinTheta = Math.sin(a1.angle);
-        double cosTheta = Math.cos(a1.angle);
-        double t = 1.0 - cosTheta;
-
-        double xz = ax * az;
-        double xy = ax * ay;
-        double yz = ay * az;
-
-        m00 = t * ax * ax + cosTheta;
-        m01 = t * xy - sinTheta * az;
-        m02 = t * xz + sinTheta * ay;
-
-        m10 = t * xy + sinTheta * az;
-        m11 = t * ay * ay + cosTheta;
-        m12 = t * yz - sinTheta * ax;
-
-        m20 = t * xz - sinTheta * ay;
-        m21 = t * yz + sinTheta * ax;
-        m22 = t * az * az + cosTheta;
-      }
     }
 
     /**
@@ -2057,34 +1830,6 @@ public class Matrix3d implements java.io.Serializable, Cloneable {
         this.m21 = -m1.m21;
         this.m22 = -m1.m22;
 
-    }
-
-   /**
-     * Multiply this matrix by the tuple t and place the result
-     * back into the tuple (t = this*t).
-     * @param t  the tuple to be multiplied by this matrix and then replaced
-     */
-    public final void transform(Tuple3d t) {
-     double x,y,z;
-     x = m00* t.x + m01*t.y + m02*t.z;
-     y = m10* t.x + m11*t.y + m12*t.z;
-     z = m20* t.x + m21*t.y + m22*t.z;
-     t.set(x,y,z);
-    }
-
-   /**
-     * Multiply this matrix by the tuple t and and place the result
-     * into the tuple "result" (result = this*t).
-     * @param t  the tuple to be multiplied by this matrix
-     * @param result  the tuple into which the product is placed
-     */
-    public final void transform(Tuple3d t, Tuple3d result) {
-     double x,y,z;
-        x = m00* t.x + m01*t.y + m02*t.z;
-        y = m10* t.x + m11*t.y + m12*t.z;
-        result.z = m20* t.x + m21*t.y + m22*t.z;
-        result.x = x;
-        result.y = y;
     }
 
     /**

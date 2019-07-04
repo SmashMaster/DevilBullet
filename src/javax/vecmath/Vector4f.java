@@ -73,17 +73,6 @@ public class Vector4f extends Tuple4f implements java.io.Serializable {
       super(v1);
   }
 
-
-  /**
-   * Constructs and initializes a Vector4f from the specified Vector4d.
-   * @param v1 the Vector4d containing the initialization x y z w data
-   */
-  public Vector4f(Vector4d v1)
-  {
-      super(v1);
-  }
-
-
     /**
      * Constructs and initializes a Vector4f from the specified Tuple4f.
      * @param t1 the Tuple4f containing the initialization x y z w data
@@ -92,17 +81,6 @@ public class Vector4f extends Tuple4f implements java.io.Serializable {
     {
        super(t1);
     }
-
-
-    /**
-     * Constructs and initializes a Vector4f from the specified Tuple4d.
-     * @param t1 the Tuple4d containing the initialization x y z w data 
-     */  
-    public Vector4f(Tuple4d t1) 
-    {
-       super(t1); 
-    }
-
 
     /**
      * Constructs and initializes a Vector4f from the specified Tuple3f.
