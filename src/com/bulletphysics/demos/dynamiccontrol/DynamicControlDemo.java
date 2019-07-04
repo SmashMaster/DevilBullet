@@ -1,4 +1,6 @@
 /*
+ * DevilBullet modifications (c) 2019 Sam Johnson https://github.com/SmashMaster
+ * 
  * Java port of Bullet (c) 2008 Martin Dvorak <jezek2@advel.cz>
  * DynamicControlDemo port by: Olivier OUDIN / LvR
  * 
