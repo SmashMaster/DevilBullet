@@ -395,63 +395,6 @@ public class Quat4f implements java.io.Serializable {
        this.z = 1;
    }
 
-
-    /**
-     * Sets the value of this quaternion to the rotational component of
-     * the passed matrix.
-     * @param m1 the Matrix4d
-     */
-    public final void set(Matrix4d m1)
-    {
-	double ww = 0.25*(m1.m00 + m1.m11 + m1.m22 + m1.m33);
-
-	if (ww >= 0) {
-	    if (ww >= EPS2) {
-		this.w = (float) Math.sqrt(ww);
-		ww = 0.25/this.w;
-		this.x = (float) ((m1.m21 - m1.m12)*ww);
-		this.y = (float) ((m1.m02 - m1.m20)*ww);
-		this.z = (float) ((m1.m10 - m1.m01)*ww);
-		return;
-	    }
-	} else {
-	    this.w = 0;
-	    this.x = 0;
-	    this.y = 0;
-	    this.z = 1;
-	    return;
-	}
-
-	this.w = 0;
-	ww = -0.5*(m1.m11 + m1.m22);
-	if (ww >= 0) {
-	    if (ww >= EPS2) {
-		this.x = (float) Math.sqrt(ww);
-		ww = 0.5/this.x;
-		this.y = (float)(m1.m10*ww);
-		this.z = (float)(m1.m20*ww);
-		return;
-	    } 
-	} else {
-	    this.x = 0;
-	    this.y = 0;
-	    this.z = 1;
-	    return;
-	}
-     
-	this.x = 0;
-	ww = 0.5*(1.0 - m1.m22);
-	if (ww >= EPS2) {
-	    this.y = (float) Math.sqrt(ww);
-	    this.z = (float) (m1.m21/(2.0*(double)(this.y)));
-	    return;
-	}
-     
-	this.y = 0;
-	this.z = 1;
-    }
-
-
     /**
      * Sets the value of this quaternion to the rotational component of
      * the passed matrix.
@@ -506,63 +449,6 @@ public class Quat4f implements java.io.Serializable {
 	this.y = 0;
 	this.z = 1;
     }
-
-
-    /**
-     * Sets the value of this quaternion to the rotational component of
-     * the passed matrix.
-     * @param m1 the Matrix3d
-     */
-    public final void set(Matrix3d m1)
-    {
-	double ww = 0.25*(m1.m00 + m1.m11 + m1.m22 + 1.0f);
-
-	if (ww >= 0) {
-	    if (ww >= EPS2) {
-		this.w = (float) Math.sqrt(ww);
-		ww = 0.25/this.w;
-		this.x = (float) ((m1.m21 - m1.m12)*ww);
-		this.y = (float) ((m1.m02 - m1.m20)*ww);
-		this.z = (float) ((m1.m10 - m1.m01)*ww);
-		return;
-	    }
-	} else {
-	    this.w = 0;
-	    this.x = 0;
-	    this.y = 0;
-	    this.z = 1;
-	    return;
-	}
-
-	this.w = 0;
-	ww = -0.5*(m1.m11 + m1.m22);
-	if (ww >= 0) {
-	    if (ww >= EPS2) {
-		this.x = (float) Math.sqrt(ww);
-		ww = 0.5/this.x;
-		this.y = (float) (m1.m10*ww);
-		this.z = (float) (m1.m20*ww);
-		return;
-	    }
-	} else {
-	    this.x = 0;
-	    this.y = 0;
-	    this.z = 1;
-	    return;
-	}
-     
-	this.x = 0;
-	ww = 0.5*(1.0 - m1.m22);
-	if (ww >= EPS2) {
-	    this.y = (float) Math.sqrt(ww);
-	    this.z = (float) (m1.m21/(2.0*(double)(this.y)));
-	    return;
-	}
-     
-	this.y = 0;
-	this.z = 1;
-    }
-    
 
     /**
      *  Performs a great circle interpolation between this quaternion

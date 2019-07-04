@@ -144,28 +144,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	this.m22 = v[ 8];
 
     }
-
-   /**   
-     *  Constructs a new matrix with the same values as the 
-     *  Matrix3d parameter.
-     *  @param m1  the source matrix
-     */  
-   public Matrix3f(Matrix3d m1) 
-   { 
-        this.m00 = (float)m1.m00;
-        this.m01 = (float)m1.m01;
-        this.m02 = (float)m1.m02;
- 
-        this.m10 = (float)m1.m10;
-        this.m11 = (float)m1.m11;
-        this.m12 = (float)m1.m12;
- 
-        this.m20 = (float)m1.m20;
-        this.m21 = (float)m1.m21;
-        this.m22 = (float)m1.m22;
-
-   } 
- 
  
    /**
      *  Constructs a new matrix with the same values as the
@@ -235,33 +213,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	this.m20 = (float) 0.0;
 	this.m21 = (float) 0.0;
 	this.m22 = (float) 1.0;
-    }
-
-   /**
-     * Sets the scale component of the current matrix by factoring
-     * out the current scale (by doing an SVD) and multiplying by 
-     * the new scale.
-     * @param scale  the new scale amount
-     */
-    public final void setScale(float scale)
-    {
-	double[]    tmp_rot = new double[9];  // scratch matrix
-	double[]    tmp_scale = new double[3];  // scratch matrix
-	
-	getScaleRotate( tmp_scale, tmp_rot );
- 
-        this.m00 = (float)(tmp_rot[0] * scale);
-        this.m01 = (float)(tmp_rot[1] * scale);
-        this.m02 = (float)(tmp_rot[2] * scale);
- 
-        this.m10 = (float)(tmp_rot[3] * scale);
-        this.m11 = (float)(tmp_rot[4] * scale);
-        this.m12 = (float)(tmp_rot[5] * scale);
- 
-        this.m20 = (float)(tmp_rot[6] * scale);
-        this.m21 = (float)(tmp_rot[7] * scale);
-        this.m22 = (float)(tmp_rot[8] * scale);
-
     }
 
     /**
@@ -677,24 +628,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
     }
 
    /**
-     * Performs an SVD normalization of this matrix to calculate
-     * and return the uniform scale factor. If the matrix has non-uniform 
-     * scale factors, the largest of the x, y, and z scale factors will 
-     * be returned. This matrix is not modified.
-     * @return  the scale factor of this matrix
-     */  
-    public final float getScale()
-    {
-	
-	double[]    tmp_rot = new double[9];  // scratch matrix
-	double[]    tmp_scale = new double[3];  // scratch matrix
-	getScaleRotate(tmp_scale, tmp_rot);
-
-        return( (float)Matrix3d.max3(tmp_scale ));
-
-    } 
-
-   /**
      *  Adds a scalar to each component of this matrix.
      *  @param scalar  the scalar adder
      */
@@ -916,29 +849,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
         this.m22 = m1.m22;
 
     }
-
- 
-    /**
-     * Sets the value of this matrix to the float value of the Matrix3d 
-     * argument. 
-     * @param m1 the source matrix3d 
-     */  
-    public final void set(Matrix3d m1) { 
- 
-        this.m00 = (float)m1.m00; 
-        this.m01 = (float)m1.m01; 
-        this.m02 = (float)m1.m02; 
- 
-        this.m10 = (float)m1.m10; 
-        this.m11 = (float)m1.m11;
-        this.m12 = (float)m1.m12;
- 
-        this.m20 = (float)m1.m20;
-        this.m21 = (float)m1.m21; 
-        this.m22 = (float)m1.m22;
- 
-    }
- 
 
     /**
      * Sets the value of this matrix to the matrix inverse
@@ -1458,87 +1368,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
     }
 
    /**
-     *  Multiplies this matrix by matrix m1, does an SVD normalization 
-     *  of the result, and places the result back into this matrix.
-     *  this = SVDnorm(this*m1).
-     *  @param  m1 the matrix on the right hand side of the multiplication
-     */
-    public final void mulNormalize(Matrix3f m1){
-	
-	double[]    tmp = new double[9];  // scratch matrix
-	double[]    tmp_rot = new double[9];  // scratch matrix
-	double[]    tmp_scale = new double[3];  // scratch matrix
-
-	tmp[0] = this.m00*m1.m00 + this.m01*m1.m10 + this.m02*m1.m20;
-	tmp[1] = this.m00*m1.m01 + this.m01*m1.m11 + this.m02*m1.m21;
-	tmp[2] = this.m00*m1.m02 + this.m01*m1.m12 + this.m02*m1.m22;
-
-	tmp[3] = this.m10*m1.m00 + this.m11*m1.m10 + this.m12*m1.m20;
-	tmp[4] = this.m10*m1.m01 + this.m11*m1.m11 + this.m12*m1.m21;
-	tmp[5] = this.m10*m1.m02 + this.m11*m1.m12 + this.m12*m1.m22;
-
-	tmp[6] = this.m20*m1.m00 + this.m21*m1.m10 + this.m22*m1.m20;
-	tmp[7] = this.m20*m1.m01 + this.m21*m1.m11 + this.m22*m1.m21;
-	tmp[8] = this.m20*m1.m02 + this.m21*m1.m12 + this.m22*m1.m22;
-
-	Matrix3d.compute_svd( tmp, tmp_scale, tmp_rot);
-
-	this.m00 = (float)(tmp_rot[0]);
-	this.m01 = (float)(tmp_rot[1]);
-	this.m02 = (float)(tmp_rot[2]);
-
-	this.m10 = (float)(tmp_rot[3]);
-	this.m11 = (float)(tmp_rot[4]);
-	this.m12 = (float)(tmp_rot[5]);
-
-	this.m20 = (float)(tmp_rot[6]);
-	this.m21 = (float)(tmp_rot[7]);
-	this.m22 = (float)(tmp_rot[8]);
-
-    }
-
-   /**
-     *  Multiplies matrix m1 by matrix m2, does an SVD normalization 
-     *  of the result, and places the result into this matrix.
-     *  this = SVDnorm(m1*m2).
-     *  @param m1  the matrix on the left hand side of the multiplication
-     *  @param m2  the matrix on the right hand side of the multiplication
-     */  
-    public final void mulNormalize(Matrix3f m1, Matrix3f m2){
-	
-	double[]    tmp = new double[9];  // scratch matrix
-	double[]    tmp_rot = new double[9];  // scratch matrix
-	double[]    tmp_scale = new double[3];  // scratch matrix
-
-	
-	tmp[0] = m1.m00*m2.m00 + m1.m01*m2.m10 + m1.m02*m2.m20;
-	tmp[1] = m1.m00*m2.m01 + m1.m01*m2.m11 + m1.m02*m2.m21;
-	tmp[2] = m1.m00*m2.m02 + m1.m01*m2.m12 + m1.m02*m2.m22;
- 
-	tmp[3] = m1.m10*m2.m00 + m1.m11*m2.m10 + m1.m12*m2.m20;
-	tmp[4] = m1.m10*m2.m01 + m1.m11*m2.m11 + m1.m12*m2.m21; 
-	tmp[5] = m1.m10*m2.m02 + m1.m11*m2.m12 + m1.m12*m2.m22; 
- 
-	tmp[6] = m1.m20*m2.m00 + m1.m21*m2.m10 + m1.m22*m2.m20;
-	tmp[7] = m1.m20*m2.m01 + m1.m21*m2.m11 + m1.m22*m2.m21; 
-	tmp[8] = m1.m20*m2.m02 + m1.m21*m2.m12 + m1.m22*m2.m22; 
- 
-	Matrix3d.compute_svd( tmp, tmp_scale, tmp_rot);
- 
-	this.m00 = (float)(tmp_rot[0]);
-	this.m01 = (float)(tmp_rot[1]);
-	this.m02 = (float)(tmp_rot[2]);
- 
-	this.m10 = (float)(tmp_rot[3]);
-	this.m11 = (float)(tmp_rot[4]);
-	this.m12 = (float)(tmp_rot[5]);
- 
-	this.m20 = (float)(tmp_rot[6]);
-	this.m21 = (float)(tmp_rot[7]);
-	this.m22 = (float)(tmp_rot[8]);
-    }
-
-   /**
      *  Multiplies the transpose of matrix m1 times the transpose of matrix
      *  m2, and places the result into this.
      *  @param m1  the matrix on the left hand side of the multiplication
@@ -1667,67 +1496,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	this.m10 = m10; this.m11 = m11; this.m12 = m12;
 	this.m20 = m20; this.m21 = m21; this.m22 = m22;
       }  
-    }
-
-   /**
-     * Performs singular value decomposition normalization of this matrix.   
-     */
-    public final void normalize(){
-	
-	double[]    tmp_rot = new double[9];  // scratch matrix
-	double[]    tmp_scale = new double[3];  // scratch matrix
-	getScaleRotate( tmp_scale, tmp_rot );
-
-	this.m00 = (float)tmp_rot[0];
-	this.m01 = (float)tmp_rot[1];
-	this.m02 = (float)tmp_rot[2];
-
-	this.m10 = (float)tmp_rot[3];
-	this.m11 = (float)tmp_rot[4];
-	this.m12 = (float)tmp_rot[5];
-
-	this.m20 = (float)tmp_rot[6];
-	this.m21 = (float)tmp_rot[7];
-	this.m22 = (float)tmp_rot[8];
-
-    }
-
-   /**   
-     * Perform singular value decomposition normalization of matrix m1 
-     * and place the normalized values into this.   
-     * @param m1  the matrix values to be normalized
-     */ 
-    public final void normalize(Matrix3f m1){
-	double[]    tmp = new double[9];  // scratch matrix
-	double[]    tmp_rot = new double[9];  // scratch matrix
-	double[]    tmp_scale = new double[3];  // scratch matrix
-
-	tmp[0] = m1.m00;
-	tmp[1] = m1.m01;
-	tmp[2] = m1.m02;
- 
-	tmp[3] = m1.m10;
-	tmp[4] = m1.m11;
-	tmp[5] = m1.m12;
- 
-	tmp[6] = m1.m20;
-	tmp[7] = m1.m21;
-	tmp[8] = m1.m22;
- 
-	Matrix3d.compute_svd( tmp, tmp_scale, tmp_rot );
- 
-	this.m00 = (float)(tmp_rot[0]);
-	this.m01 = (float)(tmp_rot[1]);
-	this.m02 = (float)(tmp_rot[2]);
- 
-	this.m10 = (float)(tmp_rot[3]);
-	this.m11 = (float)(tmp_rot[4]);
-	this.m12 = (float)(tmp_rot[5]);
- 
-	this.m20 = (float)(tmp_rot[6]);
-	this.m21 = (float)(tmp_rot[7]);
-	this.m22 = (float)(tmp_rot[8]);
-
     }
 
    /**
@@ -1927,27 +1695,6 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
      result.x = x;
      result.y = y;
     }   
-
-    /**
-     * perform SVD (if necessary to get rotational component 
-     */
-    void  getScaleRotate( double[] scales, double[] rot ) {
-	
-	double[]    tmp = new double[9];  // scratch matrix
-        tmp[0] = m00;
-        tmp[1] = m01;
-        tmp[2] = m02;
-        tmp[3] = m10;
-        tmp[4] = m11;
-        tmp[5] = m12;
-        tmp[6] = m20;
-        tmp[7] = m21;
-        tmp[8] = m22;
-        Matrix3d.compute_svd(tmp, scales, rot);
-
-        return;
-       
-    }
 
     /**
      * Creates a new object of the same class as this object.
