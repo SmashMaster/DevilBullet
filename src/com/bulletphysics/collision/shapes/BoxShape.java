@@ -33,7 +33,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vec4;
+import com.samrj.devil.math.Vec4;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length

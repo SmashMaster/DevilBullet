@@ -49,7 +49,7 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vec4;
+import com.samrj.devil.math.Vec4;
 
 /**
  * Collision Algorithm for GImpact Shapes.<p>

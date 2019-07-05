@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vec4;
+import com.samrj.devil.math.Vec4;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane

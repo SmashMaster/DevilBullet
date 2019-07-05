@@ -32,7 +32,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vec4;
+import com.samrj.devil.math.Vec4;
 
 /**
  *
@@ -56,8 +56,7 @@ class GeometryOperations {
 		planenormal.cross(planenormal, normal);
 		planenormal.normalize();
 
-		plane.set(planenormal);
-		plane.w = e2.dot(planenormal);
+		plane.set(planenormal.x, planenormal.y, planenormal.z, e2.dot(planenormal));
 	}
 	
 	/**

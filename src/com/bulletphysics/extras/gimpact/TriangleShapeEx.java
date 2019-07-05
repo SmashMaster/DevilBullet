@@ -33,7 +33,7 @@ import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vec4;
+import com.samrj.devil.math.Vec4;
 
 /**
  *

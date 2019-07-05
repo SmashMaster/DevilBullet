@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath;
 
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vec4;
+import com.samrj.devil.math.Vec4;
 
 /**
  * Utility functions for vectors.
@@ -79,7 +79,10 @@ public class VectorUtil {
 
 	public static int closestAxis4(Vec4 vec) {
 		Vec4 tmp = new Vec4(vec);
-		tmp.absolute();
+                tmp.x = Math.abs(tmp.x);
+                tmp.y = Math.abs(tmp.y);
+                tmp.z = Math.abs(tmp.z);
+                tmp.w = Math.abs(tmp.w);
 		return maxAxis4(tmp);
 	}
 	
