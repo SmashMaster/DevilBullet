@@ -524,7 +524,7 @@ public class Matrix3f implements java.io.Serializable, Cloneable {
 	// Calculate LU decomposition: Is the matrix singular? 
 	if (!luDecomposition(temp, row_perm)) {
 	    // Matrix has no inverse 
-	    throw new SingularMatrixException();
+	    throw new IllegalArgumentException("singular matrix");
 	}
 
 	// Perform back substitution on the identity matrix 
