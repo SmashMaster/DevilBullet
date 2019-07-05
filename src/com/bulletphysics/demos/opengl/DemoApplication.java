@@ -42,11 +42,12 @@ import com.bulletphysics.linearmath.CProfileManager;
 import com.bulletphysics.linearmath.Clock;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 import org.lwjgl.glfw.GLFW;
 
@@ -206,7 +207,7 @@ public abstract class DemoApplication {
 		tmpMat1.setRotation(rot);
 		tmpMat2.setRotation(roll);
 		tmpMat1.mult(tmpMat2);
-		tmpMat1.transform(eyePos);
+		MatrixUtil.transform(tmpMat1, eyePos);
 
 		cameraPosition.set(eyePos);
 

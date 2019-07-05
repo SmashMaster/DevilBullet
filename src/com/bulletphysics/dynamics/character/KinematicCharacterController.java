@@ -36,6 +36,7 @@ import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.dynamics.ActionInterface;
 import com.bulletphysics.linearmath.IDebugDraw;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vec3;
@@ -675,7 +676,7 @@ public class KinematicCharacterController extends ActionInterface {
 			} else {
 				//need to transform normal into worldspace
 				hitNormalWorld = new Vec3();
-				hitCollisionObject.getWorldTransform(new Transform()).basis.transform(convexResult.hitNormalLocal, hitNormalWorld);
+				MatrixUtil.transform(hitCollisionObject.getWorldTransform(new Transform()).basis, convexResult.hitNormalLocal, hitNormalWorld);
 			}
 			
 			float dotUp = up.dot(hitNormalWorld);

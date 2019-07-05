@@ -29,12 +29,13 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -89,24 +90,24 @@ public class HingeConstraint extends TypedConstraint {
 		Vec3 rbAxisA2 = new Vec3();
 		
 		Transform centerOfMassA = rbA.getCenterOfMassTransform(new Transform());
-		centerOfMassA.basis.getColumn(0, rbAxisA1);
+		MatrixUtil.getColumn(centerOfMassA.basis, 0, rbAxisA1);
 		float projection = axisInA.dot(rbAxisA1);
 
 		if (projection >= 1.0f - BulletGlobals.SIMD_EPSILON) {
-			centerOfMassA.basis.getColumn(2, rbAxisA1);
+			MatrixUtil.getColumn(centerOfMassA.basis, 2, rbAxisA1);
 			rbAxisA1.negate();
-			centerOfMassA.basis.getColumn(1, rbAxisA2);
+			MatrixUtil.getColumn(centerOfMassA.basis, 1, rbAxisA2);
 		} else if (projection <= -1.0f + BulletGlobals.SIMD_EPSILON) {           
-			centerOfMassA.basis.getColumn(2, rbAxisA1);                            
-			centerOfMassA.basis.getColumn(1, rbAxisA2);
+			MatrixUtil.getColumn(centerOfMassA.basis, 2, rbAxisA1);                            
+			MatrixUtil.getColumn(centerOfMassA.basis, 1, rbAxisA2);
 		} else {
 			rbAxisA2.crossHere(axisInA, rbAxisA1);                                                                
 			rbAxisA1.crossHere(rbAxisA2, axisInA);                                                                                            
 		}
 
-		rbAFrame.basis.setRow(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
-		rbAFrame.basis.setRow(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
-		rbAFrame.basis.setRow(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
+		MatrixUtil.setRow(rbAFrame.basis, 0, new Vec3(rbAxisA1.x, rbAxisA2.x, axisInA.x));
+		MatrixUtil.setRow(rbAFrame.basis, 1, new Vec3(rbAxisA1.y, rbAxisA2.y, axisInA.y));
+		MatrixUtil.setRow(rbAFrame.basis, 2, new Vec3(rbAxisA1.z, rbAxisA2.z, axisInA.z));
 
 		Quat rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat());
 		Vec3 rbAxisB1 = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vec3());
@@ -114,9 +115,9 @@ public class HingeConstraint extends TypedConstraint {
 		rbAxisB2.crossHere(axisInB, rbAxisB1);
 
 		rbBFrame.origin.set(pivotInB);
-		rbBFrame.basis.setRow(0, rbAxisB1.x, rbAxisB2.x, -axisInB.x);
-		rbBFrame.basis.setRow(1, rbAxisB1.y, rbAxisB2.y, -axisInB.y);
-		rbBFrame.basis.setRow(2, rbAxisB1.z, rbAxisB2.z, -axisInB.z);			
+		MatrixUtil.setRow(rbBFrame.basis, 0, new Vec3(rbAxisB1.x, rbAxisB2.x, -axisInB.x));
+		MatrixUtil.setRow(rbBFrame.basis, 1, new Vec3(rbAxisB1.y, rbAxisB2.y, -axisInB.y));
+		MatrixUtil.setRow(rbBFrame.basis, 2, new Vec3(rbAxisB1.z, rbAxisB2.z, -axisInB.z));			
 
 		// start with free
 		lowerLimit = 1e30f;
@@ -136,7 +137,7 @@ public class HingeConstraint extends TypedConstraint {
 		// fixed axis in worldspace
 		Vec3 rbAxisA1 = new Vec3();
 		Transform centerOfMassA = rbA.getCenterOfMassTransform(new Transform());
-		centerOfMassA.basis.getColumn(0, rbAxisA1);
+		MatrixUtil.getColumn(centerOfMassA.basis, 0, rbAxisA1);
 
 		float projection = rbAxisA1.dot(axisInA);
 		if (projection > BulletGlobals.FLT_EPSILON) {
@@ -144,20 +145,20 @@ public class HingeConstraint extends TypedConstraint {
 			rbAxisA1.sub(axisInA);
 		}
 		else {
-			centerOfMassA.basis.getColumn(1, rbAxisA1);
+			MatrixUtil.getColumn(centerOfMassA.basis, 1, rbAxisA1);
 		}
 
 		Vec3 rbAxisA2 = new Vec3();
 		rbAxisA2.crossHere(axisInA, rbAxisA1);
 
 		rbAFrame.origin.set(pivotInA);
-		rbAFrame.basis.setRow(0, rbAxisA1.x, rbAxisA2.x, axisInA.x);
-		rbAFrame.basis.setRow(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
-		rbAFrame.basis.setRow(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
+		MatrixUtil.setRow(rbAFrame.basis, 0, new Vec3(rbAxisA1.x, rbAxisA2.x, axisInA.x));
+		MatrixUtil.setRow(rbAFrame.basis, 1, new Vec3(rbAxisA1.y, rbAxisA2.y, axisInA.y));
+		MatrixUtil.setRow(rbAFrame.basis, 2, new Vec3(rbAxisA1.z, rbAxisA2.z, axisInA.z));
 
 		Vec3 axisInB = new Vec3();
 		axisInB.negateHere(axisInA);
-		centerOfMassA.basis.transform(axisInB);
+		MatrixUtil.transform(centerOfMassA.basis, axisInB);
 
 		Quat rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat());
 		Vec3 rbAxisB1 = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vec3());
@@ -166,9 +167,9 @@ public class HingeConstraint extends TypedConstraint {
 
 		rbBFrame.origin.set(pivotInA);
 		centerOfMassA.transform(rbBFrame.origin);
-		rbBFrame.basis.setRow(0, rbAxisB1.x, rbAxisB2.x, axisInB.x);
-		rbBFrame.basis.setRow(1, rbAxisB1.y, rbAxisB2.y, axisInB.y);
-		rbBFrame.basis.setRow(2, rbAxisB1.z, rbAxisB2.z, axisInB.z);
+		MatrixUtil.setRow(rbBFrame.basis, 0, new Vec3(rbAxisB1.x, rbAxisB2.x, axisInB.x));
+		MatrixUtil.setRow(rbBFrame.basis, 1, new Vec3(rbAxisB1.y, rbAxisB2.y, axisInB.y));
+		MatrixUtil.setRow(rbBFrame.basis, 2, new Vec3(rbAxisB1.z, rbAxisB2.z, axisInB.z));
 
 		// start with free
 		lowerLimit = 1e30f;
@@ -262,8 +263,8 @@ public class HingeConstraint extends TypedConstraint {
 			TransformUtil.planeSpace1(normal[0], normal[1], normal[2]);
 
 			for (int i = 0; i < 3; i++) {
-				mat1.transposeHere(centerOfMassA.basis);
-				mat2.transposeHere(centerOfMassB.basis);
+                                Mat3.transpose(centerOfMassA.basis, mat1);
+                                Mat3.transpose(centerOfMassB.basis, mat2);
 
 				tmp1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 				tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
@@ -288,24 +289,24 @@ public class HingeConstraint extends TypedConstraint {
 		Vec3 jointAxis0local = new Vec3();
 		Vec3 jointAxis1local = new Vec3();
 
-		rbAFrame.basis.getColumn(2, tmp);
+		MatrixUtil.getColumn(rbAFrame.basis, 2, tmp);
 		TransformUtil.planeSpace1(tmp, jointAxis0local, jointAxis1local);
 
 		// TODO: check this
 		//getRigidBodyA().getCenterOfMassTransform().getBasis() * m_rbAFrame.getBasis().getColumn(2);
 
 		Vec3 jointAxis0 = new Vec3(jointAxis0local);
-		centerOfMassA.basis.transform(jointAxis0);
+		MatrixUtil.transform(centerOfMassA.basis, jointAxis0);
 
 		Vec3 jointAxis1 = new Vec3(jointAxis1local);
-		centerOfMassA.basis.transform(jointAxis1);
+		MatrixUtil.transform(centerOfMassA.basis, jointAxis1);
 
 		Vec3 hingeAxisWorld = new Vec3();
-		rbAFrame.basis.getColumn(2, hingeAxisWorld);
-		centerOfMassA.basis.transform(hingeAxisWorld);
+		MatrixUtil.getColumn(rbAFrame.basis, 2, hingeAxisWorld);
+		MatrixUtil.transform(centerOfMassA.basis, hingeAxisWorld);
 
-		mat1.transposeHere(centerOfMassA.basis);
-		mat2.transposeHere(centerOfMassB.basis);
+		Mat3.transpose(centerOfMassA.basis, mat1);
+                Mat3.transpose(centerOfMassB.basis, mat2);
 		jacAng[0].init(jointAxis0,
 				mat1,
 				mat2,
@@ -350,8 +351,8 @@ public class HingeConstraint extends TypedConstraint {
 
 		// Compute K = J*W*J' for hinge axis
 		Vec3 axisA = new Vec3();
-		rbAFrame.basis.getColumn(2, axisA);
-		centerOfMassA.basis.transform(axisA);
+		MatrixUtil.getColumn(rbAFrame.basis, 2, axisA);
+		MatrixUtil.transform(centerOfMassA.basis, axisA);
 
 		kHinge = 1.0f / (getRigidBodyA().computeAngularImpulseDenominator(axisA) +
 				getRigidBodyB().computeAngularImpulseDenominator(axisA));
@@ -416,12 +417,12 @@ public class HingeConstraint extends TypedConstraint {
 
 			// get axes in world space
 			Vec3 axisA = new Vec3();
-			rbAFrame.basis.getColumn(2, axisA);
-			centerOfMassA.basis.transform(axisA);
+			MatrixUtil.getColumn(rbAFrame.basis, 2, axisA);
+			MatrixUtil.transform(centerOfMassA.basis, axisA);
 
 			Vec3 axisB = new Vec3();
-			rbBFrame.basis.getColumn(2, axisB);
-			centerOfMassB.basis.transform(axisB);
+			MatrixUtil.getColumn(rbBFrame.basis, 2, axisB);
+			MatrixUtil.transform(centerOfMassB.basis, axisB);
 
 			Vec3 angVelA = getRigidBodyA().getAngularVelocity(new Vec3());
 			Vec3 angVelB = getRigidBodyB().getAngularVelocity(new Vec3());
@@ -540,16 +541,16 @@ public class HingeConstraint extends TypedConstraint {
 		Transform centerOfMassB = rbB.getCenterOfMassTransform(new Transform());
 		
 		Vec3 refAxis0 = new Vec3();
-		rbAFrame.basis.getColumn(0, refAxis0);
-		centerOfMassA.basis.transform(refAxis0);
+		MatrixUtil.getColumn(rbAFrame.basis, 0, refAxis0);
+		MatrixUtil.transform(centerOfMassA.basis, refAxis0);
 
 		Vec3 refAxis1 = new Vec3();
-		rbAFrame.basis.getColumn(1, refAxis1);
-		centerOfMassA.basis.transform(refAxis1);
+		MatrixUtil.getColumn(rbAFrame.basis, 1, refAxis1);
+		MatrixUtil.transform(centerOfMassA.basis, refAxis1);
 
 		Vec3 swingAxis = new Vec3();
-		rbBFrame.basis.getColumn(1, swingAxis);
-		centerOfMassB.basis.transform(swingAxis);
+		MatrixUtil.getColumn(rbBFrame.basis, 1, swingAxis);
+		MatrixUtil.transform(centerOfMassB.basis, swingAxis);
 
 		return ScalarUtil.atan2Fast(swingAxis.dot(refAxis0), swingAxis.dot(refAxis1));
 	}

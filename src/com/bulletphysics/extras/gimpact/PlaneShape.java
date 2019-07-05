@@ -30,6 +30,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Vec4;
@@ -53,11 +54,11 @@ class PlaneShape {
 
 		Vec3 tmp = new Vec3();
 
-		trans.basis.getRow(0, tmp);
+		MatrixUtil.getRow(trans.basis, 0, tmp);
 		float x = VectorUtil.dot3(tmp, equation);
-		trans.basis.getRow(1, tmp);
+		MatrixUtil.getRow(trans.basis, 1, tmp);
 		float y = VectorUtil.dot3(tmp, equation);
-		trans.basis.getRow(2, tmp);
+		MatrixUtil.getRow(trans.basis, 2, tmp);
 		float z = VectorUtil.dot3(tmp, equation);
 
 		float w = VectorUtil.dot3(trans.origin, equation) + equation.w;

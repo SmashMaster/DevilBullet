@@ -30,7 +30,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 // JAVA NOTE: CompoundShape from 2.71
@@ -148,11 +148,11 @@ public class CompoundShape extends CollisionShape {
 		Vec3 tmp = new Vec3();
 
 		Vec3 extent = new Vec3();
-		abs_b.getRow(0, tmp);
+		MatrixUtil.getRow(abs_b, 0, tmp);
 		extent.x = tmp.dot(localHalfExtents);
-		abs_b.getRow(1, tmp);
+		MatrixUtil.getRow(abs_b, 1, tmp);
 		extent.y = tmp.dot(localHalfExtents);
-		abs_b.getRow(2, tmp);
+		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
 		aabbMin.subHere(center, extent);
@@ -281,8 +281,7 @@ public class CompoundShape extends CollisionShape {
 			o.subHere(t.origin, center);
 
 			// compute inertia tensor in coordinate system of compound shape
-			Mat3 j = new Mat3();
-			j.transposeHere(t.basis);
+			Mat3 j = Mat3.transpose(t.basis);
 
 			j.a *= i.x;
 			j.b *= i.x;
@@ -294,16 +293,24 @@ public class CompoundShape extends CollisionShape {
 			j.h *= i.z;
 			j.i *= i.z;
 
-			j.multHere(t.basis, j);
+                        Mat3.mult(t.basis, j, j);
 
 			// add inertia tensor
-			tensor.add(j);
+                        tensor.a += j.a;
+                        tensor.b += j.b;
+                        tensor.c += j.c;
+                        tensor.d += j.d;
+                        tensor.e += j.e;
+                        tensor.f += j.f;
+                        tensor.g += j.g;
+                        tensor.h += j.h;
+                        tensor.i += j.i;
 
 			// compute inertia tensor of pointmass at o
 			float o2 = o.squareLength();
-			j.setRow(0, o2, 0, 0);
-			j.setRow(1, 0, o2, 0);
-			j.setRow(2, 0, 0, o2);
+			j.set(o2, 0, 0,
+                              0, o2, 0,
+                              0, 0, o2);
 			j.a += o.x * -o.x;
 			j.b += o.y * -o.x;
 			j.c += o.z * -o.x;

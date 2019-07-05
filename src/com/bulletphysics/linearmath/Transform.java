@@ -26,8 +26,8 @@
 package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.shapes.UniformScalingShape;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -71,7 +71,7 @@ public class Transform {
 	}
 
 	public void transform(Vec3 v) {
-		basis.transform(v);
+		MatrixUtil.transform(basis, v);
 		v.add(origin);
 	}
 
@@ -83,7 +83,7 @@ public class Transform {
 	public void inverse() {
 		basis.transpose();
 		origin.mult(-1f);
-		basis.transform(origin);
+		MatrixUtil.transform(basis, origin);
 	}
 
 	public void inverse(Transform tr) {
@@ -103,7 +103,7 @@ public class Transform {
 		Vec3 vec = new Vec3(tr2.origin);
 		tr1.transform(vec);
 
-		basis.multHere(tr1.basis, tr2.basis);
+                Mat3.mult(tr1.basis, tr2.basis, basis);
 		origin.set(vec);
 	}
 	
@@ -112,7 +112,7 @@ public class Transform {
 
 		Mat3 mat = new Mat3(basis);
 		mat.transpose();
-		mat.transform(out);
+		MatrixUtil.transform(mat, out);
 	}
 	
 	public Quat getRotation(Quat out) {

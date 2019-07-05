@@ -26,8 +26,9 @@
 package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.BulletGlobals;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 //notes:
@@ -72,12 +73,12 @@ public class JacobianEntry {
 		linearJointAxis.set(jointAxis);
 
 		aJ.crossHere(rel_pos1, linearJointAxis);
-		world2A.transform(aJ);
+		MatrixUtil.transform(world2A, aJ);
 
 		bJ.set(linearJointAxis);
 		bJ.negate();
 		bJ.crossHere(rel_pos2, bJ);
-		world2B.transform(bJ);
+		MatrixUtil.transform(world2B, bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
 		VectorUtil.mul(m_1MinvJt, inertiaInvB, bJ);
@@ -98,11 +99,11 @@ public class JacobianEntry {
 		linearJointAxis.set(0f, 0f, 0f);
 
 		aJ.set(jointAxis);
-		world2A.transform(aJ);
+		MatrixUtil.transform(world2A, aJ);
 
 		bJ.set(jointAxis);
 		bJ.negate();
-		world2B.transform(bJ);
+		MatrixUtil.transform(world2B, bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
 		VectorUtil.mul(m_1MinvJt, inertiaInvB, bJ);
@@ -145,12 +146,12 @@ public class JacobianEntry {
 		linearJointAxis.set(jointAxis);
 
 		aJ.crossHere(rel_pos1, jointAxis);
-		world2A.transform(aJ);
+		MatrixUtil.transform(world2A, aJ);
 
 		bJ.set(jointAxis);
 		bJ.negate();
 		bJ.crossHere(rel_pos2, bJ);
-		world2A.transform(bJ);
+		MatrixUtil.transform(world2A, bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
 		m_1MinvJt.set(0f, 0f, 0f);

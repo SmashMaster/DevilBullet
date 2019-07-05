@@ -26,8 +26,8 @@
 package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -121,8 +121,7 @@ public class TransformUtil {
 		tmp.set(transform0.basis);
 		MatrixUtil.invert(tmp);
 
-		Mat3 dmat = new Mat3();
-		dmat.multHere(transform1.basis, tmp);
+		Mat3 dmat = Mat3.mult(transform1.basis, tmp);
 
 		Quat dorn = new Quat();
 		MatrixUtil.getRotation(dmat, dorn);

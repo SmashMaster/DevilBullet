@@ -51,12 +51,13 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.TriangleMeshShape;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.IDebugDraw;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -297,7 +298,7 @@ public class CollisionWorld {
 					if (castResult.fraction < resultCallback.closestHitFraction) {
 						//#ifdef USE_SUBSIMPLEX_CONVEX_CAST
 						//rotate normal into worldspace
-						rayFromTrans.basis.transform(castResult.normal);
+						MatrixUtil.transform(rayFromTrans.basis, castResult.normal);
 						//#endif //USE_SUBSIMPLEX_CONVEX_CAST
 
 						castResult.normal.normalize();
@@ -454,8 +455,7 @@ public class CollisionWorld {
 
 					// rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
 					Transform rotationXform = new Transform();
-					Mat3 tmpMat = new Mat3();
-					tmpMat.multHere(worldTocollisionObject.basis, convexToTrans.basis);
+					Mat3 tmpMat = Mat3.mult(worldTocollisionObject.basis, convexToTrans.basis);
 					rotationXform.set(tmpMat);
 
 					BridgeTriangleConvexcastCallback tccb = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -482,8 +482,7 @@ public class CollisionWorld {
 
 					// rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
 					Transform rotationXform = new Transform();
-					Mat3 tmpMat = new Mat3();
-					tmpMat.multHere(worldTocollisionObject.basis, convexToTrans.basis);
+					Mat3 tmpMat = Mat3.mult(worldTocollisionObject.basis, convexToTrans.basis);
 					rotationXform.set(tmpMat);
 
 					BridgeTriangleConvexcastCallback tccb = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -704,7 +703,7 @@ public class CollisionWorld {
 			else {
 				// need to transform normal into worldspace
 				hitNormalWorld.set(rayResult.hitNormalLocal);
-				collisionObject.getWorldTransform(new Transform()).basis.transform(hitNormalWorld);
+				MatrixUtil.transform(collisionObject.getWorldTransform(new Transform()).basis, hitNormalWorld);
 			}
 
 			VectorUtil.setInterpolate3(hitPointWorld, rayFromWorld, rayToWorld, rayResult.hitFraction);
@@ -775,7 +774,7 @@ public class CollisionWorld {
 			else {
 				// need to transform normal into worldspace
 				hitNormalWorld.set(convexResult.hitNormalLocal);
-				hitCollisionObject.getWorldTransform(new Transform()).basis.transform(hitNormalWorld);
+				MatrixUtil.transform(hitCollisionObject.getWorldTransform(new Transform()).basis, hitNormalWorld);
 				if (hitNormalWorld.length() > 2) {
 					System.out.println("CollisionWorld.addSingleResult world " + hitNormalWorld);
 				}

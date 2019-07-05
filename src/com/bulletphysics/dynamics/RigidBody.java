@@ -38,8 +38,8 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -336,7 +336,7 @@ public class RigidBody extends CollisionObject {
 
 		linearVelocity.scaleAddHere(inverseMass * step, totalForce, linearVelocity);
 		Vec3 tmp = new Vec3(totalTorque);
-		invInertiaTensorWorld.transform(tmp);
+		MatrixUtil.transform(invInertiaTensorWorld, tmp);
 		angularVelocity.scaleAddHere(step, tmp, angularVelocity);
 
 		// clamp angular velocity. collision calculations will fail on higher angular velocities	
@@ -396,7 +396,7 @@ public class RigidBody extends CollisionObject {
 	
 	public void applyTorqueImpulse(Vec3 torque) {
 		Vec3 tmp = new Vec3(torque);
-		invInertiaTensorWorld.transform(tmp);
+		MatrixUtil.transform(invInertiaTensorWorld, tmp);
 		angularVelocity.add(tmp);
 	}
 
@@ -436,7 +436,7 @@ public class RigidBody extends CollisionObject {
 		Mat3 mat2 = new Mat3(worldTransform.basis);
 		mat2.transpose();
 
-		invInertiaTensorWorld.multHere(mat1, mat2);
+                Mat3.mult(mat1, mat2, invInertiaTensorWorld);
 	}
 	
 	public Vec3 getCenterOfMassPosition(Vec3 out) {

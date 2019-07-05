@@ -30,7 +30,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -178,11 +178,11 @@ public class CapsuleShape extends ConvexInternalShape {
 		Vec3 center = t.origin;
 		Vec3 extent = new Vec3();
 
-		abs_b.getRow(0, tmp);
+                MatrixUtil.getRow(abs_b, 0, tmp);
 		extent.x = tmp.dot(halfExtents);
-		abs_b.getRow(1, tmp);
+		MatrixUtil.getRow(abs_b, 1, tmp);
 		extent.y = tmp.dot(halfExtents);
-		abs_b.getRow(2, tmp);
+		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(halfExtents);
 
 		aabbMin.subHere(center, extent);

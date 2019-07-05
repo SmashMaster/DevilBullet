@@ -27,8 +27,8 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -37,6 +37,84 @@ import javax.vecmath.Vec3;
  * @author jezek2
  */
 public class MatrixUtil {
+        public static void transform(Mat3 m, Vec3 v, Vec3 r) {
+            float x = m.a*v.x + m.b*v.y + m.c*v.z; 
+            float y = m.d*v.x + m.e*v.y + m.f*v.z; 
+            float z = m.g*v.x + m.h*v.y + m.i*v.z; 
+            r.set(x, y, z);
+        }
+    
+        public static void transform(Mat3 matrix, Vec3 vector) {
+                transform(matrix, vector, vector);
+        }
+        
+        public static void getRow(Mat3 m, int i, Vec3 r)
+        {
+            switch (i)
+            {
+                case 0: r.x = m.a;
+                        r.y = m.b;
+                        r.z = m.c; return;
+                case 1: r.x = m.d;
+                        r.y = m.e;
+                        r.z = m.f; return;
+                case 2: r.x = m.g;
+                        r.y = m.h;
+                        r.z = m.i; return;
+                default: throw new ArrayIndexOutOfBoundsException();
+            }
+        }
+        
+        public static void getColumn(Mat3 m, int i, Vec3 r)
+        {
+            switch (i)
+            {
+                case 0: r.x = m.a;
+                        r.y = m.d;
+                        r.z = m.g; return;
+                case 1: r.x = m.b;
+                        r.y = m.e;
+                        r.z = m.h; return;
+                case 2: r.x = m.c;
+                        r.y = m.f;
+                        r.z = m.i; return;
+                default: throw new ArrayIndexOutOfBoundsException();
+            }
+        }
+        
+        public static void setRow(Mat3 m, int i, Vec3 v)
+        {
+            switch (i)
+            {
+                case 0: m.a = v.x;
+                        m.b = v.y;
+                        m.c = v.z; return;
+                case 1: m.d = v.x;
+                        m.e = v.y;
+                        m.f = v.z; return;
+                case 2: m.g = v.x;
+                        m.h = v.y;
+                        m.i = v.z; return;
+                default: throw new ArrayIndexOutOfBoundsException();
+            }
+        }
+        
+        public static void setColumn(Mat3 m, int i, Vec3 v)
+        {
+            switch (i)
+            {
+                case 0: m.a = v.x;
+                        m.d = v.y;
+                        m.g = v.z; return;
+                case 1: m.b = v.x;
+                        m.e = v.y;
+                        m.h = v.z; return;
+                case 2: m.c = v.x;
+                        m.f = v.y;
+                        m.i = v.z; return;
+                default: throw new ArrayIndexOutOfBoundsException();
+            }
+        }
 	
 	public static void scale(Mat3 dest, Mat3 mat, Vec3 s) {
 		dest.a = mat.a * s.x;   dest.b = mat.b * s.y;   dest.c = mat.c * s.z;
@@ -93,9 +171,9 @@ public class MatrixUtil {
 		float sc = si * ch;
 		float ss = si * sh;
 
-		mat.setRow(0, cj * ch, sj * sc - cs, sj * cc + ss);
-		mat.setRow(1, cj * sh, sj * ss + cc, sj * cs - sc);
-		mat.setRow(2, -sj, cj * si, cj * ci);
+		mat.set(cj * ch, sj * sc - cs, sj * cc + ss,
+                        cj * sh, sj * ss + cc, sj * cs - sc,
+                        -sj, cj * si, cj * ci);
 	}
 	
 	private static float tdotx(Mat3 mat, Vec3 vec) {
@@ -279,13 +357,13 @@ public class MatrixUtil {
 
 			// apply rotation to rot (rot = rot * J)
 			for (int i=0; i<3; i++) {
-				rot.getRow(i, row);
+                                MatrixUtil.getRow(rot, i, row);
 
 				mrp = VectorUtil.getCoord(row, p);
 				mrq = VectorUtil.getCoord(row, q);
 				VectorUtil.setCoord(row, p, cos * mrp - sin * mrq);
 				VectorUtil.setCoord(row, q, cos * mrq + sin * mrp);
-				rot.setRow(i, row);
+                                MatrixUtil.setRow(rot, i, row);
 			}
 		}
 	}

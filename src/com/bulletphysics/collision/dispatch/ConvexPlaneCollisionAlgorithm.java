@@ -31,6 +31,7 @@ import com.bulletphysics.collision.broadphase.DispatcherInfo;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
@@ -101,7 +102,7 @@ public class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm {
 
 		Vec3 tmp = new Vec3();
 		tmp.negateHere(planeNormal);
-		planeInConvex.basis.transform(tmp);
+		MatrixUtil.transform(planeInConvex.basis, tmp);
 
 		Vec3 vtx = convexShape.localGetSupportingVertex(tmp, new Vec3());
 		Vec3 vtxInPlane = new Vec3(vtx);
@@ -121,7 +122,7 @@ public class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm {
 		if (hasCollision) {
 			// report a contact. internally this will be kept persistent, and contact reduction is done
 			Vec3 normalOnSurfaceB = new Vec3(planeNormal);
-			planeObj.getWorldTransform(tmpTrans).basis.transform(normalOnSurfaceB);
+			MatrixUtil.transform(planeObj.getWorldTransform(tmpTrans).basis, normalOnSurfaceB);
 
 			Vec3 pOnB = new Vec3(vtxInPlaneWorld);
 			resultOut.addContactPoint(normalOnSurfaceB, pOnB, distance);

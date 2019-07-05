@@ -29,7 +29,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 // JAVA NOTE: ScaledBvhTriangleMeshShape from 2.73 SP1
@@ -115,11 +115,11 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
 
 		Vec3 extent = new Vec3();
 		Vec3 tmp = new Vec3();
-		abs_b.getRow(0, tmp);
+                MatrixUtil.getRow(abs_b, 0, tmp);
 		extent.x = tmp.dot(localHalfExtents);
-		abs_b.getRow(1, tmp);
+                MatrixUtil.getRow(abs_b, 1, tmp);
 		extent.y = tmp.dot(localHalfExtents);
-		abs_b.getRow(2, tmp);
+                MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
 		aabbMin.subHere(center, extent);

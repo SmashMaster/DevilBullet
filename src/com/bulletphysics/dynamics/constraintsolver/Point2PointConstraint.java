@@ -28,7 +28,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -82,8 +82,8 @@ public class Point2PointConstraint extends TypedConstraint {
 		for (int i = 0; i < 3; i++) {
 			VectorUtil.setCoord(normal, i, 1f);
 
-			tmpMat1.transposeHere(centerOfMassA.basis);
-			tmpMat2.transposeHere(centerOfMassB.basis);
+                        Mat3.transpose(centerOfMassA.basis, tmpMat1);
+                        Mat3.transpose(centerOfMassB.basis, tmpMat2);
 
 			tmp1.set(pivotInA);
 			centerOfMassA.transform(tmp1);

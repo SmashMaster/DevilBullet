@@ -48,6 +48,7 @@ import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.character.KinematicCharacterController;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vec3;
@@ -146,12 +147,12 @@ public class CharacterDemo extends DemoApplication {
 			Transform xform = ghostObject.getWorldTransform(new Transform());
 
 			Vec3 forwardDir = new Vec3();
-			xform.basis.getRow(2, forwardDir);
+                        MatrixUtil.getRow(xform.basis, 2, forwardDir);
 			//printf("forwardDir=%f,%f,%f\n",forwardDir[0],forwardDir[1],forwardDir[2]);
 			Vec3 upDir = new Vec3();
-			xform.basis.getRow(1, upDir);
+                        MatrixUtil.getRow(xform.basis, 1, upDir);
 			Vec3 strafeDir = new Vec3();
-			xform.basis.getRow(0, strafeDir);
+                        MatrixUtil.getRow(xform.basis, 0, strafeDir);
 			forwardDir.normalize();
 			upDir.normalize();
 			strafeDir.normalize();
@@ -285,9 +286,9 @@ public class CharacterDemo extends DemoApplication {
 		// look at the vehicle
 		Transform characterWorldTrans = ghostObject.getWorldTransform(new Transform());
 		Vec3 up = new Vec3();
-		characterWorldTrans.basis.getRow(1, up);
+                MatrixUtil.getRow(characterWorldTrans.basis, 1, up);
 		Vec3 backward = new Vec3();
-		characterWorldTrans.basis.getRow(2, backward);
+                MatrixUtil.getRow(characterWorldTrans.basis, 2, backward);
 		backward.mult(-1);
 		up.normalize ();
 		backward.normalize ();
@@ -330,7 +331,7 @@ public class CharacterDemo extends DemoApplication {
 				// can use a shift
 				startTransform.setIdentity();
 				// JAVA NOTE: port change, we want y to be up.
-				startTransform.basis.rotX((float) -Math.PI / 2f);
+                                startTransform.basis.setRotation(new com.samrj.devil.math.Vec3(1, 0, 0), (float) -Math.PI / 2f);
 				startTransform.origin.set(0, -10, 0);
 				//startTransform.origin.set(0, 0, -10f);
 				

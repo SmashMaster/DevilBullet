@@ -28,9 +28,10 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -107,10 +108,10 @@ public class ContactConstraint {
 		float jacDiagABInv = 1f / jacDiagAB;
 
 		Vec3 tmp1 = body1.getAngularVelocity(new Vec3());
-		mat1.transform(tmp1);
+		MatrixUtil.transform(mat1, tmp1);
 
 		Vec3 tmp2 = body2.getAngularVelocity(new Vec3());
-		mat2.transform(tmp2);
+		MatrixUtil.transform(mat2, tmp2);
 
 		float rel_vel = jac.getRelativeVelocity(
 				body1.getLinearVelocity(new Vec3()),
@@ -395,11 +396,11 @@ public class ContactConstraint {
 
 					Vec3 temp1 = new Vec3();
 					temp1.crossHere(rel_pos1, lat_vel);
-					body1.getInvInertiaTensorWorld(new Mat3()).transform(temp1);
+					MatrixUtil.transform(body1.getInvInertiaTensorWorld(new Mat3()), temp1);
 
 					Vec3 temp2 = new Vec3();
 					temp2.crossHere(rel_pos2, lat_vel);
-					body2.getInvInertiaTensorWorld(new Mat3()).transform(temp2);
+					MatrixUtil.transform(body2.getInvInertiaTensorWorld(new Mat3()), temp2);
 
 					Vec3 java_tmp1 = new Vec3();
 					java_tmp1.crossHere(temp1, rel_pos1);

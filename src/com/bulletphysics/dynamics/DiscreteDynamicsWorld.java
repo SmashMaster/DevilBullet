@@ -52,6 +52,7 @@ import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
 import com.bulletphysics.linearmath.CProfileManager;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.IDebugDraw;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
@@ -766,13 +767,13 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
 
 		Vec3 xoffs = new Vec3();
 		xoffs.set(radius, 0, 0);
-		transform.basis.transform(xoffs);
+		MatrixUtil.transform(transform.basis, xoffs);
 		Vec3 yoffs = new Vec3();
 		yoffs.set(0, radius, 0);
-		transform.basis.transform(yoffs);
+		MatrixUtil.transform(transform.basis, yoffs);
 		Vec3 zoffs = new Vec3();
 		zoffs.set(0, 0, radius);
-		transform.basis.transform(zoffs);
+		MatrixUtil.transform(transform.basis, zoffs);
 
 		Vec3 tmp1 = new Vec3();
 		Vec3 tmp2 = new Vec3();
@@ -829,19 +830,19 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
 			Vec3 start = new Vec3(worldTransform.origin);
 
 			tmp.set(1f, 0f, 0f);
-			worldTransform.basis.transform(tmp);
+			MatrixUtil.transform(worldTransform.basis, tmp);
 			tmp.add(start);
 			tmp2.set(1f, 0f, 0f);
 			getDebugDrawer().drawLine(start, tmp, tmp2);
 
 			tmp.set(0f, 1f, 0f);
-			worldTransform.basis.transform(tmp);
+			MatrixUtil.transform(worldTransform.basis, tmp);
 			tmp.add(start);
 			tmp2.set(0f, 1f, 0f);
 			getDebugDrawer().drawLine(start, tmp, tmp2);
 
 			tmp.set(0f, 0f, 1f);
-			worldTransform.basis.transform(tmp);
+			MatrixUtil.transform(worldTransform.basis, tmp);
 			tmp.add(start);
 			tmp2.set(0f, 0f, 1f);
 			getDebugDrawer().drawLine(start, tmp, tmp2);

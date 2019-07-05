@@ -29,12 +29,13 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -173,11 +174,11 @@ public class ConeTwistConstraint extends TypedConstraint {
 		Vec3 b1Axis1 = new Vec3(), b1Axis2 = new Vec3(), b1Axis3 = new Vec3();
 		Vec3 b2Axis1 = new Vec3(), b2Axis2 = new Vec3();
 
-		rbAFrame.basis.getColumn(0, b1Axis1);
-		getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis.transform(b1Axis1);
+                MatrixUtil.getColumn(rbAFrame.basis, 0, b1Axis1);
+		MatrixUtil.transform(getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis, b1Axis1);
 
-		rbBFrame.basis.getColumn(0, b2Axis1);
-		getRigidBodyB().getCenterOfMassTransform(tmpTrans).basis.transform(b2Axis1);
+                MatrixUtil.getColumn(rbBFrame.basis, 0, b2Axis1);
+		MatrixUtil.transform(getRigidBodyB().getCenterOfMassTransform(tmpTrans).basis, b2Axis1);
 
 		float swing1 = 0f, swing2 = 0f;
 
@@ -187,8 +188,8 @@ public class ConeTwistConstraint extends TypedConstraint {
 
 		// Get Frame into world space
 		if (swingSpan1 >= 0.05f) {
-			rbAFrame.basis.getColumn(1, b1Axis2);
-			getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis.transform(b1Axis2);
+                        MatrixUtil.getColumn(rbAFrame.basis, 1, b1Axis2);
+			MatrixUtil.transform(getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis, b1Axis2);
 //			swing1 = ScalarUtil.atan2Fast(b2Axis1.dot(b1Axis2), b2Axis1.dot(b1Axis1));
 			swx = b2Axis1.dot(b1Axis1);
 			swy = b2Axis1.dot(b1Axis2);
@@ -199,8 +200,8 @@ public class ConeTwistConstraint extends TypedConstraint {
 		}
 
 		if (swingSpan2 >= 0.05f) {
-			rbAFrame.basis.getColumn(2, b1Axis3);
-			getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis.transform(b1Axis3);
+                        MatrixUtil.getColumn(rbAFrame.basis, 2, b1Axis3);
+			MatrixUtil.transform(getRigidBodyA().getCenterOfMassTransform(tmpTrans).basis, b1Axis3);
 //			swing2 = ScalarUtil.atan2Fast(b2Axis1.dot(b1Axis3), b2Axis1.dot(b1Axis1));
 			swx = b2Axis1.dot(b1Axis1);
 			swy = b2Axis1.dot(b1Axis3);
@@ -236,8 +237,8 @@ public class ConeTwistConstraint extends TypedConstraint {
 		// Twist limits
 		if (twistSpan >= 0f) {
 			//Vec3 b2Axis2 = new Vec3();
-			rbBFrame.basis.getColumn(1, b2Axis2);
-			getRigidBodyB().getCenterOfMassTransform(tmpTrans).basis.transform(b2Axis2);
+                        MatrixUtil.getColumn(rbBFrame.basis, 1, b2Axis2);
+			MatrixUtil.transform(getRigidBodyB().getCenterOfMassTransform(tmpTrans).basis, b2Axis2);
 
 			Quat rotationArc = QuaternionUtil.shortestArcQuat(b2Axis1, b1Axis1, new Quat());
 			Vec3 TwistRef = QuaternionUtil.quatRotate(rotationArc, b2Axis2, new Vec3());

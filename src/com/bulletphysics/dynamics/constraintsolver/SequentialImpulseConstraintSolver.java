@@ -34,13 +34,14 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.IDebugDraw;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -368,7 +369,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 			solverConstraint.relpos1CrossNormal.set(ftorqueAxis1);
 			if (body0 != null) {
 				solverConstraint.angularComponentA.set(ftorqueAxis1);
-				body0.getInvInertiaTensorWorld(tmpMat).transform(solverConstraint.angularComponentA);
+				MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat), solverConstraint.angularComponentA);
 			}
 			else {
 				solverConstraint.angularComponentA.set(0f, 0f, 0f);
@@ -379,7 +380,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 			solverConstraint.relpos2CrossNormal.set(ftorqueAxis1);
 			if (body1 != null) {
 				solverConstraint.angularComponentB.set(ftorqueAxis1);
-				body1.getInvInertiaTensorWorld(tmpMat).transform(solverConstraint.angularComponentB);
+				MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat), solverConstraint.angularComponentB);
 			}
 			else {
 				solverConstraint.angularComponentB.set(0f, 0f, 0f);
@@ -586,7 +587,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 									if (rb0 != null) {
 										solverConstraint.angularComponentA.set(torqueAxis0);
-										rb0.getInvInertiaTensorWorld(tmpMat).transform(solverConstraint.angularComponentA);
+										MatrixUtil.transform(rb0.getInvInertiaTensorWorld(tmpMat), solverConstraint.angularComponentA);
 									}
 									else {
 										solverConstraint.angularComponentA.set(0f, 0f, 0f);
@@ -596,7 +597,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 									if (rb1 != null) {
 										solverConstraint.angularComponentB.set(torqueAxis1);
-										rb1.getInvInertiaTensorWorld(tmpMat).transform(solverConstraint.angularComponentB);
+										MatrixUtil.transform(rb1.getInvInertiaTensorWorld(tmpMat), solverConstraint.angularComponentB);
 									}
 									else {
 										solverConstraint.angularComponentB.set(0f, 0f, 0f);
@@ -1187,36 +1188,36 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 						torqueAxis0.crossHere(rel_pos1, cp.normalWorldOnB);
 
 						cpd.angularComponentA.set(torqueAxis0);
-						body0.getInvInertiaTensorWorld(tmpMat3).transform(cpd.angularComponentA);
+						MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat3), cpd.angularComponentA);
 
 						torqueAxis1.crossHere(rel_pos2, cp.normalWorldOnB);
 
 						cpd.angularComponentB.set(torqueAxis1);
-						body1.getInvInertiaTensorWorld(tmpMat3).transform(cpd.angularComponentB);
+						MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat3), cpd.angularComponentB);
 					}
 					{
 						ftorqueAxis0.crossHere(rel_pos1, cpd.frictionWorldTangential0);
 
 						cpd.frictionAngularComponent0A.set(ftorqueAxis0);
-						body0.getInvInertiaTensorWorld(tmpMat3).transform(cpd.frictionAngularComponent0A);
+						MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent0A);
 					}
 					{
 						ftorqueAxis1.crossHere(rel_pos1, cpd.frictionWorldTangential1);
 
 						cpd.frictionAngularComponent1A.set(ftorqueAxis1);
-						body0.getInvInertiaTensorWorld(tmpMat3).transform(cpd.frictionAngularComponent1A);
+						MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent1A);
 					}
 					{
 						ftorqueAxis0.crossHere(rel_pos2, cpd.frictionWorldTangential0);
 
 						cpd.frictionAngularComponent0B.set(ftorqueAxis0);
-						body1.getInvInertiaTensorWorld(tmpMat3).transform(cpd.frictionAngularComponent0B);
+						MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent0B);
 					}
 					{
 						ftorqueAxis1.crossHere(rel_pos2, cpd.frictionWorldTangential1);
 
 						cpd.frictionAngularComponent1B.set(ftorqueAxis1);
-						body1.getInvInertiaTensorWorld(tmpMat3).transform(cpd.frictionAngularComponent1B);
+						MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent1B);
 					}
 
 					///

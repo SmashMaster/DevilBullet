@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath;
 
 
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -150,11 +150,11 @@ public class AabbUtil2 {
 
 		Vec3 center = new Vec3(t.origin);
 		Vec3 extent = new Vec3();
-		abs_b.getRow(0, tmp);
+		MatrixUtil.getRow(abs_b, 0, tmp);
 		extent.x = tmp.dot(halfExtentsWithMargin);
-		abs_b.getRow(1, tmp);
+		MatrixUtil.getRow(abs_b, 1, tmp);
 		extent.y = tmp.dot(halfExtentsWithMargin);
-		abs_b.getRow(2, tmp);
+		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(halfExtentsWithMargin);
 
 		aabbMinOut.subHere(center, extent);
@@ -187,11 +187,11 @@ public class AabbUtil2 {
 		Vec3 extent = new Vec3();
 		Vec3 tmp = new Vec3();
 
-		abs_b.getRow(0, tmp);
+		MatrixUtil.getRow(abs_b, 0, tmp);
 		extent.x = tmp.dot(localHalfExtents);
-		abs_b.getRow(1, tmp);
+		MatrixUtil.getRow(abs_b, 1, tmp);
 		extent.y = tmp.dot(localHalfExtents);
-		abs_b.getRow(2, tmp);
+		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
 		aabbMinOut.subHere(center, extent);

@@ -33,9 +33,9 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectStackList;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
 import java.util.Arrays;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /*
@@ -183,7 +183,7 @@ public class GjkEpaSolver {
 			MatrixUtil.transposeTransform(tmp, d, wrotations[i]);
 
 			shapes[i].localGetSupportingVertex(tmp, out);
-			wrotations[i].transform(out);
+			MatrixUtil.transform(wrotations[i], out);
 			out.add(positions[i]);
 
 			return out;
@@ -432,11 +432,11 @@ public class GjkEpaSolver {
 					w.set(b[m[0] > m[1] ? m[0] > m[2] ? 0 : 2 : m[1] > m[2] ? 1 : 2]);
 
 					tmp.normalizeHere(w);
-					Support(tmp, simplex[4]); r.transform(w);
+					Support(tmp, simplex[4]); MatrixUtil.transform(r, w);
 					tmp.normalizeHere(w);
-					Support(tmp, simplex[2]); r.transform(w);
+					Support(tmp, simplex[2]); MatrixUtil.transform(r, w);
 					tmp.normalizeHere(w);
-					Support(tmp, simplex[3]); r.transform(w);
+					Support(tmp, simplex[3]); MatrixUtil.transform(r, w);
 					order = 4;
 					return (true);
 				}

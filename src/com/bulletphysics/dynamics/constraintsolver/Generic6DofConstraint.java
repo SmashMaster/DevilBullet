@@ -37,7 +37,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Mat3;
+import com.samrj.devil.math.Mat3;
 import javax.vecmath.Vec3;
 /*!
 
@@ -167,7 +167,7 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Mat3 relative_frame = new Mat3();
 		mat.set(calculatedTransformA.basis);
 		MatrixUtil.invert(mat);
-		relative_frame.multHere(mat, calculatedTransformB.basis);
+                Mat3.mult(mat, calculatedTransformB.basis, relative_frame);
 
 		matrixToEulerXYZ(relative_frame, calculatedAxisAngleDiff);
 
@@ -187,10 +187,10 @@ public class Generic6DofConstraint extends TypedConstraint {
 		// to the components of w and set that to 0.
 
 		Vec3 axis0 = new Vec3();
-		calculatedTransformB.basis.getColumn(0, axis0);
+		MatrixUtil.getColumn(calculatedTransformB.basis, 0, axis0);
 
 		Vec3 axis2 = new Vec3();
-		calculatedTransformA.basis.getColumn(2, axis2);
+		MatrixUtil.getColumn(calculatedTransformA.basis, 2, axis2);
 
 		calculatedAxis[1].crossHere(axis2, axis0);
 		calculatedAxis[0].crossHere(calculatedAxis[1], axis2);
@@ -306,10 +306,10 @@ public class Generic6DofConstraint extends TypedConstraint {
 		for (int i=0; i<3; i++) {
 			if (linearLimits.isLimited(i)) {
 				if (useLinearReferenceFrameA) {
-					calculatedTransformA.basis.getColumn(i, normalWorld);
+					MatrixUtil.getColumn(calculatedTransformA.basis, i, normalWorld);
 				}
 				else {
-					calculatedTransformB.basis.getColumn(i, normalWorld);
+					MatrixUtil.getColumn(calculatedTransformB.basis, i, normalWorld);
 				}
 
 				buildLinearJacobian(
@@ -350,10 +350,10 @@ public class Generic6DofConstraint extends TypedConstraint {
 				jacDiagABInv = 1f / jacLinear[i].getDiagonal();
 
 				if (useLinearReferenceFrameA) {
-					calculatedTransformA.basis.getColumn(i, linear_axis);
+					MatrixUtil.getColumn(calculatedTransformA.basis, i, linear_axis);
 				}
 				else {
-					calculatedTransformB.basis.getColumn(i, linear_axis);
+					MatrixUtil.getColumn(calculatedTransformB.basis, i, linear_axis);
 				}
 
 				linearLimits.solveLinearAxis(

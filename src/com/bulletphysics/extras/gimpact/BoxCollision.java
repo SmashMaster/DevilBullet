@@ -30,10 +30,11 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.BulletGlobals;
+import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -144,13 +145,13 @@ class BoxCollision {
 		 * Calcs the full invertion of the matrices. Useful for scaling matrices.
 		 */
 		public void calc_from_full_invert(Transform trans0, Transform trans1) {
-			R1to0.invertHere(trans0.basis);
+                        Mat3.invert(trans0.basis, R1to0);
 			T1to0.negateHere(trans0.origin);
-			R1to0.transform(T1to0);
+			MatrixUtil.transform(R1to0, T1to0);
 
 			Vec3 tmp = new Vec3();
 			tmp.set(trans1.origin);
-			R1to0.transform(tmp);
+			MatrixUtil.transform(R1to0, tmp);
 			T1to0.add(tmp);
 
 			R1to0.mult(trans1.basis);
@@ -164,11 +165,11 @@ class BoxCollision {
 			}
 			
 			Vec3 tmp = new Vec3();
-			R1to0.getRow(0, tmp);
+			MatrixUtil.getRow(R1to0, 0, tmp);
 			out.x = tmp.dot(point) + T1to0.x;
-			R1to0.getRow(1, tmp);
+			MatrixUtil.getRow(R1to0, 1, tmp);
 			out.y = tmp.dot(point) + T1to0.y;
-			R1to0.getRow(2, tmp);
+			MatrixUtil.getRow(R1to0, 2, tmp);
 			out.z = tmp.dot(point) + T1to0.z;
 			return out;
 		}
@@ -276,15 +277,15 @@ class BoxCollision {
 
 			Vec3 textends = new Vec3();
 
-			trans.basis.getRow(0, tmp);
+			MatrixUtil.getRow(trans.basis, 0, tmp);
 			tmp.absolute();
 			textends.x = extends_.dot(tmp);
 
-			trans.basis.getRow(1, tmp);
+			MatrixUtil.getRow(trans.basis, 1, tmp);
 			tmp.absolute();
 			textends.y = extends_.dot(tmp);
 
-			trans.basis.getRow(2, tmp);
+			MatrixUtil.getRow(trans.basis, 2, tmp);
 			tmp.absolute();
 			textends.z = extends_.dot(tmp);
 
@@ -310,15 +311,15 @@ class BoxCollision {
 
 			Vec3 textends = new Vec3();
 
-			trans.R1to0.getRow(0, tmp);
+			MatrixUtil.getRow(trans.R1to0, 0, tmp);
 			tmp.absolute();
 			textends.x = extends_.dot(tmp);
 
-			trans.R1to0.getRow(1, tmp);
+			MatrixUtil.getRow(trans.R1to0, 1, tmp);
 			tmp.absolute();
 			textends.y = extends_.dot(tmp);
 
-			trans.R1to0.getRow(2, tmp);
+			MatrixUtil.getRow(trans.R1to0, 2, tmp);
 			tmp.absolute();
 			textends.z = extends_.dot(tmp);
 
@@ -480,10 +481,10 @@ class BoxCollision {
 
 			// Class I : A's basis vectors
 			for (int i=0; i<3; i++) {
-				transcache.R1to0.getRow(i, tmp);
+				MatrixUtil.getRow(transcache.R1to0, i, tmp);
 				VectorUtil.setCoord(T, i, tmp.dot(cb) + VectorUtil.getCoord(transcache.T1to0, i) - VectorUtil.getCoord(ca, i));
 
-				transcache.AR.getRow(i, tmp);
+				MatrixUtil.getRow(transcache.AR, i, tmp);
 				t = tmp.dot(eb) + VectorUtil.getCoord(ea, i);
 				if (BT_GREATER(VectorUtil.getCoord(T, i), t)) {
 					return false;

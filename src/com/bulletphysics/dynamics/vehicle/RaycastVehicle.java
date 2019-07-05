@@ -36,8 +36,8 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Mat3;
 import javax.vecmath.Vec3;
 
 /**
@@ -149,12 +149,12 @@ public class RaycastVehicle extends TypedConstraint {
 		MatrixUtil.setRotation(rotatingMat, rotatingOrn);
 
 		Mat3 basis2 = new Mat3();
-		basis2.setRow(0, right.x, fwd.x, up.x);
-		basis2.setRow(1, right.y, fwd.y, up.y);
-		basis2.setRow(2, right.z, fwd.z, up.z);
+		MatrixUtil.setRow(basis2, 0, new Vec3(right.x, fwd.x, up.x));
+		MatrixUtil.setRow(basis2, 1, new Vec3(right.y, fwd.y, up.y));
+		MatrixUtil.setRow(basis2, 2, new Vec3(right.z, fwd.z, up.z));
 
 		Mat3 wheelBasis = wheel.worldTransform.basis;
-		wheelBasis.multHere(steeringMat, rotatingMat);
+                Mat3.mult(steeringMat, rotatingMat, wheelBasis);
 		wheelBasis.mult(basis2);
 
 		wheel.worldTransform.origin.scaleAddHere(wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);
@@ -189,10 +189,10 @@ public class RaycastVehicle extends TypedConstraint {
 		chassisTrans.transform(wheel.raycastInfo.hardPointWS);
 
 		wheel.raycastInfo.wheelDirectionWS.set(wheel.wheelDirectionCS);
-		chassisTrans.basis.transform(wheel.raycastInfo.wheelDirectionWS);
+		MatrixUtil.transform(chassisTrans.basis, wheel.raycastInfo.wheelDirectionWS);
 
 		wheel.raycastInfo.wheelAxleWS.set(wheel.wheelAxleCS);
-		chassisTrans.basis.transform(wheel.raycastInfo.wheelAxleWS);
+		MatrixUtil.transform(chassisTrans.basis, wheel.raycastInfo.wheelAxleWS);
 	}
 
 	public float rayCast(WheelInfo wheel) {
