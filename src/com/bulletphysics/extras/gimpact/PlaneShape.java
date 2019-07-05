@@ -32,8 +32,8 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
 import com.samrj.devil.math.Vec4;
+import javax.vecmath.Vector3f;
 
 /**
  *

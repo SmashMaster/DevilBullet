@@ -27,7 +27,6 @@ package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector3f;
 
 /**
  * Allows accessing vertex data.

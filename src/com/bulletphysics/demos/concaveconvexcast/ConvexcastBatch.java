@@ -29,14 +29,14 @@ import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.dispatch.CollisionWorld.ClosestConvexResultCallback;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.demos.opengl.IGL;
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.linearmath.Clock;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Quat;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Vector3f;
-import static com.bulletphysics.demos.opengl.IGL.*;
 
 /**
  * Scrolls back and forth over terrain.
@@ -147,7 +147,7 @@ public class ConvexcastBatch {
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {
 			float alpha = dalpha * i;
 			// rotate around by alpha degrees y
-			Quat q = new Quat(0f, 1f, 0f, alpha);
+			Quat q = new Quat(alpha, 0f, 1f, 0f);
 			direction[i].set(1f, 0f, 0f);
 			Quat tmpQuat = new Quat(q);
 			QuaternionUtil.mul(tmpQuat, direction[i]);

@@ -27,8 +27,8 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -166,7 +166,7 @@ public class MatrixUtil {
 			temp[j] = (mat.getElement(j, i) + mat.getElement(i, j)) * s;
 			temp[k] = (mat.getElement(k, i) + mat.getElement(i, k)) * s;
 		}
-		dest.set(temp[0], temp[1], temp[2], temp[3]);
+		dest.set(temp[3], temp[0], temp[1], temp[2]);
 		
 		floatArrays.release(temp);
 	}

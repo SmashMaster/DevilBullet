@@ -84,11 +84,10 @@
 */
 package org.lwjgl.util.glu.tessellation;
 
+import static org.lwjgl.util.glu.GLU.*;
 import org.lwjgl.util.glu.GLUtessellator;
 import org.lwjgl.util.glu.GLUtessellatorCallback;
 import org.lwjgl.util.glu.GLUtessellatorCallbackAdapter;
-
-import static org.lwjgl.util.glu.GLU.*;
 
 public class GLUtessellatorImpl implements GLUtessellator {
     public static final int TESS_MAX_CACHE = 100;

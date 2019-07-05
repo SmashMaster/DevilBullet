@@ -32,7 +32,7 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Quat;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Vector3f;
 
 /**

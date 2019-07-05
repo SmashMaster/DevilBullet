@@ -25,9 +25,6 @@
 
 package com.bulletphysics.demos.concave;
 
-import com.bulletphysics.util.ObjectArrayList;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.BulletStats;
 import com.bulletphysics.ContactAddedCallback;
@@ -48,6 +45,7 @@ import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.demos.opengl.DemoApplication;
 import com.bulletphysics.demos.opengl.GLDebugDrawer;
 import com.bulletphysics.demos.opengl.IGL;
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.demos.opengl.LWJGL;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
@@ -55,17 +53,19 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Quat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
-import static com.bulletphysics.demos.opengl.IGL.*;
 
 // JAVA TODO: update for 2.70b1
 

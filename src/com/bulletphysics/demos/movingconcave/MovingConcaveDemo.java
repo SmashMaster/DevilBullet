@@ -38,6 +38,7 @@ import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.demos.opengl.DemoApplication;
 import com.bulletphysics.demos.opengl.GLDebugDrawer;
 import com.bulletphysics.demos.opengl.IGL;
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.demos.opengl.LWJGL;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
@@ -46,9 +47,8 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Quat;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Vector3f;
-import static com.bulletphysics.demos.opengl.IGL.*;
 
 /**
  * 
@@ -209,7 +209,7 @@ public class MovingConcaveDemo extends DemoApplication {
 
 			Transform tr = new Transform();
 			tr.origin.set(camPos);
-			tr.setRotation(new Quat(0f, 0f, 0f, 1f));
+			tr.setRotation(new Quat(1f, 0f, 0f, 0f));
 			body.setWorldTransform(tr);
 
 			body.setLinearVelocity(linVel);

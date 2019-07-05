@@ -31,6 +31,7 @@ import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
@@ -44,10 +45,9 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
-import static com.bulletphysics.demos.opengl.IGL.*;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -553,7 +553,7 @@ public abstract class DemoApplication {
 
 			Transform worldTrans = body.getWorldTransform(new Transform());
 			worldTrans.origin.set(camPos);
-			worldTrans.setRotation(new Quat(0f, 0f, 0f, 1f));
+			worldTrans.setRotation(new Quat(1f, 0f, 0f, 0f));
 			body.setWorldTransform(worldTrans);
 			
 			body.setLinearVelocity(linVel);

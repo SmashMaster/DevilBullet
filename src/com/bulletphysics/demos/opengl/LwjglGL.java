@@ -25,13 +25,13 @@
 
 package com.bulletphysics.demos.opengl;
 
+import com.bulletphysics.demos.opengl.FontRender.GLFont;
+import com.samrj.devil.res.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import com.bulletphysics.demos.opengl.FontRender.GLFont;
-import com.samrj.devil.res.Resource;
-import java.io.InputStream;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Cylinder;

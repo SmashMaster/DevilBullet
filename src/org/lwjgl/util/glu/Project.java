@@ -33,10 +33,7 @@ package org.lwjgl.util.glu;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 import static org.lwjgl.opengl.GL11.*;
 
 /**

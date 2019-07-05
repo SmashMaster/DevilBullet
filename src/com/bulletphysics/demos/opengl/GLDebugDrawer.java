@@ -25,10 +25,10 @@
 
 package com.bulletphysics.demos.opengl;
 
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.IDebugDraw;
 import javax.vecmath.Vector3f;
-import static com.bulletphysics.demos.opengl.IGL.*;
 
 /**
  *

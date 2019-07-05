@@ -25,7 +25,6 @@
 
 package com.bulletphysics.demos.opengl;
 
-import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
@@ -39,16 +38,15 @@ import com.bulletphysics.collision.shapes.ShapeHull;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
+import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import javax.vecmath.Vector3f;
-//import static org.lwjgl.opengl.GL11.*;
-//import static org.lwjgl.opengl.glu.GLU.*;
-import static com.bulletphysics.demos.opengl.IGL.*;
 
 /**
  *

@@ -33,9 +33,9 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectStackList;
+import com.samrj.devil.math.Quat;
 import java.util.Arrays;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /*

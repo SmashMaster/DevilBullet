@@ -25,7 +25,6 @@
 
 package com.bulletphysics.demos.forklift;
 
-import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -41,6 +40,7 @@ import com.bulletphysics.demos.opengl.DemoApplication;
 import com.bulletphysics.demos.opengl.GLDebugDrawer;
 import com.bulletphysics.demos.opengl.GLShapeDrawer;
 import com.bulletphysics.demos.opengl.IGL;
+import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.demos.opengl.LWJGL;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
@@ -56,11 +56,11 @@ import com.bulletphysics.dynamics.vehicle.WheelInfo;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.util.ObjectArrayList;
 import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import javax.vecmath.Vector3f;
-import static com.bulletphysics.demos.opengl.IGL.*;
 import org.lwjgl.glfw.GLFW;
 
 /**

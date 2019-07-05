@@ -31,8 +31,8 @@ package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
 import com.samrj.devil.math.Vec4;
+import javax.vecmath.Vector3f;
 
 /**
  *

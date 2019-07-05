@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
-import javax.vecmath.Quat;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -45,7 +45,7 @@ public class QuaternionUtil {
 		float d = axis.length();
 		assert (d != 0f);
 		float s = (float)Math.sin(angle * 0.5f) / d;
-		q.set(axis.x * s, axis.y * s, axis.z * s, (float) Math.cos(angle * 0.5f));
+		q.set((float)Math.cos(angle * 0.5f), axis.x * s, axis.y * s, axis.z * s);
 	}
 	
 	// Game Programming Gems 2.10. make sure v0,v1 are normalized
@@ -56,14 +56,14 @@ public class QuaternionUtil {
 
 		if (d < -1.0 + BulletGlobals.FLT_EPSILON) {
 			// just pick any vector
-			out.set(0.0f, 1.0f, 0.0f, 0.0f);
+			out.set(0.0f, 0.0f, 1.0f, 0.0f);
 			return out;
 		}
 
 		float s = (float) Math.sqrt((1.0f + d) * 2.0f);
 		float rs = 1.0f / s;
 
-		out.set(c.x * rs, c.y * rs, c.z * rs, s * 0.5f);
+		out.set(s * 0.5f, c.x * rs, c.y * rs, c.z * rs);
 		return out;
 	}
 	
@@ -72,7 +72,7 @@ public class QuaternionUtil {
 		float ry = q.w * w.y + q.z * w.x - q.x * w.z;
 		float rz = q.w * w.z + q.x * w.y - q.y * w.x;
 		float rw = -q.x * w.x - q.y * w.y - q.z * w.z;
-		q.set(rx, ry, rz, rw);
+		q.set(rw, rx, ry, rz);
 	}
 	
 	public static Vector3f quatRotate(Quat rotation, Vector3f v, Vector3f out) {
@@ -81,7 +81,7 @@ public class QuaternionUtil {
 
 		Quat tmp = new Quat();
 		inverse(tmp, rotation);
-		q.mul(tmp);
+		q.mult(tmp);
 		
 		out.set(q.x, q.y, q.z);
 		return out;

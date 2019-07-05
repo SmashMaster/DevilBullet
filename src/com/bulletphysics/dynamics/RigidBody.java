@@ -38,8 +38,8 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**

@@ -34,11 +34,9 @@ import java.io.*;
 import java.nio.*;
 import java.util.Hashtable;
 import org.lwjgl.BufferUtils;
-
+import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.ARBTextureCompression.*;
-import org.lwjgl.opengl.GL11;
 import static org.lwjgl.util.glu.GLU.*;
 
 /**

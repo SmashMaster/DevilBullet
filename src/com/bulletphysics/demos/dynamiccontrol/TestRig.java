@@ -39,7 +39,7 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Quat;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Vector3f;
 
 /**

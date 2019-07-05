@@ -25,8 +25,6 @@
 
 package com.bulletphysics.demos.vehicle;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -54,6 +52,8 @@ import com.bulletphysics.dynamics.vehicle.VehicleTuning;
 import com.bulletphysics.dynamics.vehicle.WheelInfo;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import javax.vecmath.Vector3f;
 import org.lwjgl.glfw.GLFW;
 

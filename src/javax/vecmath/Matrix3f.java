@@ -31,6 +31,8 @@
 
 package javax.vecmath;
 
+import com.samrj.devil.math.Quat;
+
 /**
  * A single precision floating point 3 by 3 matrix.
  * Primarily to support 3D rotations.

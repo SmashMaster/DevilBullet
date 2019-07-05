@@ -26,8 +26,8 @@
 package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.shapes.UniformScalingShape;
+import com.samrj.devil.math.Quat;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**

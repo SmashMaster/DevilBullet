@@ -25,8 +25,8 @@
 
 package com.bulletphysics.linearmath;
 
-import javax.vecmath.Vector3f;
 import com.samrj.devil.math.Vec4;
+import javax.vecmath.Vector3f;
 
 /**
  * Utility functions for vectors.

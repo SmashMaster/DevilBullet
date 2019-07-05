@@ -32,9 +32,9 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec4;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
-import com.samrj.devil.math.Vec4;
 
 /**
  *

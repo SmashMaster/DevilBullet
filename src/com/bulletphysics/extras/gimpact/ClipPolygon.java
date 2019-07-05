@@ -33,8 +33,8 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
 import com.samrj.devil.math.Vec4;
+import javax.vecmath.Vector3f;
 
 /**
  *
