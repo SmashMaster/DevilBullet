@@ -36,7 +36,7 @@ package javax.vecmath;
  * point x,y,z coordinates.
  *
  */
-public class Vector3f implements java.io.Serializable, Cloneable {
+public class Vector3f implements java.io.Serializable {
     /**
      * The x coordinate.
      */

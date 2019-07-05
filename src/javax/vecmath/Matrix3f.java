@@ -36,7 +36,7 @@ package javax.vecmath;
  * Primarily to support 3D rotations.
  *
  */
-public class Matrix3f implements java.io.Serializable, Cloneable {
+public class Matrix3f implements java.io.Serializable {
   /** 
     * The first matrix element in the first row.
     */
