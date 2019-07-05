@@ -71,9 +71,9 @@ public class PrimitiveTriangle {
 		Vector3f tmp2 = new Vector3f();
 
 		Vector3f normal = new Vector3f();
-		tmp1.sub(vertices[1], vertices[0]);
-		tmp2.sub(vertices[2], vertices[0]);
-		normal.cross(tmp1, tmp2);
+		tmp1.subHere(vertices[1], vertices[0]);
+		tmp2.subHere(vertices[2], vertices[0]);
+		normal.crossHere(tmp1, tmp2);
 		normal.normalize();
 
 		plane.set(normal.x, normal.y, normal.z, vertices[0].dot(normal));

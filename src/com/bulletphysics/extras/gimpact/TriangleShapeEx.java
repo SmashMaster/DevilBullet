@@ -76,9 +76,9 @@ public class TriangleShapeEx extends TriangleShape {
 		Vector3f tmp2 = new Vector3f();
 
 		Vector3f normal = new Vector3f();
-		tmp1.sub(vertices1[1], vertices1[0]);
-		tmp2.sub(vertices1[2], vertices1[0]);
-		normal.cross(tmp1, tmp2);
+		tmp1.subHere(vertices1[1], vertices1[0]);
+		tmp2.subHere(vertices1[2], vertices1[0]);
+		normal.crossHere(tmp1, tmp2);
 		normal.normalize();
 
 		plane.set(normal.x, normal.y, normal.z, vertices1[0].dot(normal));

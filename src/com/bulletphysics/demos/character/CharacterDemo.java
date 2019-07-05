@@ -176,7 +176,7 @@ public class CharacterDemo extends DemoApplication {
 				walkDirection.sub(forwardDir);
 			}
 
-			walkDirection.scale(walkSpeed);
+			walkDirection.mult(walkSpeed);
 			character.setWalkDirection(walkDirection);
 
 			int numSimSteps = dynamicsWorld.stepSimulation(dt, maxSimSubSteps);
@@ -288,7 +288,7 @@ public class CharacterDemo extends DemoApplication {
 		characterWorldTrans.basis.getRow(1, up);
 		Vector3f backward = new Vector3f();
 		characterWorldTrans.basis.getRow(2, backward);
-		backward.scale(-1);
+		backward.mult(-1);
 		up.normalize ();
 		backward.normalize ();
 
@@ -297,7 +297,7 @@ public class CharacterDemo extends DemoApplication {
 		Vector3f cameraPosition = new Vector3f();
 		cameraPosition.scale(2, up);
 		cameraPosition.add(cameraTargetPosition);
-		backward.scale(12);
+		backward.mult(12);
 		cameraPosition.add(backward);
 
 		// update OpenGL camera settings

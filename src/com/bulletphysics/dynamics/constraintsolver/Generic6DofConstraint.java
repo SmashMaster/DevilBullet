@@ -121,7 +121,7 @@ public class Generic6DofConstraint extends TypedConstraint {
 	private static float getMatrixElem(Matrix3f mat, int index) {
 		int i = index % 3;
 		int j = index / 3;
-		return mat.getElement(i, j);
+		return mat.getEntry(i, j);
 	}
 	
 	/**
@@ -167,7 +167,7 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Matrix3f relative_frame = new Matrix3f();
 		mat.set(calculatedTransformA.basis);
 		MatrixUtil.invert(mat);
-		relative_frame.mul(mat, calculatedTransformB.basis);
+		relative_frame.multHere(mat, calculatedTransformB.basis);
 
 		matrixToEulerXYZ(relative_frame, calculatedAxisAngleDiff);
 
@@ -192,9 +192,9 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Vector3f axis2 = new Vector3f();
 		calculatedTransformA.basis.getColumn(2, axis2);
 
-		calculatedAxis[1].cross(axis2, axis0);
-		calculatedAxis[0].cross(calculatedAxis[1], axis2);
-		calculatedAxis[2].cross(axis0, calculatedAxis[1]);
+		calculatedAxis[1].crossHere(axis2, axis0);
+		calculatedAxis[0].crossHere(calculatedAxis[1], axis2);
+		calculatedAxis[2].crossHere(axis0, calculatedAxis[1]);
 
 		//    if(m_debugDrawer)
 		//    {
@@ -234,10 +234,10 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Vector3f tmpVec = new Vector3f();
 		
 		Vector3f tmp1 = new Vector3f();
-		tmp1.sub(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+		tmp1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 
 		Vector3f tmp2 = new Vector3f();
-		tmp2.sub(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+		tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
 		jacLinear[jacLinear_index].init(
 				mat1,
@@ -512,7 +512,7 @@ public class Generic6DofConstraint extends TypedConstraint {
 
 		tmp1.scale(weight, pA);
 		tmp2.scale(1f - weight, pB);
-		anchorPos.add(tmp1, tmp2);
+		anchorPos.addHere(tmp1, tmp2);
 	}
 	
 }

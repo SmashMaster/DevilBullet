@@ -51,7 +51,7 @@ class ClipPolygon {
 	 */
 	public static void vec_blend(Vector3f vr, Vector3f va, Vector3f vb, float blend_factor) {
 		vr.scale(1f - blend_factor, va);
-		vr.scaleAdd(blend_factor, vb, vr);
+		vr.scaleAddHere(blend_factor, vb, vr);
 	}
 
 	/**

@@ -357,7 +357,7 @@ public class ForkLiftDemo extends DemoApplication {
 		//#endif
 
 		Vector3f camToObject = new Vector3f();
-		camToObject.sub(cameraTargetPosition, cameraPosition);
+		camToObject.subHere(cameraTargetPosition, cameraPosition);
 
 		// keep distance between min and max distance
 		float cameraDistance = camToObject.length();

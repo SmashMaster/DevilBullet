@@ -113,12 +113,12 @@ public class BoxShape extends PolyhedralConvexShape {
 		Vector3f oldMargin = new Vector3f();
 		oldMargin.set(getMargin(), getMargin(), getMargin());
 		Vector3f implicitShapeDimensionsWithMargin = new Vector3f();
-		implicitShapeDimensionsWithMargin.add(implicitShapeDimensions, oldMargin);
+		implicitShapeDimensionsWithMargin.addHere(implicitShapeDimensions, oldMargin);
 
 		super.setMargin(margin);
 		Vector3f newMargin = new Vector3f();
 		newMargin.set(getMargin(), getMargin(), getMargin());
-		implicitShapeDimensions.sub(implicitShapeDimensionsWithMargin, newMargin);
+		implicitShapeDimensions.subHere(implicitShapeDimensionsWithMargin, newMargin);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class BoxShape extends PolyhedralConvexShape {
 		Vector3f oldMargin = new Vector3f();
 		oldMargin.set(getMargin(), getMargin(), getMargin());
 		Vector3f implicitShapeDimensionsWithMargin = new Vector3f();
-		implicitShapeDimensionsWithMargin.add(implicitShapeDimensions, oldMargin);
+		implicitShapeDimensionsWithMargin.addHere(implicitShapeDimensions, oldMargin);
 		Vector3f unScaledImplicitShapeDimensionsWithMargin = new Vector3f();
 		VectorUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);
 
@@ -162,7 +162,7 @@ public class BoxShape extends PolyhedralConvexShape {
 		getPlaneEquation(plane, i);
 		planeNormal.set(plane.x, plane.y, plane.z);
 		Vector3f tmp = new Vector3f();
-		tmp.negate(planeNormal);
+		tmp.negateHere(planeNormal);
 		localGetSupportingVertex(tmp, planeSupport);
 	}
 

@@ -86,7 +86,7 @@ public class SphereSphereCollisionAlgorithm extends CollisionAlgorithm {
 		SphereShape sphere1 = (SphereShape) col1.getCollisionShape();
 
 		Vector3f diff = new Vector3f();
-		diff.sub(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
+		diff.subHere(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
 
 		float len = diff.length();
 		float radius0 = sphere0.getRadius();
@@ -117,12 +117,12 @@ public class SphereSphereCollisionAlgorithm extends CollisionAlgorithm {
 		// point on A (worldspace)
 		Vector3f pos0 = new Vector3f();
 		tmp.scale(radius0, normalOnSurfaceB);
-		pos0.sub(col0.getWorldTransform(tmpTrans1).origin, tmp);
+		pos0.subHere(col0.getWorldTransform(tmpTrans1).origin, tmp);
 
 		// point on B (worldspace)
 		Vector3f pos1 = new Vector3f();
 		tmp.scale(radius1, normalOnSurfaceB);
-		pos1.add(col1.getWorldTransform(tmpTrans2).origin, tmp);
+		pos1.addHere(col1.getWorldTransform(tmpTrans2).origin, tmp);
 
 		// report a contact. internally this will be kept persistent, and contact reduction is done
 		resultOut.addContactPoint(normalOnSurfaceB, pos1, dist);

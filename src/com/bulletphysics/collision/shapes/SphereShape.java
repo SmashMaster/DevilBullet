@@ -59,8 +59,8 @@ public class SphereShape extends ConvexInternalShape {
 		Vector3f center = t.origin;
 		Vector3f extent = new Vector3f();
 		extent.set(getMargin(), getMargin(), getMargin());
-		aabbMin.sub(center, extent);
-		aabbMax.add(center, extent);
+		aabbMin.subHere(center, extent);
+		aabbMax.addHere(center, extent);
 	}
 
 	@Override

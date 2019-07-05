@@ -68,8 +68,8 @@ public class GjkConvexCast extends ConvexCast {
 		Vector3f linVelA = new Vector3f();
 		Vector3f linVelB = new Vector3f();
 
-		linVelA.sub(toA.origin, fromA.origin);
-		linVelB.sub(toB.origin, fromB.origin);
+		linVelA.subHere(toA.origin, fromA.origin);
+		linVelB.subHere(toB.origin, fromB.origin);
 
 		float radius = 0.001f;
 		float lambda = 0f;
@@ -83,7 +83,7 @@ public class GjkConvexCast extends ConvexCast {
 		boolean hasResult = false;
 		Vector3f c = new Vector3f();
 		Vector3f r = new Vector3f();
-		r.sub(linVelA, linVelB);
+		r.subHere(linVelA, linVelB);
 
 		float lastLambda = lambda;
 		//btScalar epsilon = btScalar(0.001);

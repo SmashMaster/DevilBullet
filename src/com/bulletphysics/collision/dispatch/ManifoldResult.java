@@ -95,7 +95,7 @@ public class ManifoldResult extends DiscreteCollisionDetectorInterface.Result {
 		boolean isSwapped = manifoldPtr.getBody0() != body0;
 
 		Vector3f pointA = new Vector3f();
-		pointA.scaleAdd(depth, normalOnBInWorld, pointInWorld);
+		pointA.scaleAddHere(depth, normalOnBInWorld, pointInWorld);
 
 		Vector3f localA = new Vector3f();
 		Vector3f localB = new Vector3f();

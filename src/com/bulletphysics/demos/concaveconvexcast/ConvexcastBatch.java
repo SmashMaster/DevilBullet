@@ -154,7 +154,7 @@ public class ConvexcastBatch {
 			direction[i].set(tmpQuat.x, tmpQuat.y, tmpQuat.z);
 			//direction[i].set(direction[i]);
 			source[i].set(min_x, max_y, z);
-			dest[i].scaleAdd(ray_length, direction[i], source[i]);
+			dest[i].scaleAddHere(ray_length, direction[i], source[i]);
 			dest[i].y = min_y;
 			normal[i].set(1f, 0f, 0f);
 		}
@@ -193,9 +193,9 @@ public class ConvexcastBatch {
 
 			Transform from = new Transform();
 			Transform to = new Transform();
-			from.basis.set(qFrom);
+			from.basis.setRotation(qFrom);
 			from.origin.set(source[i]);
-			to.basis.set(qTo);
+			to.basis.setRotation(qTo);
 			to.origin.set(dest[i]);
 			
 			cw.convexSweepTest(boxShape, from, to, cb);
@@ -266,11 +266,11 @@ public class ConvexcastBatch {
 		QuaternionUtil.setRotation(qTo, new Vector3f(1f, 0f, 0f), 0.7f);
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {
 			Transform from = new Transform();
-			from.basis.set(qFrom);
+			from.basis.setRotation(qFrom);
 			from.origin.set(source[i]);
 
 			Transform to = new Transform();
-			to.basis.set(qTo);
+			to.basis.setRotation(qTo);
 			to.origin.set(dest[i]);
 
 			Vector3f linVel = new Vector3f();

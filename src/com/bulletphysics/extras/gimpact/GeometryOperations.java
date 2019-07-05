@@ -52,8 +52,8 @@ class GeometryOperations {
 	 */
 	public static void edge_plane(Vector3f e1, Vector3f e2, Vector3f normal, Vec4 plane) {
 		Vector3f planenormal = new Vector3f();
-		planenormal.sub(e2, e1);
-		planenormal.cross(planenormal, normal);
+		planenormal.subHere(e2, e1);
+		planenormal.crossHere(planenormal, normal);
 		planenormal.normalize();
 
 		plane.set(planenormal.x, planenormal.y, planenormal.z, e2.dot(planenormal));
@@ -64,8 +64,8 @@ class GeometryOperations {
 	 */
 	public static void closest_point_on_segment(Vector3f cp, Vector3f v, Vector3f e1, Vector3f e2) {
 		Vector3f n = new Vector3f();
-		n.sub(e2, e1);
-		cp.sub(v, e1);
+		n.subHere(e2, e1);
+		cp.subHere(v, e1);
 		float _scalar = cp.dot(n) / n.dot(n);
 		if (_scalar < 0.0f) {
 			cp = e1;
@@ -74,7 +74,7 @@ class GeometryOperations {
 			cp = e2;
 		}
 		else {
-			cp.scaleAdd(_scalar, n, e1);
+			cp.scaleAddHere(_scalar, n, e1);
 		}
 	}
 	
@@ -103,7 +103,7 @@ class GeometryOperations {
 			returnvalue = 0;
 			tparam[0] = tmax;
 		}
-		pout.scaleAdd(tparam[0], vDir, vPoint);
+		pout.scaleAddHere(tparam[0], vDir, vPoint);
 		return returnvalue;
 	}
 	
@@ -112,14 +112,14 @@ class GeometryOperations {
 	 */
 	public static void segment_collision(Vector3f vA1, Vector3f vA2, Vector3f vB1, Vector3f vB2, Vector3f vPointA, Vector3f vPointB) {
 		Vector3f AD = new Vector3f();
-		AD.sub(vA2, vA1);
+		AD.subHere(vA2, vA1);
 
 		Vector3f BD = new Vector3f();
-		BD.sub(vB2, vB1);
+		BD.subHere(vB2, vB1);
 
 		Vector3f N = new Vector3f();
-		N.cross(AD, BD);
-		float[] tp = new float[] { N.lengthSquared() };
+		N.crossHere(AD, BD);
+		float[] tp = new float[] { N.squareLength() };
 
 		Vec4 _M = new Vec4();//plane
 
@@ -174,19 +174,19 @@ class GeometryOperations {
 			return;
 		}
 
-		N.cross(N, BD);
+		N.crossHere(N, BD);
 		_M.set(N.x, N.y, N.z, vB1.dot(N));
 
 		// get point A as the plane collision point
 		line_plane_collision(_M, AD, vA1, vPointA, tp, 0f, 1f);
 
 		/*Closest point on segment*/
-		vPointB.sub(vPointA, vB1);
+		vPointB.subHere(vPointA, vB1);
 		tp[0] = vPointB.dot(BD);
 		tp[0] /= BD.dot(BD);
 		tp[0] = CLAMP(tp[0], 0.0f, 1.0f);
 
-		vPointB.scaleAdd(tp[0], BD, vB1);
+		vPointB.scaleAddHere(tp[0], BD, vB1);
 	}
 	
 }

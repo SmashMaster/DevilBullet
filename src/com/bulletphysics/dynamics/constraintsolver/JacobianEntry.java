@@ -71,12 +71,12 @@ public class JacobianEntry {
 	{
 		linearJointAxis.set(jointAxis);
 
-		aJ.cross(rel_pos1, linearJointAxis);
+		aJ.crossHere(rel_pos1, linearJointAxis);
 		world2A.transform(aJ);
 
 		bJ.set(linearJointAxis);
 		bJ.negate();
-		bJ.cross(rel_pos2, bJ);
+		bJ.crossHere(rel_pos2, bJ);
 		world2B.transform(bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -144,12 +144,12 @@ public class JacobianEntry {
 	{
 		linearJointAxis.set(jointAxis);
 
-		aJ.cross(rel_pos1, jointAxis);
+		aJ.crossHere(rel_pos1, jointAxis);
 		world2A.transform(aJ);
 
 		bJ.set(jointAxis);
 		bJ.negate();
-		bJ.cross(rel_pos2, bJ);
+		bJ.crossHere(rel_pos2, bJ);
 		world2A.transform(bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -200,7 +200,7 @@ public class JacobianEntry {
 
 	public float getRelativeVelocity(Vector3f linvelA, Vector3f angvelA, Vector3f linvelB, Vector3f angvelB) {
 		Vector3f linrel = new Vector3f();
-		linrel.sub(linvelA, linvelB);
+		linrel.subHere(linvelA, linvelB);
 
 		Vector3f angvela = new Vector3f();
 		VectorUtil.mul(angvela, angvelA, aJ);

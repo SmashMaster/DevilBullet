@@ -59,22 +59,22 @@ class BvhTree {
 		for (int i=startIndex; i<endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.add(tmp1, tmp2);
-			center.scale(0.5f);
+			center.addHere(tmp1, tmp2);
+			center.mult(0.5f);
 			means.add(center);
 		}
-		means.scale(1f / (float)numIndices);
+		means.mult(1f / (float)numIndices);
 
 		for (int i=startIndex; i<endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.add(tmp1, tmp2);
-			center.scale(0.5f);
-			diff2.sub(center, means);
+			center.addHere(tmp1, tmp2);
+			center.mult(0.5f);
+			diff2.subHere(center, means);
 			VectorUtil.mul(diff2, diff2, diff2);
 			variance.add(diff2);
 		}
-		variance.scale(1f / (float)(numIndices - 1));
+		variance.mult(1f / (float)(numIndices - 1));
 
 		return VectorUtil.maxAxis(variance);
 	}
@@ -97,11 +97,11 @@ class BvhTree {
 		for (int i = startIndex; i < endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.add(tmp1, tmp2);
-			center.scale(0.5f);
+			center.addHere(tmp1, tmp2);
+			center.mult(0.5f);
 			means.add(center);
 		}
-		means.scale(1f / (float) numIndices);
+		means.mult(1f / (float) numIndices);
 
 		splitValue = VectorUtil.getCoord(means, splitAxis);
 
@@ -109,8 +109,8 @@ class BvhTree {
 		for (int i = startIndex; i < endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.add(tmp1, tmp2);
-			center.scale(0.5f);
+			center.addHere(tmp1, tmp2);
+			center.mult(0.5f);
 
 			if (VectorUtil.getCoord(center, splitAxis) > splitValue) {
 				// swap

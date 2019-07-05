@@ -86,17 +86,17 @@ public abstract class ConvexInternalShape extends ConvexShape {
 
 		if (getMargin() != 0f) {
 			Vector3f vecnorm = new Vector3f(vec);
-			if (vecnorm.lengthSquared() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
+			if (vecnorm.squareLength() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}
 	
 	public void setLocalScaling(Vector3f scaling) {
-		localScaling.absolute(scaling);
+		localScaling.absoluteHere(scaling);
 	}
 	
 	public Vector3f getLocalScaling(Vector3f out) {

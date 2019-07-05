@@ -54,13 +54,13 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 		Vector3f vert2 = triangle[2];
 
 		Vector3f v10 = new Vector3f();
-		v10.sub(vert1, vert0);
+		v10.subHere(vert1, vert0);
 
 		Vector3f v20 = new Vector3f();
-		v20.sub(vert2, vert0);
+		v20.subHere(vert2, vert0);
 
 		Vector3f triangleNormal = new Vector3f();
-		triangleNormal.cross(v10, v20);
+		triangleNormal.crossHere(v10, v20);
 
 		float dist = vert0.dot(triangleNormal);
 		float dist_a = triangleNormal.dot(from);
@@ -80,26 +80,26 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 		// It must be scaled for the triangle size.
 
 		if (distance < hitFraction) {
-			float edge_tolerance = triangleNormal.lengthSquared();
+			float edge_tolerance = triangleNormal.squareLength();
 			edge_tolerance *= -0.0001f;
 			Vector3f point = new Vector3f();
 			VectorUtil.setInterpolate3(point, from, to, distance);
 			{
 				Vector3f v0p = new Vector3f();
-				v0p.sub(vert0, point);
+				v0p.subHere(vert0, point);
 				Vector3f v1p = new Vector3f();
-				v1p.sub(vert1, point);
+				v1p.subHere(vert1, point);
 				Vector3f cp0 = new Vector3f();
-				cp0.cross(v0p, v1p);
+				cp0.crossHere(v0p, v1p);
 
 				if (cp0.dot(triangleNormal) >= edge_tolerance) {
 					Vector3f v2p = new Vector3f();
-					v2p.sub(vert2, point);
+					v2p.subHere(vert2, point);
 					Vector3f cp1 = new Vector3f();
-					cp1.cross(v1p, v2p);
+					cp1.crossHere(v1p, v2p);
 					if (cp1.dot(triangleNormal) >= edge_tolerance) {
 						Vector3f cp2 = new Vector3f();
-						cp2.cross(v2p, v0p);
+						cp2.crossHere(v2p, v0p);
 
 						if (cp2.dot(triangleNormal) >= edge_tolerance) {
 
@@ -108,7 +108,7 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 							}
 							else {
 								Vector3f tmp = new Vector3f();
-								tmp.negate(triangleNormal);
+								tmp.negateHere(triangleNormal);
 								hitFraction = reportHit(tmp, distance, partId, triangleIndex);
 							}
 						}

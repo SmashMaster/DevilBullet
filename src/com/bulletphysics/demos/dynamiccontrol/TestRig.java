@@ -118,7 +118,7 @@ public class TestRig {
 			toBone.sub(root);
 			toBone.normalize();
 			Vector3f axis = new Vector3f();
-			axis.cross(toBone,up);
+			axis.crossHere(toBone,up);
 			Quat q = new Quat();
 			QuaternionUtil.setRotation(q, axis, BulletGlobals.SIMD_HALF_PI);
 			transform.setRotation(q);

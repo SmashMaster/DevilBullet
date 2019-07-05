@@ -147,7 +147,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param column the column number to be modified (zero indexed)
      * @param value the new value
      */
-    public final void setElement(int row, int column, float value)
+    public final void setEntry(int row, int column, float value)
     {
 	switch (row) 
 	  {
@@ -264,7 +264,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param column the column number to be retrieved (zero indexed)
      * @return the value at the indexed element.
      */
-    public final float getElement(int row, int column)
+    public final float getEntry(int row, int column)
     {
 	switch (row) 
 	  {
@@ -423,7 +423,7 @@ public class Matrix3f implements java.io.Serializable {
      * Sets the value of this matrix to the transpose of the argument matrix.
      * @param m1 the matrix to be transposed
      */
-    public final void transpose(Matrix3f m1)
+    public final void transposeHere(Matrix3f m1)
     {
 	if (this != m1) {
 	    this.a = m1.a;
@@ -446,7 +446,7 @@ public class Matrix3f implements java.io.Serializable {
      * (single precision) quaternion argument.
      * @param q1 the quaternion to be converted
      */
-    public final void set(Quat q1)
+    public final void setRotation(Quat q1)
     {
 	this.a = 1.0f - 2.0f*q1.y*q1.y - 2.0f*q1.z*q1.z;
 	this.d = 2.0f*(q1.x*q1.y + q1.w*q1.z);
@@ -487,7 +487,7 @@ public class Matrix3f implements java.io.Serializable {
      * of the passed matrix m1.
      * @param m1 the matrix to be inverted
      */
-    public final void invert(Matrix3f m1)
+    public final void invertHere(Matrix3f m1)
     {
 	 invertGeneral( m1);
     }
@@ -802,7 +802,7 @@ public class Matrix3f implements java.io.Serializable {
      * with matrix m1.
      * @param m1 the other matrix
      */  
-    public final void mul(Matrix3f m1)
+    public final void mult(Matrix3f m1)
     {
           float       m00, m01, m02,
                       m10, m11, m12,
@@ -831,7 +831,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param m1 the first matrix
      * @param m2 the second matrix
      */
-    public final void mul(Matrix3f m1, Matrix3f m2)
+    public final void multHere(Matrix3f m1, Matrix3f m2)
     {
 	if (this != m1 && this != m2) {
             this.a = m1.a*m2.a + m1.b*m2.d + m1.c*m2.g;

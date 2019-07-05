@@ -46,7 +46,7 @@ public class StaticPlaneShape extends ConcaveShape {
 	protected final Vector3f localScaling = new Vector3f(0f, 0f, 0f);
 
 	public StaticPlaneShape(Vector3f planeNormal, float planeConstant) {
-		this.planeNormal.normalize(planeNormal);
+		this.planeNormal.normalizeHere(planeNormal);
 		this.planeConstant = planeConstant;
 	}
 
@@ -66,13 +66,13 @@ public class StaticPlaneShape extends ConcaveShape {
 		Vector3f tmp2 = new Vector3f();
 
 		Vector3f halfExtents = new Vector3f();
-		halfExtents.sub(aabbMax, aabbMin);
-		halfExtents.scale(0.5f);
+		halfExtents.subHere(aabbMax, aabbMin);
+		halfExtents.mult(0.5f);
 
 		float radius = halfExtents.length();
 		Vector3f center = new Vector3f();
-		center.add(aabbMax, aabbMin);
-		center.scale(0.5f);
+		center.addHere(aabbMax, aabbMin);
+		center.mult(0.5f);
 
 		// this is where the triangles are generated, given AABB and plane equation (normal/constant)
 
@@ -85,7 +85,7 @@ public class StaticPlaneShape extends ConcaveShape {
 
 		Vector3f projectedCenter = new Vector3f();
 		tmp.scale(planeNormal.dot(center) - planeConstant, planeNormal);
-		projectedCenter.sub(center, tmp);
+		projectedCenter.subHere(center, tmp);
 
 		Vector3f[] triangle = new Vector3f[] { new Vector3f(), new Vector3f(), new Vector3f() };
 
@@ -95,25 +95,25 @@ public class StaticPlaneShape extends ConcaveShape {
 
 		tmp1.scale(radius, tangentDir0);
 		tmp2.scale(radius, tangentDir1);
-		tmp.sub(tmp1, tmp2);
+		tmp.subHere(tmp1, tmp2);
 		VectorUtil.add(triangle[1], projectedCenter, tmp);
 
 		tmp1.scale(radius, tangentDir0);
 		tmp2.scale(radius, tangentDir1);
-		tmp.sub(tmp1, tmp2);
-		triangle[2].sub(projectedCenter, tmp);
+		tmp.subHere(tmp1, tmp2);
+		triangle[2].subHere(projectedCenter, tmp);
 
 		callback.processTriangle(triangle, 0, 0);
 
 		tmp1.scale(radius, tangentDir0);
 		tmp2.scale(radius, tangentDir1);
-		tmp.sub(tmp1, tmp2);
-		triangle[0].sub(projectedCenter, tmp);
+		tmp.subHere(tmp1, tmp2);
+		triangle[0].subHere(projectedCenter, tmp);
 
 		tmp1.scale(radius, tangentDir0);
 		tmp2.scale(radius, tangentDir1);
-		tmp.add(tmp1, tmp2);
-		triangle[1].sub(projectedCenter, tmp);
+		tmp.addHere(tmp1, tmp2);
+		triangle[1].subHere(projectedCenter, tmp);
 
 		tmp1.scale(radius, tangentDir0);
 		tmp2.scale(radius, tangentDir1);

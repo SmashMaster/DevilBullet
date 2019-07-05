@@ -480,10 +480,10 @@ public class SliderConstraint extends TypedConstraint {
 		realPivotBInW.set(calculatedTransformB.origin);
 		calculatedTransformA.basis.getColumn(0, tmp);
 		sliderAxis.set(tmp); // along X
-		delta.sub(realPivotBInW, realPivotAInW);
-		projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
-		relPosA.sub(projPivotInW, rbA.getCenterOfMassPosition(tmp));
-		relPosB.sub(realPivotBInW, rbB.getCenterOfMassPosition(tmp));
+		delta.subHere(realPivotBInW, realPivotAInW);
+		projPivotInW.scaleAddHere(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
+		relPosA.subHere(projPivotInW, rbA.getCenterOfMassPosition(tmp));
+		relPosB.subHere(realPivotBInW, rbB.getCenterOfMassPosition(tmp));
 		Vector3f normalWorld = new Vector3f();
 
 		// linear part
@@ -545,7 +545,7 @@ public class SliderConstraint extends TypedConstraint {
 		Vector3f velA = rbA.getVelocityInLocalPoint(relPosA, new Vector3f());
 		Vector3f velB = rbB.getVelocityInLocalPoint(relPosB, new Vector3f());
 		Vector3f vel = new Vector3f();
-		vel.sub(velA, velB);
+		vel.subHere(velA, velB);
 
 		Vector3f impulse_vector = new Vector3f();
 
@@ -562,7 +562,7 @@ public class SliderConstraint extends TypedConstraint {
 			float normalImpulse = softness * (restitution * depth / timeStep - damping * rel_vel) * jacLinDiagABInv[i];
 			impulse_vector.scale(normalImpulse, normal);
 			rbA.applyImpulse(impulse_vector, relPosA);
-			tmp.negate(impulse_vector);
+			tmp.negateHere(impulse_vector);
 			rbB.applyImpulse(tmp, relPosB);
 
 			if (poweredLinMotor && (i == 0)) {
@@ -587,7 +587,7 @@ public class SliderConstraint extends TypedConstraint {
 					// apply clamped impulse
 					impulse_vector.scale(normalImpulse, normal);
 					rbA.applyImpulse(impulse_vector, relPosA);
-					tmp.negate(impulse_vector);
+					tmp.negateHere(impulse_vector);
 					rbB.applyImpulse(tmp, relPosB);
 				}
 			}
@@ -609,63 +609,63 @@ public class SliderConstraint extends TypedConstraint {
 		angVelAroundAxisB.scale(axisB.dot(angVelB), axisB);
 
 		Vector3f angAorthog = new Vector3f();
-		angAorthog.sub(angVelA, angVelAroundAxisA);
+		angAorthog.subHere(angVelA, angVelAroundAxisA);
 		Vector3f angBorthog = new Vector3f();
-		angBorthog.sub(angVelB, angVelAroundAxisB);
+		angBorthog.subHere(angVelB, angVelAroundAxisB);
 		Vector3f velrelOrthog = new Vector3f();
-		velrelOrthog.sub(angAorthog, angBorthog);
+		velrelOrthog.subHere(angAorthog, angBorthog);
 
 		// solve orthogonal angular velocity correction
 		float len = velrelOrthog.length();
 		if (len > 0.00001f) {
 			Vector3f normal = new Vector3f();
-			normal.normalize(velrelOrthog);
+			normal.normalizeHere(velrelOrthog);
 			float denom = rbA.computeAngularImpulseDenominator(normal) + rbB.computeAngularImpulseDenominator(normal);
-			velrelOrthog.scale((1f / denom) * dampingOrthoAng * softnessOrthoAng);
+			velrelOrthog.mult((1f / denom) * dampingOrthoAng * softnessOrthoAng);
 		}
 
 		// solve angular positional correction
 		Vector3f angularError = new Vector3f();
-		angularError.cross(axisA, axisB);
-		angularError.scale(1f / timeStep);
+		angularError.crossHere(axisA, axisB);
+		angularError.mult(1f / timeStep);
 		float len2 = angularError.length();
 		if (len2 > 0.00001f) {
 			Vector3f normal2 = new Vector3f();
-			normal2.normalize(angularError);
+			normal2.normalizeHere(angularError);
 			float denom2 = rbA.computeAngularImpulseDenominator(normal2) + rbB.computeAngularImpulseDenominator(normal2);
-			angularError.scale((1f / denom2) * restitutionOrthoAng * softnessOrthoAng);
+			angularError.mult((1f / denom2) * restitutionOrthoAng * softnessOrthoAng);
 		}
 
 		// apply impulse
-		tmp.negate(velrelOrthog);
+		tmp.negateHere(velrelOrthog);
 		tmp.add(angularError);
 		rbA.applyTorqueImpulse(tmp);
-		tmp.sub(velrelOrthog, angularError);
+		tmp.subHere(velrelOrthog, angularError);
 		rbB.applyTorqueImpulse(tmp);
 		float impulseMag;
 
 		// solve angular limits
 		if (solveAngLim) {
-			tmp.sub(angVelB, angVelA);
+			tmp.subHere(angVelB, angVelA);
 			impulseMag = tmp.dot(axisA) * dampingLimAng + angDepth * restitutionLimAng / timeStep;
 			impulseMag *= kAngle * softnessLimAng;
 		}
 		else {
-			tmp.sub(angVelB, angVelA);
+			tmp.subHere(angVelB, angVelA);
 			impulseMag = tmp.dot(axisA) * dampingDirAng + angDepth * restitutionDirAng / timeStep;
 			impulseMag *= kAngle * softnessDirAng;
 		}
 		Vector3f impulse = new Vector3f();
 		impulse.scale(impulseMag, axisA);
 		rbA.applyTorqueImpulse(impulse);
-		tmp.negate(impulse);
+		tmp.negateHere(impulse);
 		rbB.applyTorqueImpulse(tmp);
 
 		// apply angular motor
 		if (poweredAngMotor) {
 			if (accumulatedAngMotorImpulse < maxAngMotorForce) {
 				Vector3f velrel = new Vector3f();
-				velrel.sub(angVelAroundAxisA, angVelAroundAxisB);
+				velrel.subHere(angVelAroundAxisA, angVelAroundAxisB);
 				float projRelVel = velrel.dot(axisA);
 
 				float desiredMotorVel = targetAngMotorVelocity;
@@ -689,7 +689,7 @@ public class SliderConstraint extends TypedConstraint {
 				Vector3f motorImp = new Vector3f();
 				motorImp.scale(angImpulse, axisA);
 				rbA.applyTorqueImpulse(motorImp);
-				tmp.negate(motorImp);
+				tmp.negateHere(motorImp);
 				rbB.applyTorqueImpulse(tmp);
 			}
 		}
@@ -711,8 +711,8 @@ public class SliderConstraint extends TypedConstraint {
 		realPivotAInW.set(calculatedTransformA.origin);
 		realPivotBInW.set(calculatedTransformB.origin);
 		calculatedTransformA.basis.getColumn(0, sliderAxis); // along X
-		delta.sub(realPivotBInW, realPivotAInW);
-		projPivotInW.scaleAdd(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
+		delta.subHere(realPivotBInW, realPivotAInW);
+		projPivotInW.scaleAddHere(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
 		Vector3f normalWorld = new Vector3f();
 		// linear part
 		for (int i=0; i<3; i++) {
@@ -771,7 +771,7 @@ public class SliderConstraint extends TypedConstraint {
 		Transform tmpTrans = new Transform();
 
 		Vector3f ancorInA = out;
-		ancorInA.scaleAdd((lowerLinLimit + upperLinLimit) * 0.5f, sliderAxis, realPivotAInW);
+		ancorInA.scaleAddHere((lowerLinLimit + upperLinLimit) * 0.5f, sliderAxis, realPivotAInW);
 		rbA.getCenterOfMassTransform(tmpTrans);
 		tmpTrans.inverse();
 		tmpTrans.transform(ancorInA);

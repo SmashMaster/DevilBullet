@@ -84,13 +84,13 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 		float newDot, maxDot = -1e30f;
 
 		Vector3f vec = new Vector3f(vec0);
-		float lenSqr = vec.lengthSquared();
+		float lenSqr = vec.squareLength();
 		if (lenSqr < 0.0001f) {
 			vec.set(1f, 0f, 0f);
 		}
 		else {
 			float rlen = 1f / (float) Math.sqrt(lenSqr);
-			vec.scale(rlen);
+			vec.mult(rlen);
 		}
 
 
@@ -147,11 +147,11 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 
 		if (getMargin() != 0f) {
 			Vector3f vecnorm = new Vector3f(vec);
-			if (vecnorm.lengthSquared() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
+			if (vecnorm.squareLength() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}

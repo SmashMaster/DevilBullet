@@ -64,7 +64,7 @@ public class TransformUtil {
 	}
 	
 	public static void integrateTransform(Transform curTrans, Vector3f linvel, Vector3f angvel, float timeStep, Transform predictedTransform) {
-		predictedTransform.origin.scaleAdd(timeStep, linvel, curTrans.origin);
+		predictedTransform.origin.scaleAddHere(timeStep, linvel, curTrans.origin);
 //	//#define QUATERNION_DERIVATIVE
 //	#ifdef QUATERNION_DERIVATIVE
 //		btQuaternion predictedOrn = curTrans.getRotation();
@@ -101,8 +101,8 @@ public class TransformUtil {
 	}
 
 	public static void calculateVelocity(Transform transform0, Transform transform1, float timeStep, Vector3f linVel, Vector3f angVel) {
-		linVel.sub(transform1.origin, transform0.origin);
-		linVel.scale(1f / timeStep);
+		linVel.subHere(transform1.origin, transform0.origin);
+		linVel.mult(1f / timeStep);
 
 		Vector3f axis = new Vector3f();
 		float[] angle = new float[1];
@@ -122,7 +122,7 @@ public class TransformUtil {
 		MatrixUtil.invert(tmp);
 
 		Matrix3f dmat = new Matrix3f();
-		dmat.mul(transform1.basis, tmp);
+		dmat.multHere(transform1.basis, tmp);
 
 		Quat dorn = new Quat();
 		MatrixUtil.getRotation(dmat, dorn);
@@ -138,12 +138,12 @@ public class TransformUtil {
 		//axis[3] = btScalar(0.);
 
 		// check for axis length
-		float len = axis.lengthSquared();
+		float len = axis.squareLength();
 		if (len < BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON) {
 			axis.set(1f, 0f, 0f);
 		}
 		else {
-			axis.scale(1f / (float) Math.sqrt(len));
+			axis.mult(1f / (float) Math.sqrt(len));
 		}
 	}
 	

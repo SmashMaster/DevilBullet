@@ -129,10 +129,10 @@ public class OptimizedBvh implements Serializable {
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
 		Vector3f clampValue = new Vector3f();
 		clampValue.set(quantizationMargin,quantizationMargin,quantizationMargin);
-		bvhAabbMin.sub(aabbMin, clampValue);
-		bvhAabbMax.add(aabbMax, clampValue);
+		bvhAabbMin.subHere(aabbMin, clampValue);
+		bvhAabbMax.addHere(aabbMax, clampValue);
 		Vector3f aabbSize = new Vector3f();
-		aabbSize.sub(bvhAabbMax, bvhAabbMin);
+		aabbSize.subHere(bvhAabbMax, bvhAabbMin);
 		bvhQuantization.set(65535f, 65535f, 65535f);
 		VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
@@ -614,19 +614,19 @@ public class OptimizedBvh implements Serializable {
 		means.set(0f, 0f, 0f);
 		Vector3f center = new Vector3f();
 		for (i = startIndex; i < endIndex; i++) {
-			center.add(getAabbMax(i), getAabbMin(i));
-			center.scale(0.5f);
+			center.addHere(getAabbMax(i), getAabbMin(i));
+			center.mult(0.5f);
 			means.add(center);
 		}
-		means.scale(1f / (float) numIndices);
+		means.mult(1f / (float) numIndices);
 
 		splitValue = VectorUtil.getCoord(means, splitAxis);
 
 		//sort leafNodes so all values larger then splitValue comes first, and smaller values start from 'splitIndex'.
 		for (i = startIndex; i < endIndex; i++) {
 			//Vector3f center = new Vector3f();
-			center.add(getAabbMax(i), getAabbMin(i));
-			center.scale(0.5f);
+			center.addHere(getAabbMax(i), getAabbMin(i));
+			center.mult(0.5f);
 
 			if (VectorUtil.getCoord(center, splitAxis) > splitValue) {
 				// swap
@@ -668,22 +668,22 @@ public class OptimizedBvh implements Serializable {
 
 		Vector3f center = new Vector3f();
 		for (i = startIndex; i < endIndex; i++) {
-			center.add(getAabbMax(i), getAabbMin(i));
-			center.scale(0.5f);
+			center.addHere(getAabbMax(i), getAabbMin(i));
+			center.mult(0.5f);
 			means.add(center);
 		}
-		means.scale(1f / (float) numIndices);
+		means.mult(1f / (float) numIndices);
 
 		Vector3f diff2 = new Vector3f();
 		for (i = startIndex; i < endIndex; i++) {
-			center.add(getAabbMax(i), getAabbMin(i));
-			center.scale(0.5f);
-			diff2.sub(center, means);
+			center.addHere(getAabbMax(i), getAabbMin(i));
+			center.mult(0.5f);
+			diff2.subHere(center, means);
 			//diff2 = diff2 * diff2;
 			VectorUtil.mul(diff2, diff2, diff2);
 			variance.add(diff2);
 		}
-		variance.scale(1f / ((float) numIndices - 1));
+		variance.mult(1f / ((float) numIndices - 1));
 
 		return VectorUtil.maxAxis(variance);
 	}
@@ -815,8 +815,8 @@ public class OptimizedBvh implements Serializable {
 		//#ifdef RAYAABB2
 		Vector3f rayFrom = new Vector3f(raySource);
 		Vector3f rayDirection = new Vector3f();
-		tmp.sub(rayTarget, raySource);
-		rayDirection.normalize(tmp);
+		tmp.subHere(rayTarget, raySource);
+		rayDirection.normalizeHere(tmp);
 		lambda_max = rayDirection.dot(tmp);
 		rayDirection.x = 1f / rayDirection.x;
 		rayDirection.y = 1f / rayDirection.y;
@@ -1015,7 +1015,7 @@ public class OptimizedBvh implements Serializable {
 		VectorUtil.setMin(clampedPoint, bvhAabbMax);
 
 		Vector3f v = new Vector3f();
-		v.sub(clampedPoint, bvhAabbMin);
+		v.subHere(clampedPoint, bvhAabbMin);
 		VectorUtil.mul(v, v, bvhQuantization);
 
 		int out0 = (int)(v.x + 0.5f) & 0xFFFF;

@@ -71,8 +71,8 @@ public class SubsimplexConvexCast extends ConvexCast {
 
 		Vector3f linVelA = new Vector3f();
 		Vector3f linVelB = new Vector3f();
-		linVelA.sub(toA.origin, fromA.origin);
-		linVelB.sub(toB.origin, fromB.origin);
+		linVelA.subHere(toA.origin, fromA.origin);
+		linVelB.subHere(toB.origin, fromB.origin);
 		
 		float lambda = 0f;
 		
@@ -81,11 +81,11 @@ public class SubsimplexConvexCast extends ConvexCast {
 
 		// take relative motion
 		Vector3f r = new Vector3f();
-		r.sub(linVelA, linVelB);
+		r.subHere(linVelA, linVelB);
 		
 		Vector3f v = new Vector3f();
 
-		tmp.negate(r);
+		tmp.negateHere(r);
 		MatrixUtil.transposeTransform(tmp, tmp, fromA.basis);
 		Vector3f supVertexA = convexA.localGetSupportingVertex(tmp, new Vector3f());
 		fromA.transform(supVertexA);
@@ -94,7 +94,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 		Vector3f supVertexB = convexB.localGetSupportingVertex(tmp, new Vector3f());
 		fromB.transform(supVertexB);
 		
-		v.sub(supVertexA, supVertexB);
+		v.subHere(supVertexA, supVertexB);
 		
 		int maxIter = MAX_ITERATIONS;
 
@@ -105,7 +105,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 
 		float lastLambda = lambda;
 
-		float dist2 = v.lengthSquared();
+		float dist2 = v.squareLength();
 		//#ifdef BT_USE_DOUBLE_PRECISION
 		//	btScalar epsilon = btScalar(0.0001);
 		//#else
@@ -115,7 +115,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 		float VdotR;
 
 		while ((dist2 > epsilon) && (maxIter--) != 0) {
-			tmp.negate(v);
+			tmp.negateHere(v);
 			MatrixUtil.transposeTransform(tmp, tmp, interpolatedTransA.basis);
 			convexA.localGetSupportingVertex(tmp, supVertexA);
 			interpolatedTransA.transform(supVertexA);
@@ -124,7 +124,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 			convexB.localGetSupportingVertex(tmp, supVertexB);
 			interpolatedTransB.transform(supVertexB);
 			
-			w.sub(supVertexA, supVertexB);
+			w.subHere(supVertexA, supVertexB);
 
 			float VdotW = v.dot(w);
 
@@ -147,7 +147,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 					VectorUtil.setInterpolate3(interpolatedTransB.origin, fromB.origin, toB.origin, lambda);
 					//m_simplexSolver->reset();
 					// check next line
-					w.sub(supVertexA, supVertexB);
+					w.subHere(supVertexA, supVertexB);
 					lastLambda = lambda;
 					n.set(v);
 					hasResult = true;
@@ -155,7 +155,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 			}
 			simplexSolver.addVertex(w, supVertexA , supVertexB);
 			if (simplexSolver.closest(v)) {
-				dist2 = v.lengthSquared();
+				dist2 = v.squareLength();
 				hasResult = true;
 				// todo: check this normal for validity
 				//n.set(v);
@@ -174,8 +174,8 @@ public class SubsimplexConvexCast extends ConvexCast {
 		// don't report a time of impact when moving 'away' from the hitnormal
 		
 		result.fraction = lambda;
-		if (n.lengthSquared() >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON) {
-			result.normal.normalize(n);
+		if (n.squareLength() >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON) {
+			result.normal.normalizeHere(n);
 		}
 		else {
 			result.normal.set(0f, 0f, 0f);

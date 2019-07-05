@@ -64,7 +64,7 @@ public class ContactConstraint {
 	public static void resolveSingleBilateral(RigidBody body1, Vector3f pos1,
 			RigidBody body2, Vector3f pos2,
 			float distance, Vector3f normal, float[] impulse, float timeStep) {
-		float normalLenSqr = normal.lengthSquared();
+		float normalLenSqr = normal.squareLength();
 		assert (Math.abs(normalLenSqr) < 1.1f);
 		if (normalLenSqr > 1.1f) {
 			impulse[0] = 0f;
@@ -75,10 +75,10 @@ public class ContactConstraint {
 		Vector3f tmp = new Vector3f();
 		
 		Vector3f rel_pos1 = new Vector3f();
-		rel_pos1.sub(pos1, body1.getCenterOfMassPosition(tmp));
+		rel_pos1.subHere(pos1, body1.getCenterOfMassPosition(tmp));
 
 		Vector3f rel_pos2 = new Vector3f();
-		rel_pos2.sub(pos2, body2.getCenterOfMassPosition(tmp));
+		rel_pos2.subHere(pos2, body2.getCenterOfMassPosition(tmp));
 
 		//this jacobian entry could be re-used for all iterations
 
@@ -89,7 +89,7 @@ public class ContactConstraint {
 		body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
 		Vector3f vel = new Vector3f();
-		vel.sub(vel1, vel2);
+		vel.subHere(vel1, vel2);
 
 		Matrix3f mat1 = body1.getCenterOfMassTransform(new Transform()).basis;
 		mat1.transpose();
@@ -155,15 +155,15 @@ public class ContactConstraint {
 
 		// constant over all iterations
 		Vector3f rel_pos1 = new Vector3f();
-		rel_pos1.sub(pos1_, body1.getCenterOfMassPosition(tmpVec));
+		rel_pos1.subHere(pos1_, body1.getCenterOfMassPosition(tmpVec));
 
 		Vector3f rel_pos2 = new Vector3f();
-		rel_pos2.sub(pos2_, body2.getCenterOfMassPosition(tmpVec));
+		rel_pos2.subHere(pos2_, body2.getCenterOfMassPosition(tmpVec));
 
 		Vector3f vel1 = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
 		Vector3f vel2 = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
 		Vector3f vel = new Vector3f();
-		vel.sub(vel1, vel2);
+		vel.subHere(vel1, vel2);
 
 		float rel_vel;
 		rel_vel = normal.dot(vel);
@@ -223,10 +223,10 @@ public class ContactConstraint {
 		Vector3f pos2 = contactPoint.getPositionWorldOnB(new Vector3f());
 
 		Vector3f rel_pos1 = new Vector3f();
-		rel_pos1.sub(pos1, body1.getCenterOfMassPosition(tmpVec));
+		rel_pos1.subHere(pos1, body1.getCenterOfMassPosition(tmpVec));
 
 		Vector3f rel_pos2 = new Vector3f();
-		rel_pos2.sub(pos2, body2.getCenterOfMassPosition(tmpVec));
+		rel_pos2.subHere(pos2, body2.getCenterOfMassPosition(tmpVec));
 
 		ConstraintPersistentData cpd = (ConstraintPersistentData) contactPoint.userPersistentData;
 		assert (cpd != null);
@@ -247,7 +247,7 @@ public class ContactConstraint {
 			body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
 			Vector3f vel = new Vector3f();
-			vel.sub(vel1, vel2);
+			vel.subHere(vel1, vel2);
 
 			float j1, j2;
 
@@ -320,15 +320,15 @@ public class ContactConstraint {
 		Vector3f normal = contactPoint.normalWorldOnB;
 
 		Vector3f rel_pos1 = new Vector3f();
-		rel_pos1.sub(pos1, body1.getCenterOfMassPosition(tmpVec));
+		rel_pos1.subHere(pos1, body1.getCenterOfMassPosition(tmpVec));
 
 		Vector3f rel_pos2 = new Vector3f();
-		rel_pos2.sub(pos2, body2.getCenterOfMassPosition(tmpVec));
+		rel_pos2.subHere(pos2, body2.getCenterOfMassPosition(tmpVec));
 
 		Vector3f vel1 = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
 		Vector3f vel2 = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
 		Vector3f vel = new Vector3f();
-		vel.sub(vel1, vel2);
+		vel.subHere(vel1, vel2);
 
 		float rel_vel;
 		rel_vel = normal.dot(vel);
@@ -378,36 +378,36 @@ public class ContactConstraint {
 			//friction
 			body1.getVelocityInLocalPoint(rel_pos1, vel1);
 			body2.getVelocityInLocalPoint(rel_pos2, vel2);
-			vel.sub(vel1, vel2);
+			vel.subHere(vel1, vel2);
 
 			rel_vel = normal.dot(vel);
 
 			tmp.scale(rel_vel, normal);
 			Vector3f lat_vel = new Vector3f();
-			lat_vel.sub(vel, tmp);
+			lat_vel.subHere(vel, tmp);
 			float lat_rel_vel = lat_vel.length();
 
 			float combinedFriction = cpd.friction;
 
 			if (cpd.appliedImpulse > 0) {
 				if (lat_rel_vel > BulletGlobals.FLT_EPSILON) {
-					lat_vel.scale(1f / lat_rel_vel);
+					lat_vel.mult(1f / lat_rel_vel);
 
 					Vector3f temp1 = new Vector3f();
-					temp1.cross(rel_pos1, lat_vel);
+					temp1.crossHere(rel_pos1, lat_vel);
 					body1.getInvInertiaTensorWorld(new Matrix3f()).transform(temp1);
 
 					Vector3f temp2 = new Vector3f();
-					temp2.cross(rel_pos2, lat_vel);
+					temp2.crossHere(rel_pos2, lat_vel);
 					body2.getInvInertiaTensorWorld(new Matrix3f()).transform(temp2);
 
 					Vector3f java_tmp1 = new Vector3f();
-					java_tmp1.cross(temp1, rel_pos1);
+					java_tmp1.crossHere(temp1, rel_pos1);
 
 					Vector3f java_tmp2 = new Vector3f();
-					java_tmp2.cross(temp2, rel_pos2);
+					java_tmp2.crossHere(temp2, rel_pos2);
 
-					tmp.add(java_tmp1, java_tmp2);
+					tmp.addHere(java_tmp1, java_tmp2);
 
 					float friction_impulse = lat_rel_vel /
 							(body1.getInvMass() + body2.getInvMass() + lat_vel.dot(tmp));

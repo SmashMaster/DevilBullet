@@ -113,11 +113,11 @@ public class CylinderShape extends BoxShape {
 
 		if (getMargin() != 0f) {
 			Vector3f vecnorm = new Vector3f(vec);
-			if (vecnorm.lengthSquared() < (BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)) {
+			if (vecnorm.squareLength() < (BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}

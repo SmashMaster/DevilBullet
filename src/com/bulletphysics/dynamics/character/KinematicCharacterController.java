@@ -341,7 +341,7 @@ public class KinematicCharacterController extends ActionInterface {
 	protected Vector3f computeReflectionDirection(Vector3f direction, Vector3f normal, Vector3f out) {
 		// return direction - (btScalar(2.0) * direction.dot(normal)) * normal;
 		out.set(normal);
-		out.scale(-2.0f * direction.dot(normal));
+		out.mult(-2.0f * direction.dot(normal));
 		out.add(direction);
 		return out;
 	}
@@ -353,7 +353,7 @@ public class KinematicCharacterController extends ActionInterface {
 		//btScalar magnitude = direction.dot(normal);
 		//return normal * magnitude;
 		out.set(normal);
-		out.scale(direction.dot(normal));
+		out.mult(direction.dot(normal));
 		return out;
 	}
 
@@ -363,7 +363,7 @@ public class KinematicCharacterController extends ActionInterface {
 	protected Vector3f perpindicularComponent(Vector3f direction, Vector3f normal, Vector3f out) {
 		//return direction - parallelComponent(direction, normal);
 		Vector3f perpendicular = parallelComponent(direction, normal, out);
-		perpendicular.scale(-1);
+		perpendicular.mult(-1);
 		perpendicular.add(direction);
 		return perpendicular;
 	}
@@ -397,10 +397,10 @@ public class KinematicCharacterController extends ActionInterface {
 						if (dist < maxPen) {
 							maxPen = dist;
 							touchingNormal.set(pt.normalWorldOnB);//??
-							touchingNormal.scale(directionSign);
+							touchingNormal.mult(directionSign);
 						}
 
-						currentPosition.scaleAdd(directionSign * dist * 0.2f, pt.normalWorldOnB, currentPosition);
+						currentPosition.scaleAddHere(directionSign * dist * 0.2f, pt.normalWorldOnB, currentPosition);
 
 						penetration = true;
 					}
@@ -427,13 +427,13 @@ public class KinematicCharacterController extends ActionInterface {
 		// phase 1: up
 		Transform start = new Transform();
 		Transform end = new Transform();
-		targetPosition.scaleAdd(stepHeight + (verticalOffset > 0.0?verticalOffset:0.0f), upAxisDirection[upAxis], currentPosition);
+		targetPosition.scaleAddHere(stepHeight + (verticalOffset > 0.0?verticalOffset:0.0f), upAxisDirection[upAxis], currentPosition);
 
 		start.setIdentity ();
 		end.setIdentity ();
 
 		/* FIXME: Handle penetration properly */
-		start.origin.scaleAdd(convexShape.getMargin() + addedMargin, upAxisDirection[upAxis], currentPosition);
+		start.origin.scaleAddHere(convexShape.getMargin() + addedMargin, upAxisDirection[upAxis], currentPosition);
 		end.origin.set(targetPosition);
 		
 		// Find only sloped/flat surface hits, avoid wall and ceiling hits...
@@ -453,7 +453,7 @@ public class KinematicCharacterController extends ActionInterface {
 		if (callback.hasHit()) {
 			// we moved up only a fraction of the step height
 			currentStepOffset = stepHeight * callback.closestHitFraction;
-			currentPosition.interpolate(currentPosition, targetPosition, callback.closestHitFraction);
+			currentPosition.interpolateHere(currentPosition, targetPosition, callback.closestHitFraction);
 			verticalVelocity = 0.0f;
 			verticalOffset = 0.0f;
 		}
@@ -469,7 +469,7 @@ public class KinematicCharacterController extends ActionInterface {
 
 	protected void updateTargetPositionBasedOnCollision(Vector3f hitNormal, float tangentMag, float normalMag) {
 		Vector3f movementDirection = new Vector3f();
-		movementDirection.sub(targetPosition, currentPosition);
+		movementDirection.subHere(targetPosition, currentPosition);
 		float movementLength = movementDirection.length();
 		if (movementLength>BulletGlobals.SIMD_EPSILON) {
 			movementDirection.normalize();
@@ -507,14 +507,14 @@ public class KinematicCharacterController extends ActionInterface {
 		// phase 2: forward and strafe
 		Transform start = new Transform();
 		Transform end = new Transform();
-		targetPosition.add(currentPosition, walkMove);
+		targetPosition.addHere(currentPosition, walkMove);
 		start.setIdentity ();
 		end.setIdentity ();
 
 		float fraction = 1.0f;
 		Vector3f distance2Vec = new Vector3f();
-		distance2Vec.sub(currentPosition, targetPosition);
-		float distance2 = distance2Vec.lengthSquared();
+		distance2Vec.subHere(currentPosition, targetPosition);
+		float distance2 = distance2Vec.squareLength();
 		//printf("distance2=%f\n",distance2);
 
 		/*if (touchingContact) {
@@ -550,7 +550,7 @@ public class KinematicCharacterController extends ActionInterface {
 			if (callback.hasHit()) {
 				// we moved only a fraction
 				Vector3f hitDistanceVec = new Vector3f();
-				hitDistanceVec.sub(callback.hitPointWorld, currentPosition);
+				hitDistanceVec.subHere(callback.hitPointWorld, currentPosition);
 				//float hitDistance = hitDistanceVec.length();
 
 				// if the distance is farther than the collision margin, move
@@ -562,8 +562,8 @@ public class KinematicCharacterController extends ActionInterface {
 				updateTargetPositionBasedOnCollision(callback.hitNormalWorld);
 
 				Vector3f currentDir = new Vector3f();
-				currentDir.sub(targetPosition, currentPosition);
-				distance2 = currentDir.lengthSquared();
+				currentDir.subHere(targetPosition, currentPosition);
+				distance2 = currentDir.squareLength();
 				if (distance2 > BulletGlobals.SIMD_EPSILON) {
 					currentDir.normalize();
 					// see Quake2: "If velocity is against original velocity, stop ead to avoid tiny oscilations in sloping corners."
@@ -619,7 +619,7 @@ public class KinematicCharacterController extends ActionInterface {
 
 		if (callback.hasHit()) {
 			// we dropped a fraction of the height -> hit floor
-			currentPosition.interpolate(currentPosition, targetPosition, callback.closestHitFraction);
+			currentPosition.interpolateHere(currentPosition, targetPosition, callback.closestHitFraction);
 			verticalVelocity = 0.0f;
 			verticalOffset = 0.0f;
 		}

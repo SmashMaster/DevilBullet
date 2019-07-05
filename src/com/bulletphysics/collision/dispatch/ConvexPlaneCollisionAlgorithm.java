@@ -100,7 +100,7 @@ public class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm {
 		convexInPlaneTrans.mul(convexObj.getWorldTransform(tmpTrans));
 
 		Vector3f tmp = new Vector3f();
-		tmp.negate(planeNormal);
+		tmp.negateHere(planeNormal);
 		planeInConvex.basis.transform(tmp);
 
 		Vector3f vtx = convexShape.localGetSupportingVertex(tmp, new Vector3f());
@@ -111,7 +111,7 @@ public class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm {
 
 		Vector3f vtxInPlaneProjected = new Vector3f();
 		tmp.scale(distance, planeNormal);
-		vtxInPlaneProjected.sub(vtxInPlane, tmp);
+		vtxInPlaneProjected.subHere(vtxInPlane, tmp);
 
 		Vector3f vtxInPlaneWorld = new Vector3f(vtxInPlaneProjected);
 		planeObj.getWorldTransform(tmpTrans).transform(vtxInPlaneWorld);

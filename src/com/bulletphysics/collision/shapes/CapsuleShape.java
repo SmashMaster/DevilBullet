@@ -68,13 +68,13 @@ public class CapsuleShape extends ConvexInternalShape {
 		float maxDot = -1e30f;
 
 		Vector3f vec = new Vector3f(vec0);
-		float lenSqr = vec.lengthSquared();
+		float lenSqr = vec.squareLength();
 		if (lenSqr < 0.0001f) {
 			vec.set(1f, 0f, 0f);
 		}
 		else {
 			float rlen = 1f / (float) Math.sqrt(lenSqr);
-			vec.scale(rlen);
+			vec.mult(rlen);
 		}
 
 		Vector3f vtx = new Vector3f();
@@ -91,9 +91,9 @@ public class CapsuleShape extends ConvexInternalShape {
 			VectorUtil.setCoord(pos, getUpAxis(), getHalfHeight());
 			
 			VectorUtil.mul(tmp1, vec, localScaling);
-			tmp1.scale(radius);
+			tmp1.mult(radius);
 			tmp2.scale(getMargin(), vec);
-			vtx.add(pos, tmp1);
+			vtx.addHere(pos, tmp1);
 			vtx.sub(tmp2);
 			newDot = vec.dot(vtx);
 			if (newDot > maxDot) {
@@ -106,9 +106,9 @@ public class CapsuleShape extends ConvexInternalShape {
 			VectorUtil.setCoord(pos, getUpAxis(), -getHalfHeight());
 			
 			VectorUtil.mul(tmp1, vec, localScaling);
-			tmp1.scale(radius);
+			tmp1.mult(radius);
 			tmp2.scale(getMargin(), vec);
-			vtx.add(pos, tmp1);
+			vtx.addHere(pos, tmp1);
 			vtx.sub(tmp2);
 			newDot = vec.dot(vtx);
 			if (newDot > maxDot) {
@@ -185,8 +185,8 @@ public class CapsuleShape extends ConvexInternalShape {
 		abs_b.getRow(2, tmp);
 		extent.z = tmp.dot(halfExtents);
 
-		aabbMin.sub(center, extent);
-		aabbMax.add(center, extent);
+		aabbMin.subHere(center, extent);
+		aabbMax.addHere(center, extent);
 	}
 
 	@Override

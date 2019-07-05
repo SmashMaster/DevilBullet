@@ -193,19 +193,19 @@ public abstract class DemoApplication {
 
 		Vector3f forward = new Vector3f();
 		forward.set(eyePos.x, eyePos.y, eyePos.z);
-		if (forward.lengthSquared() < BulletGlobals.FLT_EPSILON) {
+		if (forward.squareLength() < BulletGlobals.FLT_EPSILON) {
 			forward.set(1f, 0f, 0f);
 		}
 		Vector3f right = new Vector3f();
-		right.cross(cameraUp, forward);
+		right.crossHere(cameraUp, forward);
 		Quat roll = new Quat();
 		QuaternionUtil.setRotation(roll, right, -rele);
 
 		Matrix3f tmpMat1 = new Matrix3f();
 		Matrix3f tmpMat2 = new Matrix3f();
-		tmpMat1.set(rot);
-		tmpMat2.set(roll);
-		tmpMat1.mul(tmpMat2);
+		tmpMat1.setRotation(rot);
+		tmpMat2.setRotation(roll);
+		tmpMat1.mult(tmpMat2);
 		tmpMat1.transform(eyePos);
 
 		cameraPosition.set(eyePos);
@@ -549,7 +549,7 @@ public abstract class DemoApplication {
 
 			Vector3f linVel = new Vector3f(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
 			linVel.normalize();
-			linVel.scale(ShootBoxInitialSpeed);
+			linVel.mult(ShootBoxInitialSpeed);
 
 			Transform worldTrans = body.getWorldTransform(new Transform());
 			worldTrans.origin.set(camPos);
@@ -573,42 +573,42 @@ public abstract class DemoApplication {
 
 		Vector3f rayFrom = new Vector3f(getCameraPosition());
 		Vector3f rayForward = new Vector3f();
-		rayForward.sub(getCameraTargetPosition(), getCameraPosition());
+		rayForward.subHere(getCameraTargetPosition(), getCameraPosition());
 		rayForward.normalize();
 		float farPlane = 10000f;
-		rayForward.scale(farPlane);
+		rayForward.mult(farPlane);
 
 		Vector3f rightOffset = new Vector3f();
 		Vector3f vertical = new Vector3f(cameraUp);
 
 		Vector3f hor = new Vector3f();
 		// TODO: check: hor = rayForward.cross(vertical);
-		hor.cross(rayForward, vertical);
+		hor.crossHere(rayForward, vertical);
 		hor.normalize();
 		// TODO: check: vertical = hor.cross(rayForward);
-		vertical.cross(hor, rayForward);
+		vertical.crossHere(hor, rayForward);
 		vertical.normalize();
 
 		float tanfov = (float) Math.tan(0.5f * fov);
 		
 		float aspect = glutScreenHeight / (float)glutScreenWidth;
 		
-		hor.scale(2f * farPlane * tanfov);
-		vertical.scale(2f * farPlane * tanfov);
+		hor.mult(2f * farPlane * tanfov);
+		vertical.mult(2f * farPlane * tanfov);
 		
 		if (aspect < 1f) {
-			hor.scale(1f / aspect);
+			hor.mult(1f / aspect);
 		}
 		else {
-			vertical.scale(aspect);
+			vertical.mult(aspect);
 		}
 		
 		Vector3f rayToCenter = new Vector3f();
-		rayToCenter.add(rayFrom, rayForward);
+		rayToCenter.addHere(rayFrom, rayForward);
 		Vector3f dHor = new Vector3f(hor);
-		dHor.scale(1f / (float) glutScreenWidth);
+		dHor.mult(1f / (float) glutScreenWidth);
 		Vector3f dVert = new Vector3f(vertical);
-		dVert.scale(1.f / (float) glutScreenHeight);
+		dVert.mult(1.f / (float) glutScreenHeight);
 
 		Vector3f tmp1 = new Vector3f();
 		Vector3f tmp2 = new Vector3f();
@@ -616,7 +616,7 @@ public abstract class DemoApplication {
 		tmp2.scale(0.5f, vertical);
 
 		Vector3f rayTo = new Vector3f();
-		rayTo.sub(rayToCenter, tmp1);
+		rayTo.subHere(rayToCenter, tmp1);
 		rayTo.add(tmp2);
 
 		tmp1.scale(x, dHor);
@@ -653,9 +653,9 @@ public abstract class DemoApplication {
 								Vector3f impulse = new Vector3f(rayTo);
 								impulse.normalize();
 								float impulseStrength = 10f;
-								impulse.scale(impulseStrength);
+								impulse.mult(impulseStrength);
 								Vector3f relPos = new Vector3f();
-								relPos.sub(rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vector3f()));
+								relPos.subHere(rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vector3f()));
 								body.applyImpulse(impulse, relPos);
 							}
 						}
@@ -695,7 +695,7 @@ public abstract class DemoApplication {
 									BulletStats.gOldPickingPos.set(rayTo);
 									Vector3f eyePos = new Vector3f(cameraPosition);
 									Vector3f tmp = new Vector3f();
-									tmp.sub(pickPos, eyePos);
+									tmp.subHere(pickPos, eyePos);
 									BulletStats.gOldPickingDist = tmp.length();
 									// very weak constraint for picking
 									p2p.setting.tau = 0.1f;
@@ -734,12 +734,12 @@ public abstract class DemoApplication {
 				Vector3f newRayTo = new Vector3f(getRayTo(x, y));
 				Vector3f eyePos = new Vector3f(cameraPosition);
 				Vector3f dir = new Vector3f();
-				dir.sub(newRayTo, eyePos);
+				dir.subHere(newRayTo, eyePos);
 				dir.normalize();
-				dir.scale(BulletStats.gOldPickingDist);
+				dir.mult(BulletStats.gOldPickingDist);
 
 				Vector3f newPos = new Vector3f();
-				newPos.add(eyePos, dir);
+				newPos.addHere(eyePos, dir);
 				p2p.setPivotB(newPos);
 			}
 		}

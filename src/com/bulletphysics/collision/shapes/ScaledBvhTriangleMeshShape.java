@@ -95,8 +95,8 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
 		localAabbMax.z = (localScaling.z <= 0f) ? tmpLocalAabbMin.z : tmpLocalAabbMax.z;
 
 		Vector3f localHalfExtents = new Vector3f();
-		localHalfExtents.sub(localAabbMax, localAabbMin);
-		localHalfExtents.scale(0.5f);
+		localHalfExtents.subHere(localAabbMax, localAabbMin);
+		localHalfExtents.mult(0.5f);
 
 		float margin = bvhTriMeshShape.getMargin();
 		localHalfExtents.x += margin;
@@ -104,8 +104,8 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
 		localHalfExtents.z += margin;
 
 		Vector3f localCenter = new Vector3f();
-		localCenter.add(localAabbMax, localAabbMin);
-		localCenter.scale(0.5f);
+		localCenter.addHere(localAabbMax, localAabbMin);
+		localCenter.mult(0.5f);
 
 		Matrix3f abs_b = new Matrix3f(trans.basis);
 		MatrixUtil.absolute(abs_b);
@@ -122,8 +122,8 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
 		abs_b.getRow(2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
-		aabbMin.sub(center, extent);
-		aabbMax.add(center, extent);
+		aabbMin.subHere(center, extent);
+		aabbMax.addHere(center, extent);
 	}
 
 	@Override

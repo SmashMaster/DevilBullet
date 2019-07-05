@@ -262,17 +262,17 @@ public class RigidBody extends CollisionObject {
 		//linearVelocity.scale(MiscUtil.GEN_clamped((1f - timeStep * linearDamping), 0f, 1f));
 		//angularVelocity.scale(MiscUtil.GEN_clamped((1f - timeStep * angularDamping), 0f, 1f));
 		//#else
-		linearVelocity.scale((float)Math.pow(1f - linearDamping, timeStep));
-		angularVelocity.scale((float)Math.pow(1f - angularDamping, timeStep));
+		linearVelocity.mult((float)Math.pow(1f - linearDamping, timeStep));
+		angularVelocity.mult((float)Math.pow(1f - angularDamping, timeStep));
 		//#endif
 
 		if (additionalDamping) {
 			// Additional damping can help avoiding lowpass jitter motion, help stability for ragdolls etc.
 			// Such damping is undesirable, so once the overall simulation quality of the rigid body dynamics system has improved, this should become obsolete
-			if ((angularVelocity.lengthSquared() < additionalAngularDampingThresholdSqr) &&
-					(linearVelocity.lengthSquared() < additionalLinearDampingThresholdSqr)) {
-				angularVelocity.scale(additionalDampingFactor);
-				linearVelocity.scale(additionalDampingFactor);
+			if ((angularVelocity.squareLength() < additionalAngularDampingThresholdSqr) &&
+					(linearVelocity.squareLength() < additionalLinearDampingThresholdSqr)) {
+				angularVelocity.mult(additionalDampingFactor);
+				linearVelocity.mult(additionalDampingFactor);
 			}
 
 			float speed = linearVelocity.length();
@@ -281,7 +281,7 @@ public class RigidBody extends CollisionObject {
 				if (speed > dampVel) {
 					Vector3f dir = new Vector3f(linearVelocity);
 					dir.normalize();
-					dir.scale(dampVel);
+					dir.mult(dampVel);
 					linearVelocity.sub(dir);
 				}
 				else {
@@ -295,7 +295,7 @@ public class RigidBody extends CollisionObject {
 				if (angSpeed > angDampVel) {
 					Vector3f dir = new Vector3f(angularVelocity);
 					dir.normalize();
-					dir.scale(angDampVel);
+					dir.mult(angDampVel);
 					angularVelocity.sub(dir);
 				}
 				else {
@@ -334,15 +334,15 @@ public class RigidBody extends CollisionObject {
 			return;
 		}
 
-		linearVelocity.scaleAdd(inverseMass * step, totalForce, linearVelocity);
+		linearVelocity.scaleAddHere(inverseMass * step, totalForce, linearVelocity);
 		Vector3f tmp = new Vector3f(totalTorque);
 		invInertiaTensorWorld.transform(tmp);
-		angularVelocity.scaleAdd(step, tmp, angularVelocity);
+		angularVelocity.scaleAddHere(step, tmp, angularVelocity);
 
 		// clamp angular velocity. collision calculations will fail on higher angular velocities	
 		float angvel = angularVelocity.length();
 		if (angvel * step > MAX_ANGVEL) {
-			angularVelocity.scale((MAX_ANGVEL / step) / angvel);
+			angularVelocity.mult((MAX_ANGVEL / step) / angvel);
 		}
 	}
 
@@ -385,13 +385,13 @@ public class RigidBody extends CollisionObject {
 		applyCentralForce(force);
 		
 		Vector3f tmp = new Vector3f();
-		tmp.cross(rel_pos, force);
-		tmp.scale(angularFactor);
+		tmp.crossHere(rel_pos, force);
+		tmp.mult(angularFactor);
 		applyTorque(tmp);
 	}
 
 	public void applyCentralImpulse(Vector3f impulse) {
-		linearVelocity.scaleAdd(inverseMass, impulse, linearVelocity);
+		linearVelocity.scaleAddHere(inverseMass, impulse, linearVelocity);
 	}
 	
 	public void applyTorqueImpulse(Vector3f torque) {
@@ -405,8 +405,8 @@ public class RigidBody extends CollisionObject {
 			applyCentralImpulse(impulse);
 			if (angularFactor != 0f) {
 				Vector3f tmp = new Vector3f();
-				tmp.cross(rel_pos, impulse);
-				tmp.scale(angularFactor);
+				tmp.crossHere(rel_pos, impulse);
+				tmp.mult(angularFactor);
 				applyTorqueImpulse(tmp);
 			}
 		}
@@ -417,9 +417,9 @@ public class RigidBody extends CollisionObject {
 	 */
 	public void internalApplyImpulse(Vector3f linearComponent, Vector3f angularComponent, float impulseMagnitude) {
 		if (inverseMass != 0f) {
-			linearVelocity.scaleAdd(impulseMagnitude, linearComponent, linearVelocity);
+			linearVelocity.scaleAddHere(impulseMagnitude, linearComponent, linearVelocity);
 			if (angularFactor != 0f) {
-				angularVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+				angularVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
 			}
 		}
 	}
@@ -436,7 +436,7 @@ public class RigidBody extends CollisionObject {
 		Matrix3f mat2 = new Matrix3f(worldTransform.basis);
 		mat2.transpose();
 
-		invInertiaTensorWorld.mul(mat1, mat2);
+		invInertiaTensorWorld.multHere(mat1, mat2);
 	}
 	
 	public Vector3f getCenterOfMassPosition(Vector3f out) {
@@ -477,7 +477,7 @@ public class RigidBody extends CollisionObject {
 	public Vector3f getVelocityInLocalPoint(Vector3f rel_pos, Vector3f out) {
 		// we also calculate lin/ang velocity for kinematic objects
 		Vector3f vec = out;
-		vec.cross(angularVelocity, rel_pos);
+		vec.crossHere(angularVelocity, rel_pos);
 		vec.add(linearVelocity);
 		return out;
 
@@ -495,16 +495,16 @@ public class RigidBody extends CollisionObject {
 
 	public float computeImpulseDenominator(Vector3f pos, Vector3f normal) {
 		Vector3f r0 = new Vector3f();
-		r0.sub(pos, getCenterOfMassPosition(new Vector3f()));
+		r0.subHere(pos, getCenterOfMassPosition(new Vector3f()));
 
 		Vector3f c0 = new Vector3f();
-		c0.cross(r0, normal);
+		c0.crossHere(r0, normal);
 
 		Vector3f tmp = new Vector3f();
 		MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld(new Matrix3f()));
 
 		Vector3f vec = new Vector3f();
-		vec.cross(tmp, r0);
+		vec.crossHere(tmp, r0);
 
 		return inverseMass + normal.dot(vec);
 	}
@@ -520,8 +520,8 @@ public class RigidBody extends CollisionObject {
 			return;
 		}
 
-		if ((getLinearVelocity(new Vector3f()).lengthSquared() < linearSleepingThreshold * linearSleepingThreshold) &&
-				(getAngularVelocity(new Vector3f()).lengthSquared() < angularSleepingThreshold * angularSleepingThreshold)) {
+		if ((getLinearVelocity(new Vector3f()).squareLength() < linearSleepingThreshold * linearSleepingThreshold) &&
+				(getAngularVelocity(new Vector3f()).squareLength() < angularSleepingThreshold * angularSleepingThreshold)) {
 			deactivationTime += timeStep;
 		}
 		else {

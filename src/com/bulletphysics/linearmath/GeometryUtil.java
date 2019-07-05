@@ -88,11 +88,11 @@ public class GeometryUtil {
 				for (int k = j + 1; k < numvertices; k++) {
 					Vector3f N3 = vertices.getQuick(k);
 
-					edge0.sub(N2, N1);
-					edge1.sub(N3, N1);
+					edge0.subHere(N2, N1);
+					edge1.subHere(N3, N1);
 					float normalSign = 1f;
 					for (int ww = 0; ww < 2; ww++) {
-						tmp.cross(edge0, edge1);
+						tmp.crossHere(edge0, edge1);
 						planeEquation.x = normalSign * tmp.x;
 						planeEquation.y = normalSign * tmp.y;
 						planeEquation.z = normalSign * tmp.z;
@@ -136,9 +136,9 @@ public class GeometryUtil {
 					VectorUtil.cross3(n3n1, N3, N1);
 					VectorUtil.cross3(n1n2, N1, N2);
 
-					if ((n2n3.lengthSquared() > 0.0001f) &&
-							(n3n1.lengthSquared() > 0.0001f) &&
-							(n1n2.lengthSquared() > 0.0001f)) {
+					if ((n2n3.squareLength() > 0.0001f) &&
+							(n3n1.squareLength() > 0.0001f) &&
+							(n1n2.squareLength() > 0.0001f)) {
 						// point P out of 3 plane equations:
 
 						// 	     d1 ( N2 * N3 ) + d2 ( N3 * N1 ) + d3 ( N1 * N2 )  
@@ -148,13 +148,13 @@ public class GeometryUtil {
 						float quotient = VectorUtil.dot3(N1, n2n3);
 						if (Math.abs(quotient) > 0.000001f) {
 							quotient = -1f / quotient;
-							n2n3.scale(N1.w);
-							n3n1.scale(N2.w);
-							n1n2.scale(N3.w);
+							n2n3.mult(N1.w);
+							n3n1.mult(N2.w);
+							n1n2.mult(N3.w);
 							potentialVertex.set(n2n3);
 							potentialVertex.add(n3n1);
 							potentialVertex.add(n1n2);
-							potentialVertex.scale(quotient);
+							potentialVertex.mult(quotient);
 
 							// check if inside, and replace supportingVertexOut if needed
 							if (isPointInsidePlanes(planeEquations, potentialVertex, 0.01f)) {

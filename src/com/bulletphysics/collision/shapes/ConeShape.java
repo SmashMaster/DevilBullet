@@ -106,11 +106,11 @@ public class ConeShape extends ConvexInternalShape {
 		Vector3f supVertex = coneLocalSupport(vec, out);
 		if (getMargin() != 0f) {
 			Vector3f vecnorm = new Vector3f(vec);
-			if (vecnorm.lengthSquared() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
+			if (vecnorm.squareLength() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAdd(getMargin(), vecnorm, supVertex);
+			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
 		}
 		return supVertex;
 	}
@@ -128,8 +128,8 @@ public class ConeShape extends ConvexInternalShape {
 		getAabb(identity, aabbMin, aabbMax);
 
 		Vector3f halfExtents = new Vector3f();
-		halfExtents.sub(aabbMax, aabbMin);
-		halfExtents.scale(0.5f);
+		halfExtents.subHere(aabbMax, aabbMin);
+		halfExtents.mult(0.5f);
 
 		float margin = getMargin();
 
@@ -142,7 +142,7 @@ public class ConeShape extends ConvexInternalShape {
 		float scaledmass = mass * 0.08333333f;
 
 		inertia.set(y2 + z2, x2 + z2, x2 + y2);
-		inertia.scale(scaledmass);
+		inertia.mult(scaledmass);
 
 		//inertia.x() = scaledmass * (y2+z2);
 		//inertia.y() = scaledmass * (x2+z2);

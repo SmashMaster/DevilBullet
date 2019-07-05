@@ -66,19 +66,19 @@ public class DbvtAabbMm {
 	}
 
 	public Vector3f Center(Vector3f out) {
-		out.add(mi, mx);
-		out.scale(0.5f);
+		out.addHere(mi, mx);
+		out.mult(0.5f);
 		return out;
 	}
 	
 	public Vector3f Lengths(Vector3f out) {
-		out.sub(mx, mi);
+		out.subHere(mx, mi);
 		return out;
 	}
 	
 	public Vector3f Extents(Vector3f out) {
-		out.sub(mx, mi);
-		out.scale(0.5f);
+		out.subHere(mx, mi);
+		out.mult(0.5f);
 		return out;
 	}
 	
@@ -92,8 +92,8 @@ public class DbvtAabbMm {
 	
 	public static DbvtAabbMm FromCE(Vector3f c, Vector3f e, DbvtAabbMm out) {
 		DbvtAabbMm box = out;
-		box.mi.sub(c, e);
-		box.mx.add(c, e);
+		box.mi.subHere(c, e);
+		box.mx.addHere(c, e);
 		return box;
 	}
 
@@ -288,8 +288,8 @@ public class DbvtAabbMm {
 		Vector3f d = new Vector3f();
 		Vector3f tmp = new Vector3f();
 
-		d.add(a.mi, a.mx);
-		tmp.add(b.mi, b.mx);
+		d.addHere(a.mi, a.mx);
+		tmp.addHere(b.mi, b.mx);
 		d.sub(tmp);
 		return Math.abs(d.x) + Math.abs(d.y) + Math.abs(d.z);
 	}

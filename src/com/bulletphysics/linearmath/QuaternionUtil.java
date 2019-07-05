@@ -51,7 +51,7 @@ public class QuaternionUtil {
 	// Game Programming Gems 2.10. make sure v0,v1 are normalized
 	public static Quat shortestArcQuat(Vector3f v0, Vector3f v1, Quat out) {
 		Vector3f c = new Vector3f();
-		c.cross(v0, v1);
+		c.crossHere(v0, v1);
 		float d = v0.dot(v1);
 
 		if (d < -1.0 + BulletGlobals.FLT_EPSILON) {

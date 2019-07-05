@@ -87,8 +87,8 @@ public class BspDemo extends DemoApplication {
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
 		Vector3f gravity = new Vector3f();
-		gravity.negate(cameraUp);
-		gravity.scale(10f);
+		gravity.negateHere(cameraUp);
+		gravity.mult(10f);
 		dynamicsWorld.setGravity(gravity);
 
 		new BspToBulletConverter().convertBsp(getClass().getResourceAsStream("exported.bsp.txt"));

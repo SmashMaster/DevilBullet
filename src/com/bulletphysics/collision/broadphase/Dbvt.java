@@ -358,7 +358,7 @@ public class Dbvt {
 		//DBVT_CHECKTYPE
 		if (root != null) {
 			Vector3f normal = new Vector3f();
-			normal.normalize(direction);
+			normal.normalizeHere(direction);
 			Vector3f invdir = new Vector3f();
 			invdir.set(1f / normal.x, 1f / normal.y, 1f / normal.z);
 			int[] signs = new int[] { direction.x<0 ? 1:0, direction.y<0 ? 1:0, direction.z<0 ? 1:0 };

@@ -218,8 +218,8 @@ public class CollisionWorld {
 		BroadphaseInterface bp = broadphasePairCache;
 
 		// moving objects should be moderately sized, probably something wrong if not
-		tmp.sub(maxAabb, minAabb); // TODO: optimize
-		if (colObj.isStaticObject() || (tmp.lengthSquared() < 1e12f)) {
+		tmp.subHere(maxAabb, minAabb); // TODO: optimize
+		if (colObj.isStaticObject() || (tmp.squareLength() < 1e12f)) {
 			bp.setAabb(colObj.getBroadphaseHandle(), minAabb, maxAabb, dispatcher1);
 		}
 		else {
@@ -293,7 +293,7 @@ public class CollisionWorld {
 
 			if (convexCaster.calcTimeOfImpact(rayFromTrans, rayToTrans, colObjWorldTransform, colObjWorldTransform, castResult)) {
 				//add hit
-				if (castResult.normal.lengthSquared() > 0.0001f) {
+				if (castResult.normal.squareLength() > 0.0001f) {
 					if (castResult.fraction < resultCallback.closestHitFraction) {
 						//#ifdef USE_SUBSIMPLEX_CONVEX_CAST
 						//rotate normal into worldspace
@@ -426,7 +426,7 @@ public class CollisionWorld {
 
 			if (castPtr.calcTimeOfImpact(convexFromTrans, convexToTrans, colObjWorldTransform, colObjWorldTransform, castResult)) {
 				// add hit
-				if (castResult.normal.lengthSquared() > 0.0001f) {
+				if (castResult.normal.squareLength() > 0.0001f) {
 					if (castResult.fraction < resultCallback.closestHitFraction) {
 						castResult.normal.normalize();
 						LocalConvexResult localConvexResult = new LocalConvexResult(collisionObject, null, castResult.normal, castResult.hitPoint, castResult.fraction);
@@ -455,7 +455,7 @@ public class CollisionWorld {
 					// rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
 					Transform rotationXform = new Transform();
 					Matrix3f tmpMat = new Matrix3f();
-					tmpMat.mul(worldTocollisionObject.basis, convexToTrans.basis);
+					tmpMat.multHere(worldTocollisionObject.basis, convexToTrans.basis);
 					rotationXform.set(tmpMat);
 
 					BridgeTriangleConvexcastCallback tccb = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
@@ -483,7 +483,7 @@ public class CollisionWorld {
 					// rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
 					Transform rotationXform = new Transform();
 					Matrix3f tmpMat = new Matrix3f();
-					tmpMat.mul(worldTocollisionObject.basis, convexToTrans.basis);
+					tmpMat.multHere(worldTocollisionObject.basis, convexToTrans.basis);
 					rotationXform.set(tmpMat);
 
 					BridgeTriangleConvexcastCallback tccb = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);

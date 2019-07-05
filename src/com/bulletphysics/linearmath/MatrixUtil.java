@@ -158,13 +158,13 @@ public class MatrixUtil {
 			int j = (i + 1) % 3;
 			int k = (i + 2) % 3;
 
-			float s = (float) Math.sqrt(mat.getElement(i, i) - mat.getElement(j, j) - mat.getElement(k, k) + 1f);
+			float s = (float) Math.sqrt(mat.getEntry(i, i) - mat.getEntry(j, j) - mat.getEntry(k, k) + 1f);
 			temp[i] = s * 0.5f;
 			s = 0.5f / s;
 
-			temp[3] = (mat.getElement(k, j) - mat.getElement(j, k)) * s;
-			temp[j] = (mat.getElement(j, i) + mat.getElement(i, j)) * s;
-			temp[k] = (mat.getElement(k, i) + mat.getElement(i, k)) * s;
+			temp[3] = (mat.getEntry(k, j) - mat.getEntry(j, k)) * s;
+			temp[j] = (mat.getEntry(j, i) + mat.getEntry(i, j)) * s;
+			temp[k] = (mat.getEntry(k, i) + mat.getEntry(i, k)) * s;
 		}
 		dest.set(temp[3], temp[0], temp[1], temp[2]);
 		
@@ -172,7 +172,7 @@ public class MatrixUtil {
 	}
 
 	private static float cofac(Matrix3f mat, int r1, int c1, int r2, int c2) {
-		return mat.getElement(r1, c1) * mat.getElement(r2, c2) - mat.getElement(r1, c2) * mat.getElement(r2, c1);
+		return mat.getEntry(r1, c1) * mat.getEntry(r2, c2) - mat.getEntry(r1, c2) * mat.getEntry(r2, c1);
 	}
 	
 	public static void invert(Matrix3f mat) {
@@ -247,8 +247,8 @@ public class MatrixUtil {
 			}
 
 			// compute Jacobi rotation J which leads to a zero for element [p][q]
-			float mpq = mat.getElement(p, q);
-			float theta = (mat.getElement(q, q) - mat.getElement(p, p)) / (2 * mpq);
+			float mpq = mat.getEntry(p, q);
+			float theta = (mat.getEntry(q, q) - mat.getEntry(p, p)) / (2 * mpq);
 			float theta2 = theta * theta;
 			float cos;
 			float sin;
@@ -266,16 +266,16 @@ public class MatrixUtil {
 			}
 
 			// apply rotation to matrix (this = J^T * this * J)
-			mat.setElement(p, q, 0f);
-			mat.setElement(q, p, 0f);
-			mat.setElement(p, p, mat.getElement(p, p) - t * mpq);
-			mat.setElement(q, q, mat.getElement(q, q) + t * mpq);
-			float mrp = mat.getElement(r, p);
-			float mrq = mat.getElement(r, q);
-			mat.setElement(r, p, cos * mrp - sin * mrq);
-			mat.setElement(p, r, cos * mrp - sin * mrq);
-			mat.setElement(r, q, cos * mrq + sin * mrp);
-			mat.setElement(q, r, cos * mrq + sin * mrp);
+			mat.setEntry(p, q, 0f);
+			mat.setEntry(q, p, 0f);
+			mat.setEntry(p, p, mat.getEntry(p, p) - t * mpq);
+			mat.setEntry(q, q, mat.getEntry(q, q) + t * mpq);
+			float mrp = mat.getEntry(r, p);
+			float mrq = mat.getEntry(r, q);
+			mat.setEntry(r, p, cos * mrp - sin * mrq);
+			mat.setEntry(p, r, cos * mrp - sin * mrq);
+			mat.setEntry(r, q, cos * mrq + sin * mrp);
+			mat.setEntry(q, r, cos * mrq + sin * mrp);
 
 			// apply rotation to rot (rot = rot * J)
 			for (int i=0; i<3; i++) {

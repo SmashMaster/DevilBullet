@@ -105,8 +105,8 @@ public class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm {
 
 		// only perform CCD above a certain threshold, this prevents blocking on the long run
 		// because object in a blocked ccd state (hitfraction<1) get their linear velocity halved each frame...
-		tmp.sub(convexbody.getInterpolationWorldTransform(new Transform()).origin, convexbody.getWorldTransform(new Transform()).origin);
-		float squareMot0 = tmp.lengthSquared();
+		tmp.subHere(convexbody.getInterpolationWorldTransform(new Transform()).origin, convexbody.getWorldTransform(new Transform()).origin);
+		float squareMot0 = tmp.squareLength();
 		if (squareMot0 < convexbody.getCcdSquareMotionThreshold()) {
 			return 1f;
 		}

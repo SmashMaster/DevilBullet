@@ -125,10 +125,10 @@ public class TriangleShape extends PolyhedralConvexShape {
 		Vector3f tmp1 = new Vector3f();
 		Vector3f tmp2 = new Vector3f();
 
-		tmp1.sub(vertices1[1], vertices1[0]);
-		tmp2.sub(vertices1[2], vertices1[0]);
+		tmp1.subHere(vertices1[1], vertices1[0]);
+		tmp2.subHere(vertices1[2], vertices1[0]);
 
-		normal.cross(tmp1, tmp2);
+		normal.crossHere(tmp1, tmp2);
 		normal.normalize();
 	}
 
@@ -158,9 +158,9 @@ public class TriangleShape extends PolyhedralConvexShape {
 				Vector3f pa = new Vector3f(), pb = new Vector3f();
 				getEdge(i, pa, pb);
 				Vector3f edge = new Vector3f();
-				edge.sub(pb, pa);
+				edge.subHere(pb, pa);
 				Vector3f edgeNormal = new Vector3f();
-				edgeNormal.cross(edge, normal);
+				edgeNormal.crossHere(edge, normal);
 				edgeNormal.normalize();
 				/*float*/ dist = pt.dot(edgeNormal);
 				float edgeConst = pa.dot(edgeNormal);
@@ -190,7 +190,7 @@ public class TriangleShape extends PolyhedralConvexShape {
 	public void getPreferredPenetrationDirection(int index, Vector3f penetrationVector) {
 		calcNormal(penetrationVector);
 		if (index != 0) {
-			penetrationVector.scale(-1f);
+			penetrationVector.mult(-1f);
 		}
 	}
 

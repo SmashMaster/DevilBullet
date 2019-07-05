@@ -82,7 +82,7 @@ public class Transform {
 	
 	public void inverse() {
 		basis.transpose();
-		origin.scale(-1f);
+		origin.mult(-1f);
 		basis.transform(origin);
 	}
 
@@ -95,7 +95,7 @@ public class Transform {
 		Vector3f vec = new Vector3f(tr.origin);
 		transform(vec);
 
-		basis.mul(tr.basis);
+		basis.mult(tr.basis);
 		origin.set(vec);
 	}
         
@@ -103,12 +103,12 @@ public class Transform {
 		Vector3f vec = new Vector3f(tr2.origin);
 		tr1.transform(vec);
 
-		basis.mul(tr1.basis, tr2.basis);
+		basis.multHere(tr1.basis, tr2.basis);
 		origin.set(vec);
 	}
 	
 	public void invXform(Vector3f inVec, Vector3f out) {
-		out.sub(inVec, origin);
+		out.subHere(inVec, origin);
 
 		Matrix3f mat = new Matrix3f(basis);
 		mat.transpose();

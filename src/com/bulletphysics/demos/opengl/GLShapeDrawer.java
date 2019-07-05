@@ -210,18 +210,18 @@ public class GLShapeDrawer {
 						float vecLen = 100f;
 						
 						Vector3f pt0 = vectorsPool.get();
-						pt0.scaleAdd(vecLen, vec0, planeOrigin);
+						pt0.scaleAddHere(vecLen, vec0, planeOrigin);
 
 						Vector3f pt1 = vectorsPool.get();
 						pt1.scale(vecLen, vec0);
-						pt1.sub(planeOrigin, pt1);
+						pt1.subHere(planeOrigin, pt1);
 
 						Vector3f pt2 = vectorsPool.get();
-						pt2.scaleAdd(vecLen, vec1, planeOrigin);
+						pt2.scaleAddHere(vecLen, vec1, planeOrigin);
 
 						Vector3f pt3 = vectorsPool.get();
 						pt3.scale(vecLen, vec1);
-						pt3.sub(planeOrigin, pt3);
+						pt3.subHere(planeOrigin, pt3);
 						
 						gl.glBegin(gl.GL_LINES);
 						gl.glVertex3f(pt0.x,pt0.y,pt0.z);
@@ -315,9 +315,9 @@ public class GLShapeDrawer {
 										Vector3f v1 = vtx.getQuick(index1);
 										Vector3f v2 = vtx.getQuick(index2);
 										Vector3f v3 = vtx.getQuick(index3);
-										tmp1.sub(v3, v1);
-										tmp2.sub(v2, v1);
-										normal.cross(tmp1, tmp2);
+										tmp1.subHere(v3, v1);
+										tmp2.subHere(v2, v1);
+										normal.crossHere(tmp1, tmp2);
 										normal.normalize();
 
 										gl.glNormal3f(normal.x,normal.y,normal.z);
@@ -487,9 +487,9 @@ public class GLShapeDrawer {
 		}
 		
 		public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
-			diff1.sub(triangle[1], triangle[0]);
-			diff2.sub(triangle[2], triangle[0]);
-			normal.cross(diff1, diff2);
+			diff1.subHere(triangle[1], triangle[0]);
+			diff2.subHere(triangle[2], triangle[0]);
+			normal.crossHere(diff1, diff2);
 
 			normal.normalize();
 

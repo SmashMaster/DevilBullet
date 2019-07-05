@@ -92,7 +92,7 @@ class BoxCollision {
 	 * Returns the dot product between a vec3f and the col of a matrix.
 	 */
 	public static float bt_mat3_dot_col(Matrix3f mat, Vector3f vec3, int colindex) {
-		return vec3.x*mat.getElement(0, colindex) + vec3.y*mat.getElement(1, colindex) + vec3.z*mat.getElement(2, colindex);
+		return vec3.x*mat.getEntry(0, colindex) + vec3.y*mat.getEntry(1, colindex) + vec3.z*mat.getEntry(2, colindex);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class BoxCollision {
 
 			for (int i=0; i<3; i++) {
 				for (int j=0; j<3; j++) {
-					AR.setElement(i, j, 1e-6f + Math.abs(R1to0.getElement(i, j)));
+					AR.setEntry(i, j, 1e-6f + Math.abs(R1to0.getEntry(i, j)));
 				}
 			}
 		}
@@ -144,8 +144,8 @@ class BoxCollision {
 		 * Calcs the full invertion of the matrices. Useful for scaling matrices.
 		 */
 		public void calc_from_full_invert(Transform trans0, Transform trans1) {
-			R1to0.invert(trans0.basis);
-			T1to0.negate(trans0.origin);
+			R1to0.invertHere(trans0.basis);
+			T1to0.negateHere(trans0.origin);
 			R1to0.transform(T1to0);
 
 			Vector3f tmp = new Vector3f();
@@ -153,7 +153,7 @@ class BoxCollision {
 			R1to0.transform(tmp);
 			T1to0.add(tmp);
 
-			R1to0.mul(trans1.basis);
+			R1to0.mult(trans1.basis);
 
 			calc_absolute_matrix();
 		}
@@ -265,11 +265,11 @@ class BoxCollision {
 			Vector3f tmp = new Vector3f();
 
 			Vector3f center = new Vector3f();
-			center.add(max, min);
-			center.scale(0.5f);
+			center.addHere(max, min);
+			center.mult(0.5f);
 
 			Vector3f extends_ = new Vector3f();
-			extends_.sub(max, center);
+			extends_.subHere(max, center);
 
 			// Compute new center
 			trans.transform(center);
@@ -288,8 +288,8 @@ class BoxCollision {
 			tmp.absolute();
 			textends.z = extends_.dot(tmp);
 
-			min.sub(center, textends);
-			max.add(center, textends);
+			min.subHere(center, textends);
+			max.addHere(center, textends);
 		}
 
 		/**
@@ -299,11 +299,11 @@ class BoxCollision {
 			Vector3f tmp = new Vector3f();
 
 			Vector3f center = new Vector3f();
-			center.add(max, min);
-			center.scale(0.5f);
+			center.addHere(max, min);
+			center.mult(0.5f);
 
 			Vector3f extends_ = new Vector3f();
-			extends_.sub(max, center);
+			extends_.subHere(max, center);
 
 			// Compute new center
 			trans.transform(center, center);
@@ -322,8 +322,8 @@ class BoxCollision {
 			tmp.absolute();
 			textends.z = extends_.dot(tmp);
 
-			min.sub(center, textends);
-			max.add(center, textends);
+			min.subHere(center, textends);
+			max.addHere(center, textends);
 		}
 		
 		/**
@@ -356,10 +356,10 @@ class BoxCollision {
 		 * Gets the extend and center.
 		 */
 		public void get_center_extend(Vector3f center, Vector3f extend) {
-			center.add(max, min);
-			center.scale(0.5f);
+			center.addHere(max, min);
+			center.mult(0.5f);
 
-			extend.sub(max, center);
+			extend.subHere(max, center);
 		}
 		
 		/**
@@ -427,7 +427,7 @@ class BoxCollision {
 			get_center_extend(center, extend);
 
 			float _fOrigin = direction.dot(center);
-			tmp.absolute(direction);
+			tmp.absoluteHere(direction);
 			float _fMaximumExtent = extend.dot(tmp);
 			vmin[0] = _fOrigin - _fMaximumExtent;
 			vmax[0] = _fOrigin + _fMaximumExtent;
@@ -508,9 +508,9 @@ class BoxCollision {
 					for (int j=0; j<3; j++) {
 						q = j == 2 ? 1 : 2;
 						r = j == 0 ? 1 : 0;
-						t = VectorUtil.getCoord(T, n) * transcache.R1to0.getElement(m, j) - VectorUtil.getCoord(T, m) * transcache.R1to0.getElement(n, j);
-						t2 = VectorUtil.getCoord(ea, o) * transcache.AR.getElement(p, j) + VectorUtil.getCoord(ea, p) * transcache.AR.getElement(o, j) +
-								VectorUtil.getCoord(eb, r) * transcache.AR.getElement(i, q) + VectorUtil.getCoord(eb, q) * transcache.AR.getElement(i, r);
+						t = VectorUtil.getCoord(T, n) * transcache.R1to0.getEntry(m, j) - VectorUtil.getCoord(T, m) * transcache.R1to0.getEntry(n, j);
+						t2 = VectorUtil.getCoord(ea, o) * transcache.AR.getEntry(p, j) + VectorUtil.getCoord(ea, p) * transcache.AR.getEntry(o, j) +
+								VectorUtil.getCoord(eb, r) * transcache.AR.getEntry(i, q) + VectorUtil.getCoord(eb, q) * transcache.AR.getEntry(i, r);
 						if (BT_GREATER(t, t2)) {
 							return false;
 						}
@@ -539,17 +539,17 @@ class BoxCollision {
 			get_center_extend(center, extends_);
 
 			Vector3f v1 = new Vector3f();
-			v1.sub(p1, center);
+			v1.subHere(p1, center);
 			Vector3f v2 = new Vector3f();
-			v2.sub(p2, center);
+			v2.subHere(p2, center);
 			Vector3f v3 = new Vector3f();
-			v3.sub(p3, center);
+			v3.subHere(p3, center);
 
 			// First axis
 			Vector3f diff = new Vector3f();
-			diff.sub(v2, v1);
+			diff.subHere(v2, v1);
 			Vector3f abs_diff = new Vector3f();
-			abs_diff.absolute(diff);
+			abs_diff.absoluteHere(diff);
 
 			// Test With X axis
 			TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v1, v3, extends_);
@@ -558,8 +558,8 @@ class BoxCollision {
 			// Test With Z axis
 			TEST_CROSS_EDGE_BOX_Z_AXIS_MCR(diff, abs_diff, v1, v3, extends_);
 
-			diff.sub(v3, v2);
-			abs_diff.absolute(diff);
+			diff.subHere(v3, v2);
+			abs_diff.absoluteHere(diff);
 
 			// Test With X axis
 			TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v2, v1, extends_);
@@ -568,8 +568,8 @@ class BoxCollision {
 			// Test With Z axis
 			TEST_CROSS_EDGE_BOX_Z_AXIS_MCR(diff, abs_diff, v2, v1, extends_);
 
-			diff.sub(v1, v3);
-			abs_diff.absolute(diff);
+			diff.subHere(v1, v3);
+			abs_diff.absoluteHere(diff);
 
 			// Test With X axis
 			TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v3, v2, extends_);

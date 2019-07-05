@@ -71,13 +71,13 @@ public abstract class PolyhedralConvexShape extends ConvexInternalShape {
 		float maxDot = -1e30f;
 
 		Vector3f vec = new Vector3f(vec0);
-		float lenSqr = vec.lengthSquared();
+		float lenSqr = vec.squareLength();
 		if (lenSqr < 0.0001f) {
 			vec.set(1f, 0f, 0f);
 		}
 		else {
 			float rlen = 1f / (float) Math.sqrt(lenSqr);
-			vec.scale(rlen);
+			vec.mult(rlen);
 		}
 
 		Vector3f vtx = new Vector3f();
@@ -141,8 +141,8 @@ public abstract class PolyhedralConvexShape extends ConvexInternalShape {
 		getAabb(ident, aabbMin, aabbMax);
 
 		Vector3f halfExtents = new Vector3f();
-		halfExtents.sub(aabbMax, aabbMin);
-		halfExtents.scale(0.5f);
+		halfExtents.subHere(aabbMax, aabbMin);
+		halfExtents.mult(0.5f);
 
 		float lx = 2f * (halfExtents.x + margin);
 		float ly = 2f * (halfExtents.y + margin);
@@ -153,7 +153,7 @@ public abstract class PolyhedralConvexShape extends ConvexInternalShape {
 		float scaledmass = mass * 0.08333333f;
 
 		inertia.set(y2 + z2, x2 + z2, x2 + y2);
-		inertia.scale(scaledmass);
+		inertia.mult(scaledmass);
 	}
 
 	private void getNonvirtualAabb(Transform trans, Vector3f aabbMin, Vector3f aabbMax, float margin) {

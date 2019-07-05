@@ -199,8 +199,8 @@ public class GjkEpaSolver {
 			tmp.negate();
 			Vector3f tmp2 = LocalSupport(tmp, 1, new Vector3f());
 
-			v.w.sub(tmp1, tmp2);
-			v.w.scaleAdd(margin, d, v.w);
+			v.w.subHere(tmp1, tmp2);
+			v.w.scaleAddHere(margin, d, v.w);
 		}
 
 		public boolean FetchSupport() {
@@ -228,9 +228,9 @@ public class GjkEpaSolver {
 		public boolean SolveSimplex2(Vector3f ao, Vector3f ab) {
 			if (ab.dot(ao) >= 0) {
 				Vector3f cabo = new Vector3f();
-				cabo.cross(ab, ao);
-				if (cabo.lengthSquared() > GJK_sqinsimplex_eps) {
-					ray.cross(cabo, ab);
+				cabo.crossHere(ab, ao);
+				if (cabo.squareLength() > GJK_sqinsimplex_eps) {
+					ray.crossHere(cabo, ab);
 				}
 				else {
 					return true;
@@ -247,7 +247,7 @@ public class GjkEpaSolver {
 		public boolean SolveSimplex3(Vector3f ao, Vector3f ab, Vector3f ac)
 		{
 			Vector3f tmp = new Vector3f();
-			tmp.cross(ab, ac);
+			tmp.crossHere(ab, ac);
 			return (SolveSimplex3a(ao,ab,ac,tmp));
 		}
 		
@@ -255,10 +255,10 @@ public class GjkEpaSolver {
 			// TODO: optimize
 
 			Vector3f tmp = new Vector3f();
-			tmp.cross(cabc, ab);
+			tmp.crossHere(cabc, ab);
 
 			Vector3f tmp2 = new Vector3f();
-			tmp2.cross(cabc, ac);
+			tmp2.crossHere(cabc, ac);
 
 			if (tmp.dot(ao) < -GJK_insimplex_eps) {
 				order = 1;
@@ -278,7 +278,7 @@ public class GjkEpaSolver {
 						ray.set(cabc);
 					}
 					else {
-						ray.negate(cabc);
+						ray.negateHere(cabc);
 
 						Mkv swapTmp = new Mkv();
 						swapTmp.set(simplex[0]);
@@ -299,13 +299,13 @@ public class GjkEpaSolver {
 			Vector3f crs = new Vector3f();
 
 			Vector3f tmp = new Vector3f();
-			tmp.cross(ab, ac);
+			tmp.crossHere(ab, ac);
 
 			Vector3f tmp2 = new Vector3f();
-			tmp2.cross(ac, ad);
+			tmp2.crossHere(ac, ad);
 
 			Vector3f tmp3 = new Vector3f();
-			tmp3.cross(ad, ab);
+			tmp3.crossHere(ad, ab);
 
 			if (tmp.dot(ao) > GJK_insimplex_eps) {
 				crs.set(tmp);
@@ -355,31 +355,31 @@ public class GjkEpaSolver {
 			Arrays.fill(table, null);
 
 			FetchSupport();
-			ray.negate(simplex[0].w);
+			ray.negateHere(simplex[0].w);
 			for (; iterations < GJK_maxiterations; ++iterations) {
 				float rl = ray.length();
-				ray.scale(1f / (rl > 0f ? rl : 1f));
+				ray.mult(1f / (rl > 0f ? rl : 1f));
 				if (FetchSupport()) {
 					boolean found = false;
 					switch (order) {
 						case 1: {
-							tmp1.negate(simplex[1].w);
-							tmp2.sub(simplex[0].w, simplex[1].w);
+							tmp1.negateHere(simplex[1].w);
+							tmp2.subHere(simplex[0].w, simplex[1].w);
 							found = SolveSimplex2(tmp1, tmp2);
 							break;
 						}
 						case 2: {
-							tmp1.negate(simplex[2].w);
-							tmp2.sub(simplex[1].w, simplex[2].w);
-							tmp3.sub(simplex[0].w, simplex[2].w);
+							tmp1.negateHere(simplex[2].w);
+							tmp2.subHere(simplex[1].w, simplex[2].w);
+							tmp3.subHere(simplex[0].w, simplex[2].w);
 							found = SolveSimplex3(tmp1, tmp2, tmp3);
 							break;
 						}
 						case 3: {
-							tmp1.negate(simplex[3].w);
-							tmp2.sub(simplex[2].w, simplex[3].w);
-							tmp3.sub(simplex[1].w, simplex[3].w);
-							tmp4.sub(simplex[0].w, simplex[3].w);
+							tmp1.negateHere(simplex[3].w);
+							tmp2.subHere(simplex[2].w, simplex[3].w);
+							tmp3.subHere(simplex[1].w, simplex[3].w);
+							tmp4.subHere(simplex[0].w, simplex[3].w);
 							found = SolveSimplex4(tmp1, tmp2, tmp3, tmp4);
 							break;
 						}
@@ -408,21 +408,21 @@ public class GjkEpaSolver {
 				// Line
 				case 1: {
 					Vector3f ab = new Vector3f();
-					ab.sub(simplex[1].w, simplex[0].w);
+					ab.subHere(simplex[1].w, simplex[0].w);
 
 					Vector3f[] b = new Vector3f[] { new Vector3f(), new Vector3f(), new Vector3f() };
 					b[0].set(1f, 0f, 0f);
 					b[1].set(0f, 1f, 0f);
 					b[2].set(0f, 0f, 1f);
 					
-					b[0].cross(ab, b[0]);
-					b[1].cross(ab, b[1]);
-					b[2].cross(ab, b[2]);
+					b[0].crossHere(ab, b[0]);
+					b[1].crossHere(ab, b[1]);
+					b[2].crossHere(ab, b[2]);
 
-					float m[] = new float[] { b[0].lengthSquared(), b[1].lengthSquared(), b[2].lengthSquared() };
+					float m[] = new float[] { b[0].squareLength(), b[1].squareLength(), b[2].squareLength() };
 
 					Quat tmpQuat = new Quat();
-					tmp.normalize(ab);
+					tmp.normalizeHere(ab);
 					QuaternionUtil.setRotation(tmpQuat, tmp, cst2Pi / 3f);
 
 					Matrix3f r = new Matrix3f();
@@ -431,26 +431,26 @@ public class GjkEpaSolver {
 					Vector3f w = new Vector3f();
 					w.set(b[m[0] > m[1] ? m[0] > m[2] ? 0 : 2 : m[1] > m[2] ? 1 : 2]);
 
-					tmp.normalize(w);
+					tmp.normalizeHere(w);
 					Support(tmp, simplex[4]); r.transform(w);
-					tmp.normalize(w);
+					tmp.normalizeHere(w);
 					Support(tmp, simplex[2]); r.transform(w);
-					tmp.normalize(w);
+					tmp.normalizeHere(w);
 					Support(tmp, simplex[3]); r.transform(w);
 					order = 4;
 					return (true);
 				}
 				// Triangle
 				case 2: {
-					tmp1.sub(simplex[1].w, simplex[0].w);
-					tmp2.sub(simplex[2].w, simplex[0].w);
+					tmp1.subHere(simplex[1].w, simplex[0].w);
+					tmp2.subHere(simplex[2].w, simplex[0].w);
 					Vector3f n = new Vector3f();
-					n.cross(tmp1, tmp2);
+					n.crossHere(tmp1, tmp2);
 					n.normalize();
 
 					Support(n, simplex[3]);
 
-					tmp.negate(n);
+					tmp.negateHere(n);
 					Support(tmp, simplex[4]);
 					order = 4;
 					return (true);
@@ -525,25 +525,25 @@ public class GjkEpaSolver {
 
 			float[] a = floatArrays.getFixed(3);
 
-			tmp1.sub(face.v[0].w, o);
-			tmp2.sub(face.v[1].w, o);
-			tmp.cross(tmp1, tmp2);
+			tmp1.subHere(face.v[0].w, o);
+			tmp2.subHere(face.v[1].w, o);
+			tmp.crossHere(tmp1, tmp2);
 			a[0] = tmp.length();
 
-			tmp1.sub(face.v[1].w, o);
-			tmp2.sub(face.v[2].w, o);
-			tmp.cross(tmp1, tmp2);
+			tmp1.subHere(face.v[1].w, o);
+			tmp2.subHere(face.v[2].w, o);
+			tmp.crossHere(tmp1, tmp2);
 			a[1] = tmp.length();
 
-			tmp1.sub(face.v[2].w, o);
-			tmp2.sub(face.v[0].w, o);
-			tmp.cross(tmp1, tmp2);
+			tmp1.subHere(face.v[2].w, o);
+			tmp2.subHere(face.v[0].w, o);
+			tmp.crossHere(tmp1, tmp2);
 			a[2] = tmp.length();
 
 			float sm = a[0] + a[1] + a[2];
 
 			out.set(a[1], a[2], a[0]);
-			out.scale(1f / (sm > 0f ? sm : 1f));
+			out.mult(1f / (sm > 0f ? sm : 1f));
 
 			floatArrays.release(a);
 
@@ -572,15 +572,15 @@ public class GjkEpaSolver {
 			Vector3f tmp3 = new Vector3f();
 
 			Vector3f nrm = new Vector3f();
-			tmp1.sub(b.w, a.w);
-			tmp2.sub(c.w, a.w);
-			nrm.cross(tmp1, tmp2);
+			tmp1.subHere(b.w, a.w);
+			tmp2.subHere(c.w, a.w);
+			nrm.crossHere(tmp1, tmp2);
 
 			float len = nrm.length();
 
-			tmp1.cross(a.w, b.w);
-			tmp2.cross(b.w, c.w);
-			tmp3.cross(c.w, a.w);
+			tmp1.crossHere(a.w, b.w);
+			tmp2.crossHere(b.w, c.w);
+			tmp3.crossHere(c.w, a.w);
 
 			boolean valid = (tmp1.dot(nrm) >= -EPA_inface_eps) &&
 					(tmp2.dot(nrm) >= -EPA_inface_eps) &&
@@ -759,7 +759,7 @@ public class GjkEpaSolver {
 				for (; iterations < EPA_maxiterations; ++iterations) {
 					Face bf = FindBest();
 					if (bf != null) {
-						tmp.negate(bf.n);
+						tmp.negateHere(bf.n);
 						Mkv w = Support(tmp);
 						float d = bf.n.dot(w.w) + bf.d;
 						bestface = bf;

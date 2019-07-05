@@ -67,7 +67,7 @@ public abstract class TriangleMeshShape extends ConcaveShape {
 
 		Vector3f aabbMax = new Vector3f();
 		aabbMax.set(1e30f, 1e30f, 1e30f);
-		tmp.negate(aabbMax);
+		tmp.negateHere(aabbMax);
 
 		processAllTriangles(supportCallback, tmp, aabbMax);
 
@@ -99,12 +99,12 @@ public abstract class TriangleMeshShape extends ConcaveShape {
 		Vector3f tmp = new Vector3f();
 
 		Vector3f localHalfExtents = new Vector3f();
-		localHalfExtents.sub(localAabbMax, localAabbMin);
-		localHalfExtents.scale(0.5f);
+		localHalfExtents.subHere(localAabbMax, localAabbMin);
+		localHalfExtents.mult(0.5f);
 
 		Vector3f localCenter = new Vector3f();
-		localCenter.add(localAabbMax, localAabbMin);
-		localCenter.scale(0.5f);
+		localCenter.addHere(localAabbMax, localAabbMin);
+		localCenter.mult(0.5f);
 
 		Matrix3f abs_b = new Matrix3f(trans.basis);
 		MatrixUtil.absolute(abs_b);
@@ -124,8 +124,8 @@ public abstract class TriangleMeshShape extends ConcaveShape {
 		margin.set(getMargin(), getMargin(), getMargin());
 		extent.add(margin);
 
-		aabbMin.sub(center, extent);
-		aabbMax.add(center, extent);
+		aabbMin.subHere(center, extent);
+		aabbMax.addHere(center, extent);
 	}
 
 	@Override

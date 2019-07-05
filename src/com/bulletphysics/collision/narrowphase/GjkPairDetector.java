@@ -80,8 +80,8 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 		Transform localTransA = new Transform(input.transformA);
 		Transform localTransB = new Transform(input.transformB);
 		Vector3f positionOffset = new Vector3f();
-		positionOffset.add(localTransA.origin, localTransB.origin);
-		positionOffset.scale(0.5f);
+		positionOffset.addHere(localTransA.origin, localTransB.origin);
+		positionOffset.mult(0.5f);
 		localTransA.origin.sub(positionOffset);
 		localTransB.origin.sub(positionOffset);
 
@@ -130,7 +130,7 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 			
 			for (;;) //while (true)
 			{
-				seperatingAxisInA.negate(cachedSeparatingAxis);
+				seperatingAxisInA.negateHere(cachedSeparatingAxis);
 				MatrixUtil.transposeTransform(seperatingAxisInA, seperatingAxisInA, input.transformA.basis);
 
 				seperatingAxisInB.set(cachedSeparatingAxis);
@@ -145,7 +145,7 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 				qWorld.set(qInB);
 				localTransB.transform(qWorld);
 
-				w.sub(pWorld, qWorld);
+				w.subHere(pWorld, qWorld);
 
 				delta = cachedSeparatingAxis.dot(w);
 
@@ -182,14 +182,14 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 					break;
 				}
 
-				if (cachedSeparatingAxis.lengthSquared() < REL_ERROR2) {
+				if (cachedSeparatingAxis.squareLength() < REL_ERROR2) {
 					degenerateSimplex = 6;
 					checkSimplex = true;
 					break;
 				}
 				
 				float previousSquaredDistance = squaredDistance;
-				squaredDistance = cachedSeparatingAxis.lengthSquared();
+				squaredDistance = cachedSeparatingAxis.squareLength();
 
 				// redundant m_simplexSolver->compute_points(pointOnA, pointOnB);
 
@@ -230,15 +230,15 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 
 			if (checkSimplex) {
 				simplexSolver.compute_points(pointOnA, pointOnB);
-				normalInB.sub(pointOnA, pointOnB);
-				float lenSqr = cachedSeparatingAxis.lengthSquared();
+				normalInB.subHere(pointOnA, pointOnB);
+				float lenSqr = cachedSeparatingAxis.squareLength();
 				// valid normal
 				if (lenSqr < 0.0001f) {
 					degenerateSimplex = 5;
 				}
 				if (lenSqr > BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON) {
 					float rlen = 1f / (float) Math.sqrt(lenSqr);
-					normalInB.scale(rlen); // normalize
+					normalInB.mult(rlen); // normalize
 					float s = (float) Math.sqrt(squaredDistance);
 
 					assert (s > 0f);
@@ -279,12 +279,12 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 							debugDraw/*,input.stackAlloc*/);
 
 					if (isValid2) {
-						tmpNormalInB.sub(tmpPointOnB, tmpPointOnA);
+						tmpNormalInB.subHere(tmpPointOnB, tmpPointOnA);
 
-						float lenSqr = tmpNormalInB.lengthSquared();
+						float lenSqr = tmpNormalInB.squareLength();
 						if (lenSqr > (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
-							tmpNormalInB.scale(1f / (float) Math.sqrt(lenSqr));
-							tmp.sub(tmpPointOnA, tmpPointOnB);
+							tmpNormalInB.mult(1f / (float) Math.sqrt(lenSqr));
+							tmp.subHere(tmpPointOnA, tmpPointOnB);
 							float distance2 = -tmp.length();
 							// only replace valid penetrations when the result is deeper (check)
 							if (!isValid || (distance2 < distance)) {
@@ -317,7 +317,7 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 			//		//spu_printf("distance\n");
 			//#endif //__CELLOS_LV2__
 
-			tmp.add(pointOnB, positionOffset);
+			tmp.addHere(pointOnB, positionOffset);
 			output.addContactPoint(
 					normalInB,
 					tmp,

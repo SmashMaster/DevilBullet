@@ -42,10 +42,10 @@ class Quantization {
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
 		Vector3f clampValue = new Vector3f();
 		clampValue.set(quantizationMargin, quantizationMargin, quantizationMargin);
-		outMinBound.sub(srcMinBound, clampValue);
-		outMaxBound.add(srcMaxBound, clampValue);
+		outMinBound.subHere(srcMinBound, clampValue);
+		outMaxBound.addHere(srcMaxBound, clampValue);
 		Vector3f aabbSize = new Vector3f();
-		aabbSize.sub(outMaxBound, outMinBound);
+		aabbSize.subHere(outMaxBound, outMinBound);
 		bvhQuantization.set(65535.0f, 65535.0f, 65535.0f);
 		VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
@@ -56,7 +56,7 @@ class Quantization {
 		VectorUtil.setMin(clampedPoint, max_bound);
 
 		Vector3f v = new Vector3f();
-		v.sub(clampedPoint, min_bound);
+		v.subHere(clampedPoint, min_bound);
 		VectorUtil.mul(v, v, bvhQuantization);
 
 		out[0] = (short) (v.x + 0.5f);

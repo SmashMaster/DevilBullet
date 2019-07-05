@@ -205,7 +205,7 @@ public class MovingConcaveDemo extends DemoApplication {
 
 			Vector3f linVel = new Vector3f(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
 			linVel.normalize();
-			linVel.scale(ShootBoxInitialSpeed * 0.25f);
+			linVel.mult(ShootBoxInitialSpeed * 0.25f);
 
 			Transform tr = new Transform();
 			tr.origin.set(camPos);

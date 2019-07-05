@@ -127,7 +127,7 @@ public class Vector3f implements java.io.Serializable {
      * @param t1 the first tuple
      * @param t2 the second tuple
      */
-    public final void add(Vector3f t1, Vector3f t2)
+    public final void addHere(Vector3f t1, Vector3f t2)
     {
 	this.x = t1.x + t2.x;
 	this.y = t1.y + t2.y;
@@ -153,7 +153,7 @@ public class Vector3f implements java.io.Serializable {
      * @param t1 the first tuple
      * @param t2 the second tuple
      */
-    public final void sub(Vector3f t1, Vector3f t2)
+    public final void subHere(Vector3f t1, Vector3f t2)
     {
 	this.x = t1.x - t2.x;
 	this.y = t1.y - t2.y;
@@ -178,7 +178,7 @@ public class Vector3f implements java.io.Serializable {
      * Sets the value of this tuple to the negation of tuple t1.
      * @param t1 the source tuple
      */
-    public final void negate(Vector3f t1)
+    public final void negateHere(Vector3f t1)
     {
 	this.x = -t1.x;
 	this.y = -t1.y;
@@ -216,7 +216,7 @@ public class Vector3f implements java.io.Serializable {
      * of the scale factor with this.
      * @param s the scalar value
      */
-    public final void scale(float s)
+    public final void mult(float s)
     {
 	this.x *= s;
 	this.y *= s;
@@ -231,7 +231,7 @@ public class Vector3f implements java.io.Serializable {
      * @param t1 the tuple to be scaled and added
      * @param t2 the tuple to be added without a scale
      */
-    public final void scaleAdd(float s, Vector3f t1, Vector3f t2)
+    public final void scaleAddHere(float s, Vector3f t1, Vector3f t2)
     {
 	this.x = s*t1.x + t2.x;
 	this.y = s*t1.y + t2.y;
@@ -275,7 +275,7 @@ public class Vector3f implements java.io.Serializable {
     *  value and places the modified values into this tuple.
     *  @param t   the source tuple, which will not be modified
     */   
-  public final void absolute(Vector3f t)
+  public final void absoluteHere(Vector3f t)
   {
        x = Math.abs(t.x);
        y = Math.abs(t.y);
@@ -300,7 +300,7 @@ public class Vector3f implements java.io.Serializable {
     *  @param t2  the second tuple  
     *  @param alpha  the alpha interpolation parameter  
     */   
-  public final void interpolate(Vector3f t1, Vector3f t2, float alpha) 
+  public final void interpolateHere(Vector3f t1, Vector3f t2, float alpha) 
   { 
            this.x = (1-alpha)*t1.x + alpha*t2.x;
            this.y = (1-alpha)*t1.y + alpha*t2.y;
@@ -311,7 +311,7 @@ public class Vector3f implements java.io.Serializable {
      * Returns the squared length of this vector.
      * @return the squared length of this vector
      */
-    public final float lengthSquared()
+    public final float squareLength()
     {
         return (this.x*this.x + this.y*this.y + this.z*this.z);
     }
@@ -332,7 +332,7 @@ public class Vector3f implements java.io.Serializable {
      * @param v1 the first vector
      * @param v2 the second vector
      */
-    public final void cross(Vector3f v1, Vector3f v2)
+    public final void crossHere(Vector3f v1, Vector3f v2)
     {
         float x,y;
 
@@ -357,7 +357,7 @@ public class Vector3f implements java.io.Serializable {
      * Sets the value of this vector to the normalization of vector v1.
      * @param v1 the un-normalized vector
      */
-    public final void normalize(Vector3f v1)
+    public final void normalizeHere(Vector3f v1)
     {
         float norm;
 

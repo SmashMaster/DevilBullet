@@ -79,13 +79,13 @@ public class GLDebugDrawer extends IDebugDraw {
 	public void drawContactPoint(Vector3f pointOnB, Vector3f normalOnB, float distance, int lifeTime, Vector3f color) {
 		if ((debugMode & DebugDrawModes.DRAW_CONTACT_POINTS) != 0) {
 			Vector3f to = tmpVec;
-			to.scaleAdd(distance*100f, normalOnB, pointOnB);
+			to.scaleAddHere(distance*100f, normalOnB, pointOnB);
 			Vector3f from = pointOnB;
 
 			// JAVA NOTE: added
 			if (DEBUG_NORMALS) {
-				to.normalize(normalOnB);
-				to.scale(10f);
+				to.normalizeHere(normalOnB);
+				to.mult(10f);
 				to.add(pointOnB);
 				gl.glLineWidth(3f);
 				gl.glPointSize(6f);

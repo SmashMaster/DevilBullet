@@ -193,9 +193,9 @@ public class BvhTriangleMeshShape extends TriangleMeshShape {
 	@Override
 	public void setLocalScaling(Vector3f scaling) {
 		Vector3f tmp = new Vector3f();
-		tmp.sub(getLocalScaling(new Vector3f()), scaling);
+		tmp.subHere(getLocalScaling(new Vector3f()), scaling);
 
-		if (tmp.lengthSquared() > BulletGlobals.SIMD_EPSILON) {
+		if (tmp.squareLength() > BulletGlobals.SIMD_EPSILON) {
 			super.setLocalScaling(scaling);
 			/*
 			if (ownsBvh)
@@ -231,9 +231,9 @@ public class BvhTriangleMeshShape extends TriangleMeshShape {
 
 		// update the scaling without rebuilding the bvh
 		Vector3f tmp = new Vector3f();
-		tmp.sub(getLocalScaling(new Vector3f()), scaling);
+		tmp.subHere(getLocalScaling(new Vector3f()), scaling);
 
-		if (tmp.lengthSquared() > BulletGlobals.SIMD_EPSILON) {
+		if (tmp.squareLength() > BulletGlobals.SIMD_EPSILON) {
 			super.setLocalScaling(scaling);
 		}
 	}

@@ -108,9 +108,9 @@ public class PersistentManifold {
 			b0.sub(pointCache[2].localPointA);
 
 			Vector3f cross = new Vector3f();
-			cross.cross(a0, b0);
+			cross.crossHere(a0, b0);
 
-			res0 = cross.lengthSquared();
+			res0 = cross.squareLength();
 		}
 
 		if (maxPenetrationIndex != 1) {
@@ -121,8 +121,8 @@ public class PersistentManifold {
 			b1.sub(pointCache[2].localPointA);
 
 			Vector3f cross = new Vector3f();
-			cross.cross(a1, b1);
-			res1 = cross.lengthSquared();
+			cross.crossHere(a1, b1);
+			res1 = cross.squareLength();
 		}
 
 		if (maxPenetrationIndex != 2) {
@@ -133,9 +133,9 @@ public class PersistentManifold {
 			b2.sub(pointCache[1].localPointA);
 
 			Vector3f cross = new Vector3f();
-			cross.cross(a2, b2);
+			cross.crossHere(a2, b2);
 
-			res2 = cross.lengthSquared();
+			res2 = cross.squareLength();
 		}
 
 		if (maxPenetrationIndex != 3) {
@@ -146,8 +146,8 @@ public class PersistentManifold {
 			b3.sub(pointCache[1].localPointA);
 
 			Vector3f cross = new Vector3f();
-			cross.cross(a3, b3);
-			res3 = cross.lengthSquared();
+			cross.crossHere(a3, b3);
+			res3 = cross.squareLength();
 		}
 
 		Vec4 maxvec = new Vec4();
@@ -220,7 +220,7 @@ public class PersistentManifold {
 		for (int i = 0; i < size; i++) {
 			ManifoldPoint mp = pointCache[i];
 
-			diffA.sub(mp.localPointA, newPoint.localPointA);
+			diffA.subHere(mp.localPointA, newPoint.localPointA);
 
 			float distToManiPoint = diffA.dot(diffA);
 			if (distToManiPoint < shortestDist) {
@@ -353,8 +353,8 @@ public class PersistentManifold {
 			else {
 				// contact also becomes invalid when relative movement orthogonal to normal exceeds margin
 				tmp.scale(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
-				projectedPoint.sub(manifoldPoint.positionWorldOnA, tmp);
-				projectedDifference.sub(manifoldPoint.positionWorldOnB, projectedPoint);
+				projectedPoint.subHere(manifoldPoint.positionWorldOnA, tmp);
+				projectedDifference.subHere(manifoldPoint.positionWorldOnB, projectedPoint);
 				distance2d = projectedDifference.dot(projectedDifference);
 				if (distance2d > getContactBreakingThreshold() * getContactBreakingThreshold()) {
 					removeContactPoint(i);

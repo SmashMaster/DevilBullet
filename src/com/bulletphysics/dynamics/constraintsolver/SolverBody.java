@@ -53,8 +53,8 @@ public class SolverBody {
 	
 	public void getVelocityInLocalPoint(Vector3f rel_pos, Vector3f velocity) {
 		Vector3f tmp = new Vector3f();
-		tmp.cross(angularVelocity, rel_pos);
-		velocity.add(linearVelocity, tmp);
+		tmp.crossHere(angularVelocity, rel_pos);
+		velocity.addHere(linearVelocity, tmp);
 	}
 
 	/**
@@ -62,15 +62,15 @@ public class SolverBody {
 	 */
 	public void internalApplyImpulse(Vector3f linearComponent, Vector3f angularComponent, float impulseMagnitude) {
 		if (invMass != 0f) {
-			linearVelocity.scaleAdd(impulseMagnitude, linearComponent, linearVelocity);
-			angularVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+			linearVelocity.scaleAddHere(impulseMagnitude, linearComponent, linearVelocity);
+			angularVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
 		}
 	}
 
 	public void internalApplyPushImpulse(Vector3f linearComponent, Vector3f angularComponent, float impulseMagnitude) {
 		if (invMass != 0f) {
-			pushVelocity.scaleAdd(impulseMagnitude, linearComponent, pushVelocity);
-			turnVelocity.scaleAdd(impulseMagnitude * angularFactor, angularComponent, turnVelocity);
+			pushVelocity.scaleAddHere(impulseMagnitude, linearComponent, pushVelocity);
+			turnVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, turnVelocity);
 		}
 	}
 	

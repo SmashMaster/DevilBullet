@@ -101,7 +101,7 @@ public class WheelInfo {
 			float project = raycastInfo.contactNormalWS.dot(raycastInfo.wheelDirectionWS);
 			Vector3f chassis_velocity_at_contactPoint = new Vector3f();
 			Vector3f relpos = new Vector3f();
-			relpos.sub(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vector3f()));
+			relpos.subHere(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vector3f()));
 			chassis.getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
 			float projVel = raycastInfo.contactNormalWS.dot(chassis_velocity_at_contactPoint);
 			if (project >= -0.1f) {
@@ -118,7 +118,7 @@ public class WheelInfo {
 			// Not in contact : position wheel in a nice (rest length) position
 			raycastInfo.suspensionLength = getSuspensionRestLength();
 			suspensionRelativeVelocity = 0f;
-			raycastInfo.contactNormalWS.negate(raycastInfo.wheelDirectionWS);
+			raycastInfo.contactNormalWS.negateHere(raycastInfo.wheelDirectionWS);
 			clippedInvContactDotSuspension = 1f;
 		}
 	}

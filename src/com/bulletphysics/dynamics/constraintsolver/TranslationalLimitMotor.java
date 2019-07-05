@@ -90,23 +90,23 @@ public class TranslationalLimitMotor {
 		// find relative velocity
 		Vector3f rel_pos1 = new Vector3f();
 		//rel_pos1.sub(pointInA, body1.getCenterOfMassPosition(tmpVec));
-		rel_pos1.sub(anchorPos, body1.getCenterOfMassPosition(tmpVec));
+		rel_pos1.subHere(anchorPos, body1.getCenterOfMassPosition(tmpVec));
 
 		Vector3f rel_pos2 = new Vector3f();
 		//rel_pos2.sub(pointInB, body2.getCenterOfMassPosition(tmpVec));
-		rel_pos2.sub(anchorPos, body2.getCenterOfMassPosition(tmpVec));
+		rel_pos2.subHere(anchorPos, body2.getCenterOfMassPosition(tmpVec));
 
 		Vector3f vel1 = body1.getVelocityInLocalPoint(rel_pos1, new Vector3f());
 		Vector3f vel2 = body2.getVelocityInLocalPoint(rel_pos2, new Vector3f());
 		Vector3f vel = new Vector3f();
-		vel.sub(vel1, vel2);
+		vel.subHere(vel1, vel2);
 
 		float rel_vel = axis_normal_on_a.dot(vel);
 
 		// apply displacement correction
 
 		// positional error (zeroth order error)
-		tmp.sub(pointInA, pointInB);
+		tmp.subHere(pointInA, pointInB);
 		float depth = -(tmp).dot(axis_normal_on_a);
 		float lo = -1e30f;
 		float hi = 1e30f;
@@ -145,7 +145,7 @@ public class TranslationalLimitMotor {
 		impulse_vector.scale(normalImpulse, axis_normal_on_a);
 		body1.applyImpulse(impulse_vector, rel_pos1);
 
-		tmp.negate(impulse_vector);
+		tmp.negateHere(impulse_vector);
 		body2.applyImpulse(tmp, rel_pos2);
 		return normalImpulse;
 	}

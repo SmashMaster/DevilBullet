@@ -54,10 +54,10 @@ public abstract class CollisionShape {
 
 		getAabb(tr, aabbMin, aabbMax);
 
-		tmp.sub(aabbMax, aabbMin);
+		tmp.subHere(aabbMax, aabbMin);
 		radius[0] = tmp.length() * 0.5f;
 
-		tmp.add(aabbMin, aabbMax);
+		tmp.addHere(aabbMin, aabbMax);
 		center.scale(0.5f, tmp);
 	}
 
@@ -85,7 +85,7 @@ public abstract class CollisionShape {
 
 		// add linear motion
 		Vector3f linMotion = new Vector3f(linvel);
-		linMotion.scale(timeStep);
+		linMotion.mult(timeStep);
 
 		//todo: simd would have a vector max/min operation, instead of per-element access
 		if (linMotion.x > 0f) {
