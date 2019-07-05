@@ -27,7 +27,7 @@ package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * SphereShape implements an implicit sphere, centered around a local origin with radius.
@@ -42,22 +42,22 @@ public class SphereShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec, Vector3f out) {
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec, Vec3 out) {
 		out.set(0f, 0f, 0f);
 		return out;
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		for (int i = 0; i < numVectors; i++) {
 			supportVerticesOut[i].set(0f, 0f, 0f);
 		}
 	}
 
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
-		Vector3f center = t.origin;
-		Vector3f extent = new Vector3f();
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
+		Vec3 center = t.origin;
+		Vec3 extent = new Vec3();
 		extent.set(getMargin(), getMargin(), getMargin());
 		aabbMin.subHere(center, extent);
 		aabbMax.addHere(center, extent);
@@ -69,7 +69,7 @@ public class SphereShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		float elem = 0.4f * mass * getMargin() * getMargin();
 		inertia.set(elem, elem, elem);
 	}

@@ -65,7 +65,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 // JAVA TODO: update for 2.70b1
 
@@ -109,7 +109,7 @@ public class ConcaveDemo extends DemoApplication {
 	public void setVertexPositions(float waveheight, float offset) {
 		int i;
 		int j;
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		for (i = 0; i < NUM_VERTS_X; i++) {
 			for (j = 0; j < NUM_VERTS_Y; j++) {
@@ -254,8 +254,8 @@ public class ConcaveDemo extends DemoApplication {
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
 		//#endif//USE_PARALLEL_DISPATCHER
 
-		Vector3f worldMin = new Vector3f(-1000f, -1000f, -1000f);
-		Vector3f worldMax = new Vector3f(1000f, 1000f, 1000f);
+		Vec3 worldMin = new Vec3(-1000f, -1000f, -1000f);
+		Vec3 worldMax = new Vec3(1000f, 1000f, 1000f);
 		//broadphase = new AxisSweep3(worldMin, worldMax);
 		broadphase = new DbvtBroadphase();
 		//broadphase = new SimpleBroadphase();
@@ -276,12 +276,12 @@ public class ConcaveDemo extends DemoApplication {
 		CollisionShape colShape;
 
 		if (USE_BOX_SHAPE) {
-			colShape = new BoxShape(new Vector3f(1f, 1f, 1f));
+			colShape = new BoxShape(new Vec3(1f, 1f, 1f));
 		}
 		else {
 			colShape = new CompoundShape();
-			CollisionShape cylinderShape = new CylinderShapeX(new Vector3f(4, 1, 1));
-			CollisionShape boxShape = new BoxShape(new Vector3f(4f, 1f, 1f));
+			CollisionShape cylinderShape = new CylinderShapeX(new Vec3(4, 1, 1));
+			CollisionShape boxShape = new BoxShape(new Vec3(4f, 1f, 1f));
 			Transform localTransform = new Transform();
 			localTransform.setIdentity();
 			((CompoundShape)colShape).addChildShape(localTransform, boxShape);

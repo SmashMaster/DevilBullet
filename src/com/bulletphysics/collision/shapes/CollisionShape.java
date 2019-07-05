@@ -28,7 +28,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * CollisionShape class provides an interface for collision shapes that can be
@@ -43,14 +43,14 @@ public abstract class CollisionShape {
 	protected Object userPointer;
 	
 	///getAabb returns the axis aligned bounding box in the coordinate frame of the given transform t.
-	public abstract void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax);
+	public abstract void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax);
 
-	public void getBoundingSphere(Vector3f center, float[] radius) {
-		Vector3f tmp = new Vector3f();
+	public void getBoundingSphere(Vec3 center, float[] radius) {
+		Vec3 tmp = new Vec3();
 
 		Transform tr = new Transform();
 		tr.setIdentity();
-		Vector3f aabbMin = new Vector3f(), aabbMax = new Vector3f();
+		Vec3 aabbMin = new Vec3(), aabbMax = new Vec3();
 
 		getAabb(tr, aabbMin, aabbMax);
 
@@ -63,7 +63,7 @@ public abstract class CollisionShape {
 
 	///getAngularMotionDisc returns the maximus radius needed for Conservative Advancement to handle time-of-impact with rotations.
 	public float getAngularMotionDisc() {
-		Vector3f center = new Vector3f();
+		Vec3 center = new Vec3();
 		float[] disc = new float[1]; // TODO: stack
 		getBoundingSphere(center, disc);
 		disc[0] += center.length();
@@ -72,7 +72,7 @@ public abstract class CollisionShape {
 
 	///calculateTemporalAabb calculates the enclosing aabb for the moving object over interval [0..timeStep)
 	///result is conservative
-	public void calculateTemporalAabb(Transform curTrans, Vector3f linvel, Vector3f angvel, float timeStep, Vector3f temporalAabbMin, Vector3f temporalAabbMax) {
+	public void calculateTemporalAabb(Transform curTrans, Vec3 linvel, Vec3 angvel, float timeStep, Vec3 temporalAabbMin, Vec3 temporalAabbMax) {
 		//start with static aabb
 		getAabb(curTrans, temporalAabbMin, temporalAabbMax);
 
@@ -84,7 +84,7 @@ public abstract class CollisionShape {
 		float temporalAabbMinz = temporalAabbMin.z;
 
 		// add linear motion
-		Vector3f linMotion = new Vector3f(linvel);
+		Vec3 linMotion = new Vec3(linvel);
 		linMotion.mult(timeStep);
 
 		//todo: simd would have a vector max/min operation, instead of per-element access
@@ -109,7 +109,7 @@ public abstract class CollisionShape {
 
 		//add conservative angular motion
 		float angularMotion = angvel.length() * getAngularMotionDisc() * timeStep;
-		Vector3f angularMotion3d = new Vector3f();
+		Vec3 angularMotion3d = new Vec3();
 		angularMotion3d.set(angularMotion, angularMotion, angularMotion);
 		temporalAabbMin.set(temporalAabbMinx, temporalAabbMiny, temporalAabbMinz);
 		temporalAabbMax.set(temporalAabbMaxx, temporalAabbMaxy, temporalAabbMaxz);
@@ -142,12 +142,12 @@ public abstract class CollisionShape {
 
 	public abstract BroadphaseNativeType getShapeType();
 
-	public abstract void setLocalScaling(Vector3f scaling);
+	public abstract void setLocalScaling(Vec3 scaling);
 	
 	// TODO: returns const
-	public abstract Vector3f getLocalScaling(Vector3f out);
+	public abstract Vec3 getLocalScaling(Vec3 out);
 
-	public abstract void calculateLocalInertia(float mass, Vector3f inertia);
+	public abstract void calculateLocalInertia(float mass, Vec3 inertia);
 
 
 //debugging support

@@ -44,7 +44,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * BasicDemo is good starting point for learning the code base and porting.
@@ -131,11 +131,11 @@ public class BasicDemo extends DemoApplication {
 		
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
-		dynamicsWorld.setGravity(new Vector3f(0f, -10f, 0f));
+		dynamicsWorld.setGravity(new Vec3(0f, -10f, 0f));
 
 		// create a few basic rigid bodies
-		CollisionShape groundShape = new BoxShape(new Vector3f(50f, 50f, 50f));
-		//CollisionShape groundShape = new StaticPlaneShape(new Vector3f(0, 1, 0), 50);
+		CollisionShape groundShape = new BoxShape(new Vec3(50f, 50f, 50f));
+		//CollisionShape groundShape = new StaticPlaneShape(new Vec3(0, 1, 0), 50);
 
 		collisionShapes.add(groundShape);
 
@@ -150,7 +150,7 @@ public class BasicDemo extends DemoApplication {
 			// rigidbody is dynamic if and only if mass is non zero, otherwise static
 			boolean isDynamic = (mass != 0f);
 
-			Vector3f localInertia = new Vector3f(0, 0, 0);
+			Vec3 localInertia = new Vec3(0, 0, 0);
 			if (isDynamic) {
 				groundShape.calculateLocalInertia(mass, localInertia);
 			}
@@ -168,7 +168,7 @@ public class BasicDemo extends DemoApplication {
 			// create a few dynamic rigidbodies
 			// Re-using the same collision is better for memory usage and performance
 
-			CollisionShape colShape = new BoxShape(new Vector3f(1, 1, 1));
+			CollisionShape colShape = new BoxShape(new Vec3(1, 1, 1));
 			//CollisionShape colShape = new SphereShape(1f);
 			collisionShapes.add(colShape);
 
@@ -181,7 +181,7 @@ public class BasicDemo extends DemoApplication {
 			// rigidbody is dynamic if and only if mass is non zero, otherwise static
 			boolean isDynamic = (mass != 0f);
 
-			Vector3f localInertia = new Vector3f(0, 0, 0);
+			Vec3 localInertia = new Vec3(0, 0, 0);
 			if (isDynamic) {
 				colShape.calculateLocalInertia(mass, localInertia);
 			}

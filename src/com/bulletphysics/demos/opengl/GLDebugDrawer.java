@@ -28,7 +28,7 @@ package com.bulletphysics.demos.opengl;
 import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.IDebugDraw;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -42,14 +42,14 @@ public class GLDebugDrawer extends IDebugDraw {
 	private IGL gl;
 	private int debugMode;
 	
-	private final Vector3f tmpVec = new Vector3f();
+	private final Vec3 tmpVec = new Vec3();
 
 	public GLDebugDrawer(IGL gl) {
 		this.gl = gl;
 	}
 
 	@Override
-	public void drawLine(Vector3f from, Vector3f to, Vector3f color) {
+	public void drawLine(Vec3 from, Vec3 to, Vec3 color) {
 		if (debugMode > 0) {
 			gl.glBegin(GL_LINES);
 			gl.glColor3f(color.x, color.y, color.z);
@@ -65,7 +65,7 @@ public class GLDebugDrawer extends IDebugDraw {
 	}
 
 	@Override
-	public void draw3dText(Vector3f location, String textString) {
+	public void draw3dText(Vec3 location, String textString) {
 		//glRasterPos3f(location.x,  location.y,  location.z);
 		// TODO: BMF_DrawString(BMF_GetFont(BMF_kHelvetica10),textString);
 	}
@@ -76,11 +76,11 @@ public class GLDebugDrawer extends IDebugDraw {
 	}
 
 	@Override
-	public void drawContactPoint(Vector3f pointOnB, Vector3f normalOnB, float distance, int lifeTime, Vector3f color) {
+	public void drawContactPoint(Vec3 pointOnB, Vec3 normalOnB, float distance, int lifeTime, Vec3 color) {
 		if ((debugMode & DebugDrawModes.DRAW_CONTACT_POINTS) != 0) {
-			Vector3f to = tmpVec;
+			Vec3 to = tmpVec;
 			to.scaleAddHere(distance*100f, normalOnB, pointOnB);
-			Vector3f from = pointOnB;
+			Vec3 from = pointOnB;
 
 			// JAVA NOTE: added
 			if (DEBUG_NORMALS) {

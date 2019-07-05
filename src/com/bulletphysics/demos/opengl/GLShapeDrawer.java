@@ -46,7 +46,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -93,9 +93,9 @@ public class GLShapeDrawer {
 
 	private static float[] glMat = new float[16];
 	
-	public static void drawOpenGL(IGL gl, Transform trans, CollisionShape shape, Vector3f color, int debugMode) {
+	public static void drawOpenGL(IGL gl, Transform trans, CollisionShape shape, Vec3 color, int debugMode) {
 		ObjectPool<Transform> transformsPool = ObjectPool.get(Transform.class);
-		ObjectPool<Vector3f> vectorsPool = ObjectPool.get(Vector3f.class);
+		ObjectPool<Vec3> vectorsPool = ObjectPool.get(Vec3.class);
 
 		//System.out.println("shape="+shape+" type="+BroadphaseNativeTypes.forValue(shape.getShapeType()));
 
@@ -146,7 +146,7 @@ public class GLShapeDrawer {
 				switch (shape.getShapeType()) {
 					case BOX_SHAPE_PROXYTYPE: {
 						BoxShape boxShape = (BoxShape) shape;
-						Vector3f halfExtent = boxShape.getHalfExtentsWithMargin(vectorsPool.get());
+						Vec3 halfExtent = boxShape.getHalfExtentsWithMargin(vectorsPool.get());
 						gl.glScalef(2f * halfExtent.x, 2f * halfExtent.y, 2f * halfExtent.z);
 						gl.drawCube(1f);
 						vectorsPool.release(halfExtent);
@@ -201,25 +201,25 @@ public class GLShapeDrawer {
 					{
 						StaticPlaneShape staticPlaneShape = (StaticPlaneShape)shape;
 						float planeConst = staticPlaneShape.getPlaneConstant();
-						Vector3f planeNormal = staticPlaneShape.getPlaneNormal(vectorsPool.get());
-						Vector3f planeOrigin = vectorsPool.get();
+						Vec3 planeNormal = staticPlaneShape.getPlaneNormal(vectorsPool.get());
+						Vec3 planeOrigin = vectorsPool.get();
 						planeOrigin.scale(planeConst, planeNormal);
-						Vector3f vec0 = vectorsPool.get();
-						Vector3f vec1 = vectorsPool.get();
+						Vec3 vec0 = vectorsPool.get();
+						Vec3 vec1 = vectorsPool.get();
 						TransformUtil.planeSpace1(planeNormal,vec0,vec1);
 						float vecLen = 100f;
 						
-						Vector3f pt0 = vectorsPool.get();
+						Vec3 pt0 = vectorsPool.get();
 						pt0.scaleAddHere(vecLen, vec0, planeOrigin);
 
-						Vector3f pt1 = vectorsPool.get();
+						Vec3 pt1 = vectorsPool.get();
 						pt1.scale(vecLen, vec0);
 						pt1.subHere(planeOrigin, pt1);
 
-						Vector3f pt2 = vectorsPool.get();
+						Vec3 pt2 = vectorsPool.get();
 						pt2.scaleAddHere(vecLen, vec1, planeOrigin);
 
-						Vector3f pt3 = vectorsPool.get();
+						Vec3 pt3 = vectorsPool.get();
 						pt3.scale(vecLen, vec1);
 						pt3.subHere(planeOrigin, pt3);
 						
@@ -248,7 +248,7 @@ public class GLShapeDrawer {
 						int upAxis = cylinder.getUpAxis();
 
 						float radius = cylinder.getRadius();
-						Vector3f halfVec = vectorsPool.get();
+						Vec3 halfVec = vectorsPool.get();
 						float halfHeight = VectorUtil.getCoord(cylinder.getHalfExtentsWithMargin(halfVec), upAxis);
 
 						gl.drawCylinder(radius, halfHeight, upAxis);
@@ -284,15 +284,15 @@ public class GLShapeDrawer {
 								//glutSolidCube(1.0);
 								ShapeHull hull = (ShapeHull)shape.getUserPointer();
 								
-								Vector3f normal = vectorsPool.get();
-								Vector3f tmp1 = vectorsPool.get();
-								Vector3f tmp2 = vectorsPool.get();
+								Vec3 normal = vectorsPool.get();
+								Vec3 tmp1 = vectorsPool.get();
+								Vec3 tmp2 = vectorsPool.get();
 
 								if (hull.numTriangles () > 0)
 								{
 									int index = 0;
 									IntArrayList idx = hull.getIndexPointer();
-									ObjectArrayList<Vector3f> vtx = hull.getVertexPointer();
+									ObjectArrayList<Vec3> vtx = hull.getVertexPointer();
 
 									gl.glBegin (gl.GL_TRIANGLES);
 
@@ -312,9 +312,9 @@ public class GLShapeDrawer {
 											index2 < hull.numVertices () &&
 											index3 < hull.numVertices ());
 
-										Vector3f v1 = vtx.getQuick(index1);
-										Vector3f v2 = vtx.getQuick(index2);
-										Vector3f v3 = vtx.getQuick(index3);
+										Vec3 v1 = vtx.getQuick(index1);
+										Vec3 v2 = vtx.getQuick(index2);
+										Vec3 v3 = vtx.getQuick(index3);
 										tmp1.subHere(v3, v1);
 										tmp2.subHere(v2, v1);
 										normal.crossHere(tmp1, tmp2);
@@ -351,7 +351,7 @@ public class GLShapeDrawer {
 
 					gl.glBegin(GL_LINES);
 
-					Vector3f a = vectorsPool.get(), b = vectorsPool.get();
+					Vec3 a = vectorsPool.get(), b = vectorsPool.get();
 					int i;
 					for (i = 0; i < polyshape.getNumEdges(); i++) {
 						polyshape.getEdge(i, a, b);
@@ -419,9 +419,9 @@ public class GLShapeDrawer {
 				//btVector3 aabbMax(100,100,100);//btScalar(1e30),btScalar(1e30),btScalar(1e30));
 
 				//todo pass camera, for some culling
-				Vector3f aabbMax = vectorsPool.get();
+				Vec3 aabbMax = vectorsPool.get();
 				aabbMax.set(1e30f, 1e30f, 1e30f);
-				Vector3f aabbMin = vectorsPool.get();
+				Vec3 aabbMin = vectorsPool.get();
 				aabbMin.set(-1e30f, -1e30f, -1e30f);
 
 				GlDrawcallback drawCallback = new GlDrawcallback(gl);
@@ -478,15 +478,15 @@ public class GLShapeDrawer {
 	private static class GlDisplaylistDrawcallback extends TriangleCallback {
 		private IGL gl;
 		
-		private final Vector3f diff1 = new Vector3f();
-		private final Vector3f diff2 = new Vector3f();
-		private final Vector3f normal = new Vector3f();
+		private final Vec3 diff1 = new Vec3();
+		private final Vec3 diff2 = new Vec3();
+		private final Vec3 normal = new Vec3();
 
 		public GlDisplaylistDrawcallback(IGL gl) {
 			this.gl = gl;
 		}
 		
-		public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
+		public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
 			diff1.subHere(triangle[1], triangle[0]);
 			diff2.subHere(triangle[2], triangle[0]);
 			normal.crossHere(diff1, diff2);
@@ -535,7 +535,7 @@ public class GLShapeDrawer {
 			this.gl = gl;
 		}
 		
-		public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
+		public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
 			if (wireframe) {
 				gl.glBegin(GL_LINES);
 				gl.glColor3f(1, 0, 0);
@@ -569,7 +569,7 @@ public class GLShapeDrawer {
 			this.gl = gl;
 		}
 		
-		public void internalProcessTriangleIndex(Vector3f[] triangle, int partId, int triangleIndex) {
+		public void internalProcessTriangleIndex(Vec3[] triangle, int partId, int triangleIndex) {
 			gl.glBegin(GL_TRIANGLES);//LINES);
 			gl.glColor3f(1, 0, 0);
 			gl.glVertex3f(triangle[0].x, triangle[0].y, triangle[0].z);

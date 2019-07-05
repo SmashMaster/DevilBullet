@@ -32,7 +32,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -50,8 +50,8 @@ class GeometryOperations {
 	/**
 	 * Calc a plane from a triangle edge an a normal.
 	 */
-	public static void edge_plane(Vector3f e1, Vector3f e2, Vector3f normal, Vec4 plane) {
-		Vector3f planenormal = new Vector3f();
+	public static void edge_plane(Vec3 e1, Vec3 e2, Vec3 normal, Vec4 plane) {
+		Vec3 planenormal = new Vec3();
 		planenormal.subHere(e2, e1);
 		planenormal.crossHere(planenormal, normal);
 		planenormal.normalize();
@@ -62,8 +62,8 @@ class GeometryOperations {
 	/**
 	 * Finds the closest point(cp) to (v) on a segment (e1,e2).
 	 */
-	public static void closest_point_on_segment(Vector3f cp, Vector3f v, Vector3f e1, Vector3f e2) {
-		Vector3f n = new Vector3f();
+	public static void closest_point_on_segment(Vec3 cp, Vec3 v, Vec3 e1, Vec3 e2) {
+		Vec3 n = new Vec3();
 		n.subHere(e2, e1);
 		cp.subHere(v, e1);
 		float _scalar = cp.dot(n) / n.dot(n);
@@ -83,7 +83,7 @@ class GeometryOperations {
 	 * 
 	 * @return -0 if the ray never intersects, -1 if the ray collides in front, -2 if the ray collides in back
 	 */
-	public static int line_plane_collision(Vec4 plane, Vector3f vDir, Vector3f vPoint, Vector3f pout, float[] tparam, float tmin, float tmax) {
+	public static int line_plane_collision(Vec4 plane, Vec3 vDir, Vec3 vPoint, Vec3 pout, float[] tparam, float tmin, float tmax) {
 		float _dotdir = VectorUtil.dot3(vDir, plane);
 
 		if (Math.abs(_dotdir) < PLANEDIREPSILON) {
@@ -110,14 +110,14 @@ class GeometryOperations {
 	/**
 	 * Find closest points on segments.
 	 */
-	public static void segment_collision(Vector3f vA1, Vector3f vA2, Vector3f vB1, Vector3f vB2, Vector3f vPointA, Vector3f vPointB) {
-		Vector3f AD = new Vector3f();
+	public static void segment_collision(Vec3 vA1, Vec3 vA2, Vec3 vB1, Vec3 vB2, Vec3 vPointA, Vec3 vPointB) {
+		Vec3 AD = new Vec3();
 		AD.subHere(vA2, vA1);
 
-		Vector3f BD = new Vector3f();
+		Vec3 BD = new Vec3();
 		BD.subHere(vB2, vB1);
 
-		Vector3f N = new Vector3f();
+		Vec3 N = new Vec3();
 		N.crossHere(AD, BD);
 		float[] tp = new float[] { N.squareLength() };
 

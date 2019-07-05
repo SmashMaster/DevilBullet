@@ -37,8 +37,8 @@ import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.
@@ -52,8 +52,8 @@ public class RaycastVehicle extends TypedConstraint {
 	private static RigidBody s_fixedObject = new RigidBody(0, null, null);
 	private static final float sideFrictionStiffness2 = 1.0f;
 	
-	protected ObjectArrayList<Vector3f> forwardWS = new ObjectArrayList<Vector3f>();
-	protected ObjectArrayList<Vector3f> axle = new ObjectArrayList<Vector3f>();
+	protected ObjectArrayList<Vec3> forwardWS = new ObjectArrayList<Vec3>();
+	protected ObjectArrayList<Vec3> axle = new ObjectArrayList<Vec3>();
 	protected FloatArrayList forwardImpulse = new FloatArrayList();
 	protected FloatArrayList sideImpulse = new FloatArrayList();
 
@@ -88,7 +88,7 @@ public class RaycastVehicle extends TypedConstraint {
 	/**
 	 * Basically most of the code is general for 2 or 4 wheel vehicles, but some of it needs to be reviewed.
 	 */
-	public WheelInfo addWheel(Vector3f connectionPointCS, Vector3f wheelDirectionCS0, Vector3f wheelAxleCS, float suspensionRestLength, float wheelRadius, VehicleTuning tuning, boolean isFrontWheel) {
+	public WheelInfo addWheel(Vec3 connectionPointCS, Vec3 wheelDirectionCS0, Vec3 wheelAxleCS, float suspensionRestLength, float wheelRadius, VehicleTuning tuning, boolean isFrontWheel) {
 		WheelInfoConstructionInfo ci = new WheelInfoConstructionInfo();
 
 		ci.chassisConnectionCS.set(connectionPointCS);
@@ -126,10 +126,10 @@ public class RaycastVehicle extends TypedConstraint {
 	public void updateWheelTransform(int wheelIndex, boolean interpolatedTransform) {
 		WheelInfo wheel = wheelInfo.getQuick(wheelIndex);
 		updateWheelTransformsWS(wheel, interpolatedTransform);
-		Vector3f up = new Vector3f();
+		Vec3 up = new Vec3();
 		up.negateHere(wheel.raycastInfo.wheelDirectionWS);
-		Vector3f right = wheel.raycastInfo.wheelAxleWS;
-		Vector3f fwd = new Vector3f();
+		Vec3 right = wheel.raycastInfo.wheelAxleWS;
+		Vec3 fwd = new Vec3();
 		fwd.crossHere(up, right);
 		fwd.normalize();
 		// up = right.cross(fwd);
@@ -140,20 +140,20 @@ public class RaycastVehicle extends TypedConstraint {
 
 		Quat steeringOrn = new Quat();
 		QuaternionUtil.setRotation(steeringOrn, up, steering); //wheel.m_steering);
-		Matrix3f steeringMat = new Matrix3f();
+		Mat3 steeringMat = new Mat3();
 		MatrixUtil.setRotation(steeringMat, steeringOrn);
 
 		Quat rotatingOrn = new Quat();
 		QuaternionUtil.setRotation(rotatingOrn, right, -wheel.rotation);
-		Matrix3f rotatingMat = new Matrix3f();
+		Mat3 rotatingMat = new Mat3();
 		MatrixUtil.setRotation(rotatingMat, rotatingOrn);
 
-		Matrix3f basis2 = new Matrix3f();
+		Mat3 basis2 = new Mat3();
 		basis2.setRow(0, right.x, fwd.x, up.x);
 		basis2.setRow(1, right.y, fwd.y, up.y);
 		basis2.setRow(2, right.z, fwd.z, up.z);
 
-		Matrix3f wheelBasis = wheel.worldTransform.basis;
+		Mat3 wheelBasis = wheel.worldTransform.basis;
 		wheelBasis.multHere(steeringMat, rotatingMat);
 		wheelBasis.mult(basis2);
 
@@ -202,11 +202,11 @@ public class RaycastVehicle extends TypedConstraint {
 
 		float raylen = wheel.getSuspensionRestLength() + wheel.wheelsRadius;
 
-		Vector3f rayvector = new Vector3f();
+		Vec3 rayvector = new Vec3();
 		rayvector.scale(raylen, wheel.raycastInfo.wheelDirectionWS);
-		Vector3f source = wheel.raycastInfo.hardPointWS;
+		Vec3 source = wheel.raycastInfo.hardPointWS;
 		wheel.raycastInfo.contactPointWS.addHere(source, rayvector);
-		Vector3f target = wheel.raycastInfo.contactPointWS;
+		Vec3 target = wheel.raycastInfo.contactPointWS;
 
 		float param = 0f;
 
@@ -244,9 +244,9 @@ public class RaycastVehicle extends TypedConstraint {
 
 			float denominator = wheel.raycastInfo.contactNormalWS.dot(wheel.raycastInfo.wheelDirectionWS);
 
-			Vector3f chassis_velocity_at_contactPoint = new Vector3f();
-			Vector3f relpos = new Vector3f();
-			relpos.subHere(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(new Vector3f()));
+			Vec3 chassis_velocity_at_contactPoint = new Vec3();
+			Vec3 relpos = new Vec3();
+			relpos.subHere(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(new Vec3()));
 
 			getRigidBody().getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
 
@@ -292,13 +292,13 @@ public class RaycastVehicle extends TypedConstraint {
 			updateWheelTransform(i, false);
 		}
 		
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		currentVehicleSpeedKmHour = 3.6f * getRigidBody().getLinearVelocity(tmp).length();
 
 		Transform chassisTrans = getChassisWorldTransform(new Transform());
 
-		Vector3f forwardW = new Vector3f();
+		Vec3 forwardW = new Vec3();
 		forwardW.set(
 				chassisTrans.basis.getEntry(0, indexForwardAxis),
 				chassisTrans.basis.getEntry(1, indexForwardAxis),
@@ -330,9 +330,9 @@ public class RaycastVehicle extends TypedConstraint {
 			if (suspensionForce > gMaxSuspensionForce) {
 				suspensionForce = gMaxSuspensionForce;
 			}
-			Vector3f impulse = new Vector3f();
+			Vec3 impulse = new Vec3();
 			impulse.scale(suspensionForce * step, wheel.raycastInfo.contactNormalWS);
-			Vector3f relpos = new Vector3f();
+			Vec3 relpos = new Vec3();
 			relpos.subHere(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(tmp));
 
 			getRigidBody().applyImpulse(impulse, relpos);
@@ -342,14 +342,14 @@ public class RaycastVehicle extends TypedConstraint {
 
 		for (i = 0; i < wheelInfo.size(); i++) {
 			WheelInfo wheel = wheelInfo.getQuick(i);
-			Vector3f relpos = new Vector3f();
+			Vec3 relpos = new Vec3();
 			relpos.subHere(wheel.raycastInfo.hardPointWS, getRigidBody().getCenterOfMassPosition(tmp));
-			Vector3f vel = getRigidBody().getVelocityInLocalPoint(relpos, new Vector3f());
+			Vec3 vel = getRigidBody().getVelocityInLocalPoint(relpos, new Vec3());
 
 			if (wheel.raycastInfo.isInContact) {
 				Transform chassisWorldTransform = getChassisWorldTransform(new Transform());
 
-				Vector3f fwd = new Vector3f();
+				Vec3 fwd = new Vec3();
 				fwd.set(
 						chassisWorldTransform.basis.getEntry(0, indexForwardAxis),
 						chassisWorldTransform.basis.getEntry(1, indexForwardAxis),
@@ -447,22 +447,22 @@ public class RaycastVehicle extends TypedConstraint {
 	}
 	
 	private float calcRollingFriction(WheelContactPoint contactPoint) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		
 		float j1 = 0f;
 		
-		Vector3f contactPosWorld = contactPoint.frictionPositionWorld;
+		Vec3 contactPosWorld = contactPoint.frictionPositionWorld;
 
-		Vector3f rel_pos1 = new Vector3f();
+		Vec3 rel_pos1 = new Vec3();
 		rel_pos1.subHere(contactPosWorld, contactPoint.body0.getCenterOfMassPosition(tmp));
-		Vector3f rel_pos2 = new Vector3f();
+		Vec3 rel_pos2 = new Vec3();
 		rel_pos2.subHere(contactPosWorld, contactPoint.body1.getCenterOfMassPosition(tmp));
 
 		float maxImpulse = contactPoint.maxImpulse;
 
-		Vector3f vel1 = contactPoint.body0.getVelocityInLocalPoint(rel_pos1, new Vector3f());
-		Vector3f vel2 = contactPoint.body1.getVelocityInLocalPoint(rel_pos2, new Vector3f());
-		Vector3f vel = new Vector3f();
+		Vec3 vel1 = contactPoint.body0.getVelocityInLocalPoint(rel_pos1, new Vec3());
+		Vec3 vel2 = contactPoint.body1.getVelocityInLocalPoint(rel_pos2, new Vec3());
+		Vec3 vel = new Vec3();
 		vel.subHere(vel1, vel2);
 
 		float vrel = contactPoint.frictionDirectionWorld.dot(vel);
@@ -482,12 +482,12 @@ public class RaycastVehicle extends TypedConstraint {
 			return;
 		}
 
-		MiscUtil.resize(forwardWS, numWheel, Vector3f.class);
-		MiscUtil.resize(axle, numWheel, Vector3f.class);
+		MiscUtil.resize(forwardWS, numWheel, Vec3.class);
+		MiscUtil.resize(axle, numWheel, Vec3.class);
 		MiscUtil.resize(forwardImpulse, numWheel, 0f);
 		MiscUtil.resize(sideImpulse, numWheel, 0f);
 
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		int numWheelsOnGround = 0;
 
@@ -513,13 +513,13 @@ public class RaycastVehicle extends TypedConstraint {
 				if (groundObject != null) {
 					getWheelTransformWS(i, wheelTrans);
 
-					Matrix3f wheelBasis0 = new Matrix3f(wheelTrans.basis);
+					Mat3 wheelBasis0 = new Mat3(wheelTrans.basis);
 					axle.getQuick(i).set(
 							wheelBasis0.getEntry(0, indexRightAxis),
 							wheelBasis0.getEntry(1, indexRightAxis),
 							wheelBasis0.getEntry(2, indexRightAxis));
 
-					Vector3f surfNormalWS = wheel_info.raycastInfo.contactNormalWS;
+					Vec3 surfNormalWS = wheel_info.raycastInfo.contactNormalWS;
 					float proj = axle.getQuick(i).dot(surfNormalWS);
 					tmp.scale(proj, surfNormalWS);
 					axle.getQuick(i).sub(tmp);
@@ -611,7 +611,7 @@ public class RaycastVehicle extends TypedConstraint {
 			for (int wheel = 0; wheel < getNumWheels(); wheel++) {
 				WheelInfo wheel_info = wheelInfo.getQuick(wheel);
 
-				Vector3f rel_pos = new Vector3f();
+				Vec3 rel_pos = new Vec3();
 				rel_pos.subHere(wheel_info.raycastInfo.contactPointWS, chassisBody.getCenterOfMassPosition(tmp));
 
 				if (forwardImpulse.get(wheel) != 0f) {
@@ -621,10 +621,10 @@ public class RaycastVehicle extends TypedConstraint {
 				if (sideImpulse.get(wheel) != 0f) {
 					RigidBody groundObject = (RigidBody) wheelInfo.getQuick(wheel).raycastInfo.groundObject;
 
-					Vector3f rel_pos2 = new Vector3f();
+					Vec3 rel_pos2 = new Vec3();
 					rel_pos2.subHere(wheel_info.raycastInfo.contactPointWS, groundObject.getCenterOfMassPosition(tmp));
 
-					Vector3f sideImp = new Vector3f();
+					Vec3 sideImp = new Vec3();
 					sideImp.scale(sideImpulse.get(wheel), axle.getQuick(wheel));
 
 					rel_pos.z *= wheel_info.rollInfluence;
@@ -675,7 +675,7 @@ public class RaycastVehicle extends TypedConstraint {
 	/**
 	 * Worldspace forward vector.
 	 */
-	public Vector3f getForwardVector(Vector3f out) {
+	public Vec3 getForwardVector(Vec3 out) {
 		Transform chassisTrans = getChassisWorldTransform(new Transform());
 
 		out.set(
@@ -704,12 +704,12 @@ public class RaycastVehicle extends TypedConstraint {
 	private static class WheelContactPoint {
 		public RigidBody body0;
 		public RigidBody body1;
-		public final Vector3f frictionPositionWorld = new Vector3f();
-		public final Vector3f frictionDirectionWorld = new Vector3f();
+		public final Vec3 frictionPositionWorld = new Vec3();
+		public final Vec3 frictionDirectionWorld = new Vec3();
 		public float jacDiagABInv;
 		public float maxImpulse;
 
-		public WheelContactPoint(RigidBody body0, RigidBody body1, Vector3f frictionPosWorld, Vector3f frictionDirectionWorld, float maxImpulse) {
+		public WheelContactPoint(RigidBody body0, RigidBody body1, Vec3 frictionPosWorld, Vec3 frictionDirectionWorld, float maxImpulse) {
 			this.body0 = body0;
 			this.body1 = body1;
 			this.frictionPositionWorld.set(frictionPosWorld);

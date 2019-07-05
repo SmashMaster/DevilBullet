@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ConeShape implements a cone shape primitive, centered around the origin and
@@ -60,7 +60,7 @@ public class ConeShape extends ConvexInternalShape {
 		return height;
 	}
 
-	private Vector3f coneLocalSupport(Vector3f v, Vector3f out) {
+	private Vec3 coneLocalSupport(Vec3 v, Vec3 out) {
 		float halfHeight = height * 0.5f;
 
 		if (VectorUtil.getCoord(v, coneIndices[1]) > v.length() * sinAngle) {
@@ -89,23 +89,23 @@ public class ConeShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec, Vector3f out) {
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec, Vec3 out) {
 		return coneLocalSupport(vec, out);
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		for (int i=0; i<numVectors; i++) {
-			Vector3f vec = vectors[i];
+			Vec3 vec = vectors[i];
 			coneLocalSupport(vec, supportVerticesOut[i]);
 		}
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertex(Vector3f vec, Vector3f out) {
-		Vector3f supVertex = coneLocalSupport(vec, out);
+	public Vec3 localGetSupportingVertex(Vec3 vec, Vec3 out) {
+		Vec3 supVertex = coneLocalSupport(vec, out);
 		if (getMargin() != 0f) {
-			Vector3f vecnorm = new Vector3f(vec);
+			Vec3 vecnorm = new Vec3(vec);
 			if (vecnorm.squareLength() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
@@ -121,13 +121,13 @@ public class ConeShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		Transform identity = new Transform();
 		identity.setIdentity();
-		Vector3f aabbMin = new Vector3f(), aabbMax = new Vector3f();
+		Vec3 aabbMin = new Vec3(), aabbMax = new Vec3();
 		getAabb(identity, aabbMin, aabbMax);
 
-		Vector3f halfExtents = new Vector3f();
+		Vec3 halfExtents = new Vec3();
 		halfExtents.subHere(aabbMax, aabbMin);
 		halfExtents.mult(0.5f);
 

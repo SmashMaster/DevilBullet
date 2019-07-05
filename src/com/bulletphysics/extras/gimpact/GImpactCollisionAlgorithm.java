@@ -49,7 +49,7 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Collision Algorithm for GImpact Shapes.<p>
@@ -344,7 +344,7 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
 		gimpactInConcaveSpace.inverse();
 		gimpactInConcaveSpace.mul(body0.getWorldTransform(new Transform()));
 
-		Vector3f minAABB = new Vector3f(), maxAABB = new Vector3f();
+		Vec3 minAABB = new Vec3(), maxAABB = new Vec3();
 		shape0.getAabb(gimpactInConcaveSpace, minAABB, maxAABB);
 
 		shape1.processAllTriangles(tricallback, minAABB, maxAABB);
@@ -415,7 +415,7 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
 		convex_algorithm = newAlgorithm(body0, body1);
 	}
 
-	protected void addContactPoint(CollisionObject body0, CollisionObject body1, Vector3f point, Vector3f normal, float distance) {
+	protected void addContactPoint(CollisionObject body0, CollisionObject body1, Vec3 point, Vec3 normal, float distance) {
 		resultOut.setShapeIdentifiers(part0, triface0, part1, triface1);
 		checkManifold(body0, body1);
 		resultOut.addContactPoint(normal, point, distance);
@@ -427,7 +427,7 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
 	*/
 	
 	void collide_sat_triangles(CollisionObject body0, CollisionObject body1, GImpactMeshShapePart shape0, GImpactMeshShapePart shape1, PairSet pairs, int pair_count) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		Transform orgtrans0 = body0.getWorldTransform(new Transform());
 		Transform orgtrans1 = body1.getWorldTransform(new Transform());
@@ -602,9 +602,9 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
 
 		float margin = shape0.getMargin() + planeshape.getMargin();
 
-		Vector3f vertex = new Vector3f();
+		Vec3 vertex = new Vec3();
 
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		int vi = shape0.getVertexCount();
 		while ((vi--) != 0) {

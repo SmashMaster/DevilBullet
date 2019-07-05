@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath;
 
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Utility functions for vectors.
@@ -35,7 +35,7 @@ import javax.vecmath.Vector3f;
  */
 public class VectorUtil {
 
-	public static int maxAxis(Vector3f v) {
+	public static int maxAxis(Vec3 v) {
 		int maxIndex = -1;
 		float maxVal = -1e30f;
 		if (v.x > maxVal) {
@@ -86,7 +86,7 @@ public class VectorUtil {
 		return maxAxis4(tmp);
 	}
 	
-	public static float getCoord(Vector3f vec, int num) {
+	public static float getCoord(Vec3 vec, int num) {
 		switch (num) {
 			case 0: return vec.x;
 			case 1: return vec.y;
@@ -95,7 +95,7 @@ public class VectorUtil {
 		}
 	}
 	
-	public static void setCoord(Vector3f vec, int num, float value) {
+	public static void setCoord(Vec3 vec, int num, float value) {
 		switch (num) {
 			case 0: vec.x = value; break;
 			case 1: vec.y = value; break;
@@ -104,7 +104,7 @@ public class VectorUtil {
 		}
 	}
 
-	public static void mulCoord(Vector3f vec, int num, float value) {
+	public static void mulCoord(Vec3 vec, int num, float value) {
 		switch (num) {
 			case 0: vec.x *= value; break;
 			case 1: vec.y *= value; break;
@@ -113,7 +113,7 @@ public class VectorUtil {
 		}
 	}
 
-	public static void setInterpolate3(Vector3f dest, Vector3f v0, Vector3f v1, float rt) {
+	public static void setInterpolate3(Vec3 dest, Vec3 v0, Vec3 v1, float rt) {
 		float s = 1f - rt;
 		dest.x = s * v0.x + rt * v1.x;
 		dest.y = s * v0.y + rt * v1.y;
@@ -122,49 +122,49 @@ public class VectorUtil {
 		//		m_co[3] = s * v0[3] + rt * v1[3];
 	}
 
-	public static void add(Vector3f dest, Vector3f v1, Vector3f v2) {
+	public static void add(Vec3 dest, Vec3 v1, Vec3 v2) {
 		dest.x = v1.x + v2.x;
 		dest.y = v1.y + v2.y;
 		dest.z = v1.z + v2.z;
 	}
 	
-	public static void add(Vector3f dest, Vector3f v1, Vector3f v2, Vector3f v3) {
+	public static void add(Vec3 dest, Vec3 v1, Vec3 v2, Vec3 v3) {
 		dest.x = v1.x + v2.x + v3.x;
 		dest.y = v1.y + v2.y + v3.y;
 		dest.z = v1.z + v2.z + v3.z;
 	}
 	
-	public static void add(Vector3f dest, Vector3f v1, Vector3f v2, Vector3f v3, Vector3f v4) {
+	public static void add(Vec3 dest, Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4) {
 		dest.x = v1.x + v2.x + v3.x + v4.x;
 		dest.y = v1.y + v2.y + v3.y + v4.y;
 		dest.z = v1.z + v2.z + v3.z + v4.z;
 	}
 	
-	public static void mul(Vector3f dest, Vector3f v1, Vector3f v2) {
+	public static void mul(Vec3 dest, Vec3 v1, Vec3 v2) {
 		dest.x = v1.x * v2.x;
 		dest.y = v1.y * v2.y;
 		dest.z = v1.z * v2.z;
 	}
 	
-	public static void div(Vector3f dest, Vector3f v1, Vector3f v2) {
+	public static void div(Vec3 dest, Vec3 v1, Vec3 v2) {
 		dest.x = v1.x / v2.x;
 		dest.y = v1.y / v2.y;
 		dest.z = v1.z / v2.z;
 	}
 	
-	public static void setMin(Vector3f a, Vector3f b) {
+	public static void setMin(Vec3 a, Vec3 b) {
 		a.x = Math.min(a.x, b.x);
 		a.y = Math.min(a.y, b.y);
 		a.z = Math.min(a.z, b.z);
 	}
 	
-	public static void setMax(Vector3f a, Vector3f b) {
+	public static void setMax(Vec3 a, Vec3 b) {
 		a.x = Math.max(a.x, b.x);
 		a.y = Math.max(a.y, b.y);
 		a.z = Math.max(a.z, b.z);
 	}
 	
-	public static float dot3(Vec4 v0, Vector3f v1) {
+	public static float dot3(Vec4 v0, Vec3 v1) {
 		return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 	}
 
@@ -172,7 +172,7 @@ public class VectorUtil {
 		return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 	}
 
-	public static float dot3(Vector3f v0, Vec4 v1) {
+	public static float dot3(Vec3 v0, Vec4 v1) {
 		return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 	}
 
@@ -187,7 +187,7 @@ public class VectorUtil {
 		v.z *= norm;
 	}
 
-	public static void cross3(Vector3f dest, Vec4 v1, Vec4 v2) {
+	public static void cross3(Vec3 dest, Vec4 v1, Vec4 v2) {
         float x,y;
         x = v1.y*v2.z - v1.z*v2.y;
         y = v2.x*v1.z - v2.z*v1.x;

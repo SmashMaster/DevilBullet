@@ -27,7 +27,7 @@ package com.bulletphysics.collision.narrowphase;
 
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -37,29 +37,29 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 	
 	//protected final BulletStack stack = BulletStack.get();
 
-	public final Vector3f from = new Vector3f();
-	public final Vector3f to = new Vector3f();
+	public final Vec3 from = new Vec3();
+	public final Vec3 to = new Vec3();
 
 	public float hitFraction;
 
-	public TriangleRaycastCallback(Vector3f from, Vector3f to) {
+	public TriangleRaycastCallback(Vec3 from, Vec3 to) {
 		this.from.set(from);
 		this.to.set(to);
 		this.hitFraction = 1f;
 	}
 	
-	public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
-		Vector3f vert0 = triangle[0];
-		Vector3f vert1 = triangle[1];
-		Vector3f vert2 = triangle[2];
+	public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
+		Vec3 vert0 = triangle[0];
+		Vec3 vert1 = triangle[1];
+		Vec3 vert2 = triangle[2];
 
-		Vector3f v10 = new Vector3f();
+		Vec3 v10 = new Vec3();
 		v10.subHere(vert1, vert0);
 
-		Vector3f v20 = new Vector3f();
+		Vec3 v20 = new Vec3();
 		v20.subHere(vert2, vert0);
 
-		Vector3f triangleNormal = new Vector3f();
+		Vec3 triangleNormal = new Vec3();
 		triangleNormal.crossHere(v10, v20);
 
 		float dist = vert0.dot(triangleNormal);
@@ -82,23 +82,23 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 		if (distance < hitFraction) {
 			float edge_tolerance = triangleNormal.squareLength();
 			edge_tolerance *= -0.0001f;
-			Vector3f point = new Vector3f();
+			Vec3 point = new Vec3();
 			VectorUtil.setInterpolate3(point, from, to, distance);
 			{
-				Vector3f v0p = new Vector3f();
+				Vec3 v0p = new Vec3();
 				v0p.subHere(vert0, point);
-				Vector3f v1p = new Vector3f();
+				Vec3 v1p = new Vec3();
 				v1p.subHere(vert1, point);
-				Vector3f cp0 = new Vector3f();
+				Vec3 cp0 = new Vec3();
 				cp0.crossHere(v0p, v1p);
 
 				if (cp0.dot(triangleNormal) >= edge_tolerance) {
-					Vector3f v2p = new Vector3f();
+					Vec3 v2p = new Vec3();
 					v2p.subHere(vert2, point);
-					Vector3f cp1 = new Vector3f();
+					Vec3 cp1 = new Vec3();
 					cp1.crossHere(v1p, v2p);
 					if (cp1.dot(triangleNormal) >= edge_tolerance) {
-						Vector3f cp2 = new Vector3f();
+						Vec3 cp2 = new Vec3();
 						cp2.crossHere(v2p, v0p);
 
 						if (cp2.dot(triangleNormal) >= edge_tolerance) {
@@ -107,7 +107,7 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 								hitFraction = reportHit(triangleNormal, distance, partId, triangleIndex);
 							}
 							else {
-								Vector3f tmp = new Vector3f();
+								Vec3 tmp = new Vec3();
 								tmp.negateHere(triangleNormal);
 								hitFraction = reportHit(tmp, distance, partId, triangleIndex);
 							}
@@ -118,6 +118,6 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 		}
 	}
 
-	public abstract float reportHit(Vector3f hitNormalLocal, float hitFraction, int partId, int triangleIndex );
+	public abstract float reportHit(Vec3 hitNormalLocal, float hitFraction, int partId, int triangleIndex );
 
 }

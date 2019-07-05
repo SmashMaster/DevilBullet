@@ -38,7 +38,7 @@ import com.samrj.devil.math.Quat;
  * Primarily to support 3D rotations.
  *
  */
-public class Matrix3f implements java.io.Serializable {
+public class Mat3 implements java.io.Serializable {
   /** 
     * The first matrix element in the first row.
     */
@@ -86,10 +86,10 @@ public class Matrix3f implements java.io.Serializable {
   
    /**
      *  Constructs a new matrix with the same values as the
-     *  Matrix3f parameter.
+     *  Mat3 parameter.
      *  @param m1  the source matrix
      */  
-   public Matrix3f(Matrix3f m1)
+   public Mat3(Mat3 m1)
    {
         this.a = m1.a;
         this.b = m1.b;
@@ -106,14 +106,14 @@ public class Matrix3f implements java.io.Serializable {
    }
 
     /**
-     * Constructs and initializes a Matrix3f to all zeros.
+     * Constructs and initializes a Mat3 to all zeros.
      */
-    public Matrix3f()
+    public Mat3()
     {
     }
 
    /**
-     * Returns a string that contains the values of this Matrix3f.
+     * Returns a string that contains the values of this Mat3.
      * @return the String representation
      */
     public String toString() {
@@ -124,7 +124,7 @@ public class Matrix3f implements java.io.Serializable {
     }
 
     /**
-     * Sets this Matrix3f to identity.
+     * Sets this Mat3 to identity.
      */
     public final void setIdentity()
     {
@@ -213,7 +213,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param row  the matrix row
      * @param v    the vector into which the matrix row values will be copied
      */
-    public final void getRow(int row, Vector3f v) {
+    public final void getRow(int row, Vec3 v) {
          if( row == 0 ) {
            v.x = a;
            v.y = b;
@@ -238,7 +238,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param column  the matrix column
      * @param v    the vector into which the matrix row values will be copied
      */  
-    public final void getColumn(int column, Vector3f v) {
+    public final void getColumn(int column, Vec3 v) {
         if( column == 0 ) {
            v.x = a;
            v.y = d;
@@ -353,7 +353,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param row the row number to be modified (zero indexed)
      * @param v the replacement row
      */
-    public final void setRow(int row, Vector3f v)
+    public final void setRow(int row, Vec3 v)
     {
 	switch (row) {
 	case 0:
@@ -384,7 +384,7 @@ public class Matrix3f implements java.io.Serializable {
      * matrix m1.
      * @param m1 the other matrix
      */
-    public final void add(Matrix3f m1)
+    public final void add(Mat3 m1)
     {  
         this.a += m1.a;
         this.b += m1.b;
@@ -423,7 +423,7 @@ public class Matrix3f implements java.io.Serializable {
      * Sets the value of this matrix to the transpose of the argument matrix.
      * @param m1 the matrix to be transposed
      */
-    public final void transposeHere(Matrix3f m1)
+    public final void transposeHere(Mat3 m1)
     {
 	if (this != m1) {
 	    this.a = m1.a;
@@ -462,11 +462,11 @@ public class Matrix3f implements java.io.Serializable {
     }
 
     /**
-     * Sets the value of this matrix to the value of the Matrix3f 
+     * Sets the value of this matrix to the value of the Mat3 
      * argument. 
      * @param m1 the source matrix3f 
      */  
-    public final void set(Matrix3f m1) {
+    public final void set(Mat3 m1) {
 
         this.a = m1.a;
         this.b = m1.b;
@@ -487,7 +487,7 @@ public class Matrix3f implements java.io.Serializable {
      * of the passed matrix m1.
      * @param m1 the matrix to be inverted
      */
-    public final void invertHere(Matrix3f m1)
+    public final void invertHere(Mat3 m1)
     {
 	 invertGeneral( m1);
     }
@@ -500,7 +500,7 @@ public class Matrix3f implements java.io.Serializable {
      * Also note that since this routine is slow anyway, we won't worry
      * about allocating a little bit of garbage.
      */
-    private final void invertGeneral(Matrix3f  m1) {
+    private final void invertGeneral(Mat3  m1) {
 	double temp[] = new double[9];
 	double result[] = new double[9];
 	int row_perm[] = new int[3];
@@ -802,7 +802,7 @@ public class Matrix3f implements java.io.Serializable {
      * with matrix m1.
      * @param m1 the other matrix
      */  
-    public final void mult(Matrix3f m1)
+    public final void mult(Mat3 m1)
     {
           float       m00, m01, m02,
                       m10, m11, m12,
@@ -831,7 +831,7 @@ public class Matrix3f implements java.io.Serializable {
      * @param m1 the first matrix
      * @param m2 the second matrix
      */
-    public final void multHere(Matrix3f m1, Matrix3f m2)
+    public final void multHere(Mat3 m1, Mat3 m2)
     {
 	if (this != m1 && this != m2) {
             this.a = m1.a*m2.a + m1.b*m2.d + m1.c*m2.g;
@@ -869,12 +869,12 @@ public class Matrix3f implements java.io.Serializable {
     }
 
    /**
-     * Returns true if all of the data members of Matrix3f m1 are
-     * equal to the corresponding data members in this Matrix3f.
+     * Returns true if all of the data members of Mat3 m1 are
+     * equal to the corresponding data members in this Mat3.
      * @param m1  the matrix with which the comparison is made
      * @return  true or false
      */  
-    public boolean equals(Matrix3f m1)
+    public boolean equals(Mat3 m1)
     {
       try {
 
@@ -887,9 +887,9 @@ public class Matrix3f implements java.io.Serializable {
     }
 
    /**
-     * Returns true if the Object o1 is of type Matrix3f and all of the
+     * Returns true if the Object o1 is of type Mat3 and all of the
      * data members of o1 are equal to the corresponding data members in
-     * this Matrix3f.
+     * this Mat3.
      * @param o1  the object with which the comparison is made
      * @return  true or false
      */  
@@ -897,7 +897,7 @@ public class Matrix3f implements java.io.Serializable {
     {
       try { 
 
-           Matrix3f m2 = (Matrix3f) o1;
+           Mat3 m2 = (Mat3) o1;
            return(this.a == m2.a && this.b == m2.b && this.c == m2.c
              && this.d == m2.d && this.e == m2.e && this.f == m2.f
              && this.g == m2.g && this.h == m2.h && this.i == m2.i);
@@ -930,7 +930,7 @@ public class Matrix3f implements java.io.Serializable {
     * back into the tuple (t = this*t).
     * @param t  the tuple to be multiplied by this matrix and then replaced
     */
-    public final void transform(Vector3f t) {
+    public final void transform(Vec3 t) {
      float x,y,z;
      x = a* t.x + b*t.y + c*t.z; 
      y = d* t.x + e*t.y + f*t.z; 
@@ -944,7 +944,7 @@ public class Matrix3f implements java.io.Serializable {
     * @param t  the tuple to be multiplied by this matrix
     * @param result  the tuple into which the product is placed
     */
-    public final void transform(Vector3f t, Vector3f result) { 
+    public final void transform(Vec3 t, Vec3 result) { 
      float x,y,z;
      x = a* t.x + b*t.y + c*t.z; 
      y = d* t.x + e*t.y + f*t.z;

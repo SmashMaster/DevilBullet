@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.narrowphase;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ManifoldPoint collects and maintains persistent contactpoints. Used to improve
@@ -35,12 +35,12 @@ import javax.vecmath.Vector3f;
  */
 public class ManifoldPoint {
 
-	public final Vector3f localPointA = new Vector3f();
-	public final Vector3f localPointB = new Vector3f();
-	public final Vector3f positionWorldOnB = new Vector3f();
+	public final Vec3 localPointA = new Vec3();
+	public final Vec3 localPointB = new Vec3();
+	public final Vec3 positionWorldOnB = new Vec3();
 	///m_positionWorldOnA is redundant information, see getPositionWorldOnA(), but for clarity
-	public final Vector3f positionWorldOnA = new Vector3f();
-	public final Vector3f normalWorldOnB = new Vector3f();
+	public final Vec3 positionWorldOnA = new Vec3();
+	public final Vec3 normalWorldOnB = new Vec3();
 	
 	public float distance1;
 	public float combinedFriction;
@@ -60,8 +60,8 @@ public class ManifoldPoint {
 	public float appliedImpulseLateral2;
 	public int lifeTime; //lifetime of the contactpoint in frames
 
-	public final Vector3f lateralFrictionDir1 = new Vector3f();
-	public final Vector3f lateralFrictionDir2 = new Vector3f();
+	public final Vec3 lateralFrictionDir1 = new Vec3();
+	public final Vec3 lateralFrictionDir2 = new Vec3();
 	
 	public ManifoldPoint() {
 		this.userPersistentData = null;
@@ -70,11 +70,11 @@ public class ManifoldPoint {
 		this.lifeTime = 0;
 	}
 	
-	public ManifoldPoint(Vector3f pointA, Vector3f pointB, Vector3f normal, float distance) {
+	public ManifoldPoint(Vec3 pointA, Vec3 pointB, Vec3 normal, float distance) {
 		init(pointA, pointB, normal, distance);
 	}
 
-	public void init(Vector3f pointA, Vector3f pointB, Vector3f normal, float distance) {
+	public void init(Vec3 pointA, Vec3 pointB, Vec3 normal, float distance) {
 		this.localPointA.set(pointA);
 		this.localPointB.set(pointB);
 		this.normalWorldOnB.set(normal);
@@ -120,13 +120,13 @@ public class ManifoldPoint {
 		lateralFrictionDir2.set(p.lateralFrictionDir2);
 	}
 	
-	public Vector3f getPositionWorldOnA(Vector3f out) {
+	public Vec3 getPositionWorldOnA(Vec3 out) {
 		out.set(positionWorldOnA);
 		return out;
 		//return m_positionWorldOnB + m_normalWorldOnB * m_distance1;
 	}
 
-	public Vector3f getPositionWorldOnB(Vector3f out) {
+	public Vec3 getPositionWorldOnB(Vec3 out) {
 		out.set(positionWorldOnB);
 		return out;
 	}

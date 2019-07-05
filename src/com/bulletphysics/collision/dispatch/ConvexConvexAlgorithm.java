@@ -41,7 +41,7 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ConvexConvexAlgorithm collision algorithm implements time of impact, convex
@@ -139,7 +139,7 @@ public class ConvexConvexAlgorithm extends CollisionAlgorithm {
 	
 	@Override
 	public float calculateTimeOfImpact(CollisionObject col0, CollisionObject col1, DispatcherInfo dispatchInfo, ManifoldResult resultOut) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		
 		Transform tmpTrans1 = new Transform();
 		Transform tmpTrans2 = new Transform();

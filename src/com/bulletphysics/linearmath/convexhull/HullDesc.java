@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath.convexhull;
 
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Describes point cloud data and other input for conversion to polygonal representation.
@@ -42,7 +42,7 @@ public class HullDesc {
 	public int vcount = 0;
 	
 	/** Array of vertices. */
-	public ObjectArrayList<Vector3f> vertices;
+	public ObjectArrayList<Vec3> vertices;
 	
 	/** Stride of each vertex, in bytes. */
 	int vertexStride = 3*4;       
@@ -59,11 +59,11 @@ public class HullDesc {
 	public HullDesc() {
 	}
 
-	public HullDesc(int flag, int vcount, ObjectArrayList<Vector3f> vertices) {
+	public HullDesc(int flag, int vcount, ObjectArrayList<Vec3> vertices) {
 		this(flag, vcount, vertices, 3*4);
 	}
 	
-	public HullDesc(int flag, int vcount, ObjectArrayList<Vector3f> vertices, int stride) {
+	public HullDesc(int flag, int vcount, ObjectArrayList<Vec3> vertices, int stride) {
 		this.flags = flag;
 		this.vcount = vcount;
 		this.vertices = vertices;

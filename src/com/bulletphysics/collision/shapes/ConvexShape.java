@@ -26,7 +26,7 @@
 package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ConvexShape is an abstract shape class. It describes general convex shapes
@@ -39,20 +39,20 @@ public abstract class ConvexShape extends CollisionShape {
 
 	public static final int MAX_PREFERRED_PENETRATION_DIRECTIONS = 10;
 	
-	public abstract Vector3f localGetSupportingVertex(Vector3f vec, Vector3f out);
+	public abstract Vec3 localGetSupportingVertex(Vec3 vec, Vec3 out);
 
 	//#ifndef __SPU__
-	public abstract Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec, Vector3f out);
+	public abstract Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec, Vec3 out);
 
 	//notice that the vectors should be unit length
-	public abstract void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors);
+	public abstract void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors);
 	//#endif
 	
-	public abstract void getAabbSlow(Transform t, Vector3f aabbMin, Vector3f aabbMax);
+	public abstract void getAabbSlow(Transform t, Vec3 aabbMin, Vec3 aabbMax);
 
-	public abstract void setLocalScaling(Vector3f scaling);
+	public abstract void setLocalScaling(Vec3 scaling);
 
-	public abstract Vector3f getLocalScaling(Vector3f out);
+	public abstract Vec3 getLocalScaling(Vec3 out);
 
 	public abstract void setMargin(float margin);
 
@@ -60,6 +60,6 @@ public abstract class ConvexShape extends CollisionShape {
 
 	public abstract int getNumPreferredPenetrationDirections();
 
-	public abstract void getPreferredPenetrationDirection(int index, Vector3f penetrationVector);
+	public abstract void getPreferredPenetrationDirection(int index, Vec3 penetrationVector);
 	
 }

@@ -25,7 +25,7 @@
 
 package com.bulletphysics.dynamics.vehicle;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * 
@@ -33,9 +33,9 @@ import javax.vecmath.Vector3f;
  */
 public class WheelInfoConstructionInfo {
 
-	public final Vector3f chassisConnectionCS = new Vector3f();
-	public final Vector3f wheelDirectionCS = new Vector3f();
-	public final Vector3f wheelAxleCS = new Vector3f();
+	public final Vec3 chassisConnectionCS = new Vec3();
+	public final Vec3 wheelDirectionCS = new Vec3();
+	public final Vec3 wheelAxleCS = new Vec3();
 	public float suspensionRestLength;
 	public float maxSuspensionTravelCm;
 	public float wheelRadius;

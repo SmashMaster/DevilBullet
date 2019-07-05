@@ -40,7 +40,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -59,12 +59,12 @@ public class TestRig {
 	private RigidBody[] bodies = new RigidBody[BODYPART_COUNT];
 	private TypedConstraint[] joints = new TypedConstraint[JOINT_COUNT];
 
-	public TestRig(DynamicsWorld ownerWorld, Vector3f positionOffset, boolean fixed) {
+	public TestRig(DynamicsWorld ownerWorld, Vec3 positionOffset, boolean fixed) {
 		this.ownerWorld = ownerWorld;
 
 		Transform tmpTrans = new Transform();
 
-		Vector3f up = new Vector3f();
+		Vec3 up = new Vec3();
 		up.set(0.0f, 1.0f, 0.0f);
 
 		//
@@ -90,7 +90,7 @@ public class TestRig {
 		offset.origin.set(positionOffset);
 
 		// root
-		Vector3f root = new Vector3f();
+		Vec3 root = new Vec3();
 		root.set(0.0f, height, 0.0f);
 		Transform transform = new Transform();
 		transform.setIdentity();
@@ -109,15 +109,15 @@ public class TestRig {
 			float cos = (float)Math.cos(angle);
 
 			transform.setIdentity();
-			Vector3f boneOrigin = new Vector3f();
+			Vec3 boneOrigin = new Vec3();
 			boneOrigin.set(cos*(bodySize+0.5f*legLength), height, sin*(bodySize+0.5f*legLength));
 			transform.origin.set(boneOrigin);
 
 			// thigh
-			Vector3f toBone = new Vector3f(boneOrigin);
+			Vec3 toBone = new Vec3(boneOrigin);
 			toBone.sub(root);
 			toBone.normalize();
-			Vector3f axis = new Vector3f();
+			Vec3 axis = new Vec3();
 			axis.crossHere(toBone,up);
 			Quat q = new Quat();
 			QuaternionUtil.setRotation(q, axis, BulletGlobals.SIMD_HALF_PI);
@@ -216,7 +216,7 @@ public class TestRig {
 	private RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {
 		boolean isDynamic = (mass != 0f);
 
-		Vector3f localInertia = new Vector3f();
+		Vec3 localInertia = new Vec3();
 		localInertia.set(0f, 0f, 0f);
 		if (isDynamic) {
 			shape.calculateLocalInertia(mass, localInertia);

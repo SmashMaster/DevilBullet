@@ -28,7 +28,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * SolverBody is an internal data structure for the constraint solver. Only necessary
@@ -40,19 +40,19 @@ public class SolverBody {
 	
 	//protected final BulletStack stack = BulletStack.get();
 
-	public final Vector3f angularVelocity = new Vector3f();
+	public final Vec3 angularVelocity = new Vec3();
 	public float angularFactor;
 	public float invMass;
 	public float friction;
 	public RigidBody originalBody;
-	public final Vector3f linearVelocity = new Vector3f();
-	public final Vector3f centerOfMassPosition = new Vector3f();
+	public final Vec3 linearVelocity = new Vec3();
+	public final Vec3 centerOfMassPosition = new Vec3();
 
-	public final Vector3f pushVelocity = new Vector3f();
-	public final Vector3f turnVelocity = new Vector3f();
+	public final Vec3 pushVelocity = new Vec3();
+	public final Vec3 turnVelocity = new Vec3();
 	
-	public void getVelocityInLocalPoint(Vector3f rel_pos, Vector3f velocity) {
-		Vector3f tmp = new Vector3f();
+	public void getVelocityInLocalPoint(Vec3 rel_pos, Vec3 velocity) {
+		Vec3 tmp = new Vec3();
 		tmp.crossHere(angularVelocity, rel_pos);
 		velocity.addHere(linearVelocity, tmp);
 	}
@@ -60,14 +60,14 @@ public class SolverBody {
 	/**
 	 * Optimization for the iterative solver: avoid calculating constant terms involving inertia, normal, relative position.
 	 */
-	public void internalApplyImpulse(Vector3f linearComponent, Vector3f angularComponent, float impulseMagnitude) {
+	public void internalApplyImpulse(Vec3 linearComponent, Vec3 angularComponent, float impulseMagnitude) {
 		if (invMass != 0f) {
 			linearVelocity.scaleAddHere(impulseMagnitude, linearComponent, linearVelocity);
 			angularVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
 		}
 	}
 
-	public void internalApplyPushImpulse(Vector3f linearComponent, Vector3f angularComponent, float impulseMagnitude) {
+	public void internalApplyPushImpulse(Vec3 linearComponent, Vec3 angularComponent, float impulseMagnitude) {
 		if (invMass != 0f) {
 			pushVelocity.scaleAddHere(impulseMagnitude, linearComponent, pushVelocity);
 			turnVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, turnVelocity);

@@ -33,7 +33,7 @@ import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -45,17 +45,17 @@ public class TriangleShapeEx extends TriangleShape {
 		super();
 	}
 
-	public TriangleShapeEx(Vector3f p0, Vector3f p1, Vector3f p2) {
+	public TriangleShapeEx(Vec3 p0, Vec3 p1, Vec3 p2) {
 		super(p0, p1, p2);
 	}
 
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
-		Vector3f tv0 = new Vector3f(vertices1[0]);
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
+		Vec3 tv0 = new Vec3(vertices1[0]);
 		t.transform(tv0);
-		Vector3f tv1 = new Vector3f(vertices1[1]);
+		Vec3 tv1 = new Vec3(vertices1[1]);
 		t.transform(tv1);
-		Vector3f tv2 = new Vector3f(vertices1[2]);
+		Vec3 tv2 = new Vec3(vertices1[2]);
 		t.transform(tv2);
 
 		AABB trianglebox = new AABB();
@@ -72,10 +72,10 @@ public class TriangleShapeEx extends TriangleShape {
 	}
 
 	public void buildTriPlane(Vec4 plane) {
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
 
-		Vector3f normal = new Vector3f();
+		Vec3 normal = new Vec3();
 		tmp1.subHere(vertices1[1], vertices1[0]);
 		tmp2.subHere(vertices1[2], vertices1[0]);
 		normal.crossHere(tmp1, tmp2);

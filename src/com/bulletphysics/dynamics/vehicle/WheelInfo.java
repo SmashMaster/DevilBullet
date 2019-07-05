@@ -27,7 +27,7 @@ package com.bulletphysics.dynamics.vehicle;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * WheelInfo contains information per wheel about friction and suspension.
@@ -42,9 +42,9 @@ public class WheelInfo {
 
 	public final Transform worldTransform = new Transform();
 	
-	public final Vector3f chassisConnectionPointCS = new Vector3f(); // const
-	public final Vector3f wheelDirectionCS = new Vector3f(); // const
-	public final Vector3f wheelAxleCS = new Vector3f(); // const or modified by steering
+	public final Vec3 chassisConnectionPointCS = new Vec3(); // const
+	public final Vec3 wheelDirectionCS = new Vec3(); // const
+	public final Vec3 wheelAxleCS = new Vec3(); // const or modified by steering
 	public float suspensionRestLength1; // const
 	public float maxSuspensionTravelCm;
 	public float wheelsRadius; // const
@@ -99,9 +99,9 @@ public class WheelInfo {
 	public void updateWheel(RigidBody chassis, RaycastInfo raycastInfo) {
 		if (raycastInfo.isInContact) {
 			float project = raycastInfo.contactNormalWS.dot(raycastInfo.wheelDirectionWS);
-			Vector3f chassis_velocity_at_contactPoint = new Vector3f();
-			Vector3f relpos = new Vector3f();
-			relpos.subHere(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vector3f()));
+			Vec3 chassis_velocity_at_contactPoint = new Vec3();
+			Vec3 relpos = new Vec3();
+			relpos.subHere(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vec3()));
 			chassis.getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
 			float projVel = raycastInfo.contactNormalWS.dot(chassis_velocity_at_contactPoint);
 			if (project >= -0.1f) {
@@ -127,12 +127,12 @@ public class WheelInfo {
 	
 	public static class RaycastInfo {
 		// set by raycaster
-		public final Vector3f contactNormalWS = new Vector3f(); // contactnormal
-		public final Vector3f contactPointWS = new Vector3f(); // raycast hitpoint
+		public final Vec3 contactNormalWS = new Vec3(); // contactnormal
+		public final Vec3 contactPointWS = new Vec3(); // raycast hitpoint
 		public float suspensionLength;
-		public final Vector3f hardPointWS = new Vector3f(); // raycast starting point
-		public final Vector3f wheelDirectionWS = new Vector3f(); // direction in worldspace
-		public final Vector3f wheelAxleWS = new Vector3f(); // axle in worldspace
+		public final Vec3 hardPointWS = new Vec3(); // raycast starting point
+		public final Vec3 wheelDirectionWS = new Vec3(); // direction in worldspace
+		public final Vec3 wheelAxleWS = new Vec3(); // axle in worldspace
 		public boolean isInContact;
 		public Object groundObject; // could be general void* ptr
 	}

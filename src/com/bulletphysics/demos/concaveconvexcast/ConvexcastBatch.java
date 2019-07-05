@@ -36,7 +36,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Scrolls back and forth over terrain.
@@ -47,22 +47,22 @@ public class ConvexcastBatch {
 
 	public static final int NUMRAYS_IN_BAR = 100;
 
-	public Vector3f[] source = new Vector3f[NUMRAYS_IN_BAR];
-	public Vector3f[] dest = new Vector3f[NUMRAYS_IN_BAR];
-	public Vector3f[] direction = new Vector3f[NUMRAYS_IN_BAR];
-	public Vector3f[] hit_com = new Vector3f[NUMRAYS_IN_BAR];
-	public Vector3f[] hit_surface = new Vector3f[NUMRAYS_IN_BAR];
+	public Vec3[] source = new Vec3[NUMRAYS_IN_BAR];
+	public Vec3[] dest = new Vec3[NUMRAYS_IN_BAR];
+	public Vec3[] direction = new Vec3[NUMRAYS_IN_BAR];
+	public Vec3[] hit_com = new Vec3[NUMRAYS_IN_BAR];
+	public Vec3[] hit_surface = new Vec3[NUMRAYS_IN_BAR];
 	public float[] hit_fraction = new float[NUMRAYS_IN_BAR];
-	public Vector3f[] normal = new Vector3f[NUMRAYS_IN_BAR];
+	public Vec3[] normal = new Vec3[NUMRAYS_IN_BAR];
 
 	{
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {
-			source[i] = new Vector3f();
-			dest[i] = new Vector3f();
-			direction[i] = new Vector3f();
-			hit_com[i] = new Vector3f();
-			hit_surface[i] = new Vector3f();
-			normal[i] = new Vector3f();
+			source[i] = new Vec3();
+			dest[i] = new Vec3();
+			direction[i] = new Vec3();
+			hit_com[i] = new Vec3();
+			hit_surface[i] = new Vec3();
+			normal[i] = new Vec3();
 		}
 	}
 
@@ -84,11 +84,11 @@ public class ConvexcastBatch {
 	public float max_y;
 	public float sign;
 
-	public final Vector3f boxShapeHalfExtents = new Vector3f();
+	public final Vec3 boxShapeHalfExtents = new Vec3();
 	public final BoxShape boxShape;
 
 	public ConvexcastBatch() {
-		boxShape = new BoxShape(new Vector3f(0f, 0f, 0f));
+		boxShape = new BoxShape(new Vec3(0f, 0f, 0f));
 		ms = 0;
 		max_ms = 0;
 		min_ms = 9999;
@@ -188,8 +188,8 @@ public class ConvexcastBatch {
 
 			Quat qFrom = new Quat();
 			Quat qTo = new Quat();
-			QuaternionUtil.setRotation(qFrom, new Vector3f(1f, 0f, 0f), 0f);
-			QuaternionUtil.setRotation(qTo, new Vector3f(1f, 0f, 0f), 0.7f);
+			QuaternionUtil.setRotation(qFrom, new Vec3(1f, 0f, 0f), 0f);
+			QuaternionUtil.setRotation(qTo, new Vec3(1f, 0f, 0f), 0.7f);
 
 			Transform from = new Transform();
 			Transform to = new Transform();
@@ -262,8 +262,8 @@ public class ConvexcastBatch {
 		gl.glColor3f(0f, 1f, 1f);
 		Quat qFrom = new Quat();
 		Quat qTo = new Quat();
-		QuaternionUtil.setRotation(qFrom, new Vector3f(1f, 0f, 0f), 0f);
-		QuaternionUtil.setRotation(qTo, new Vector3f(1f, 0f, 0f), 0.7f);
+		QuaternionUtil.setRotation(qFrom, new Vec3(1f, 0f, 0f), 0f);
+		QuaternionUtil.setRotation(qTo, new Vec3(1f, 0f, 0f), 0.7f);
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {
 			Transform from = new Transform();
 			from.basis.setRotation(qFrom);
@@ -273,8 +273,8 @@ public class ConvexcastBatch {
 			to.basis.setRotation(qTo);
 			to.origin.set(dest[i]);
 
-			Vector3f linVel = new Vector3f();
-			Vector3f angVel = new Vector3f();
+			Vec3 linVel = new Vec3();
+			Vec3 angVel = new Vec3();
 
 			TransformUtil.calculateVelocity(from, to, 1f, linVel, angVel);
 			Transform T = new Transform();

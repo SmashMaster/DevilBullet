@@ -31,7 +31,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * GjkPairDetector uses GJK to implement the {@link DiscreteCollisionDetectorInterface}.
@@ -45,7 +45,7 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 	// must be above the machine epsilon
 	private static final float REL_ERROR2 = 1.0e-6f;
 	
-	private final Vector3f cachedSeparatingAxis = new Vector3f();
+	private final Vec3 cachedSeparatingAxis = new Vec3();
 	private ConvexPenetrationDepthSolver penetrationDepthSolver;
 	private SimplexSolverInterface simplexSolver;
 	private ConvexShape minkowskiA;
@@ -71,15 +71,15 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 	}
 	
 	public void getClosestPoints(ClosestPointInput input, Result output, IDebugDraw debugDraw, boolean swapResults) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		float distance = 0f;
-		Vector3f normalInB = new Vector3f();
+		Vec3 normalInB = new Vec3();
 		normalInB.set(0f, 0f, 0f);
-		Vector3f pointOnA = new Vector3f(), pointOnB = new Vector3f();
+		Vec3 pointOnA = new Vec3(), pointOnB = new Vec3();
 		Transform localTransA = new Transform(input.transformA);
 		Transform localTransB = new Transform(input.transformB);
-		Vector3f positionOffset = new Vector3f();
+		Vec3 positionOffset = new Vec3();
 		positionOffset.addHere(localTransA.origin, localTransB.origin);
 		positionOffset.mult(0.5f);
 		localTransA.origin.sub(positionOffset);
@@ -115,18 +115,18 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 
 			simplexSolver.reset();
 
-			Vector3f seperatingAxisInA = new Vector3f();
-			Vector3f seperatingAxisInB = new Vector3f();
+			Vec3 seperatingAxisInA = new Vec3();
+			Vec3 seperatingAxisInB = new Vec3();
 			
-			Vector3f pInA = new Vector3f();
-			Vector3f qInB = new Vector3f();
+			Vec3 pInA = new Vec3();
+			Vec3 qInB = new Vec3();
 			
-			Vector3f pWorld = new Vector3f();
-			Vector3f qWorld = new Vector3f();
-			Vector3f w = new Vector3f();
+			Vec3 pWorld = new Vec3();
+			Vec3 qWorld = new Vec3();
+			Vec3 w = new Vec3();
 			
-			Vector3f tmpPointOnA = new Vector3f(), tmpPointOnB = new Vector3f();
-			Vector3f tmpNormalInB = new Vector3f();
+			Vec3 tmpPointOnA = new Vec3(), tmpPointOnB = new Vec3();
+			Vec3 tmpNormalInB = new Vec3();
 			
 			for (;;) //while (true)
 			{
@@ -334,7 +334,7 @@ public class GjkPairDetector extends DiscreteCollisionDetectorInterface {
 		minkowskiB = minkB;
 	}
 
-	public void setCachedSeperatingAxis(Vector3f seperatingAxis) {
+	public void setCachedSeperatingAxis(Vec3 seperatingAxis) {
 		cachedSeparatingAxis.set(seperatingAxis);
 	}
 

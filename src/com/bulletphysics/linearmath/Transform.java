@@ -27,8 +27,8 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.shapes.UniformScalingShape;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * Transform represents translation and rotation (rigid transform). Scaling and
@@ -44,15 +44,15 @@ public class Transform {
 	//protected BulletStack stack;
 
 	/** Rotation matrix of this Transform. */
-	public final Matrix3f basis = new Matrix3f();
+	public final Mat3 basis = new Mat3();
 	
 	/** Translation vector of this Transform. */
-	public final Vector3f origin = new Vector3f();
+	public final Vec3 origin = new Vec3();
 
 	public Transform() {
 	}
 
-	public Transform(Matrix3f mat) {
+	public Transform(Mat3 mat) {
 		basis.set(mat);
 	}
 
@@ -65,12 +65,12 @@ public class Transform {
 		origin.set(tr.origin);
 	}
 	
-	public void set(Matrix3f mat) {
+	public void set(Mat3 mat) {
 		basis.set(mat);
 		origin.set(0f, 0f, 0f);
 	}
 
-	public void transform(Vector3f v) {
+	public void transform(Vec3 v) {
 		basis.transform(v);
 		v.add(origin);
 	}
@@ -92,7 +92,7 @@ public class Transform {
 	}
 	
 	public void mul(Transform tr) {
-		Vector3f vec = new Vector3f(tr.origin);
+		Vec3 vec = new Vec3(tr.origin);
 		transform(vec);
 
 		basis.mult(tr.basis);
@@ -100,17 +100,17 @@ public class Transform {
 	}
         
 	public void mul(Transform tr1, Transform tr2) {
-		Vector3f vec = new Vector3f(tr2.origin);
+		Vec3 vec = new Vec3(tr2.origin);
 		tr1.transform(vec);
 
 		basis.multHere(tr1.basis, tr2.basis);
 		origin.set(vec);
 	}
 	
-	public void invXform(Vector3f inVec, Vector3f out) {
+	public void invXform(Vec3 inVec, Vec3 out) {
 		out.subHere(inVec, origin);
 
-		Matrix3f mat = new Matrix3f(basis);
+		Mat3 mat = new Mat3(basis);
 		mat.transpose();
 		mat.transform(out);
 	}

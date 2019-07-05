@@ -31,7 +31,7 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ManifoldResult is helper class to manage contact results.
@@ -84,7 +84,7 @@ public class ManifoldResult extends DiscreteCollisionDetectorInterface.Result {
 		this.index1 = index1;
 	}
 
-	public void addContactPoint(Vector3f normalOnBInWorld, Vector3f pointInWorld, float depth) {
+	public void addContactPoint(Vec3 normalOnBInWorld, Vec3 pointInWorld, float depth) {
 		assert (manifoldPtr != null);
 		//order in manifold needs to match
 
@@ -94,11 +94,11 @@ public class ManifoldResult extends DiscreteCollisionDetectorInterface.Result {
 
 		boolean isSwapped = manifoldPtr.getBody0() != body0;
 
-		Vector3f pointA = new Vector3f();
+		Vec3 pointA = new Vec3();
 		pointA.scaleAddHere(depth, normalOnBInWorld, pointInWorld);
 
-		Vector3f localA = new Vector3f();
-		Vector3f localB = new Vector3f();
+		Vec3 localA = new Vec3();
+		Vec3 localB = new Vec3();
 
 		if (isSwapped) {
 			rootTransB.invXform(pointA, localA);

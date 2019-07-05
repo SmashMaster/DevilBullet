@@ -30,8 +30,8 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * CapsuleShape represents a capsule around the Y axis, there is also the
@@ -61,13 +61,13 @@ public class CapsuleShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec0, Vector3f out) {
-		Vector3f supVec = out;
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec0, Vec3 out) {
+		Vec3 supVec = out;
 		supVec.set(0f, 0f, 0f);
 
 		float maxDot = -1e30f;
 
-		Vector3f vec = new Vector3f(vec0);
+		Vec3 vec = new Vec3(vec0);
 		float lenSqr = vec.squareLength();
 		if (lenSqr < 0.0001f) {
 			vec.set(1f, 0f, 0f);
@@ -77,14 +77,14 @@ public class CapsuleShape extends ConvexInternalShape {
 			vec.mult(rlen);
 		}
 
-		Vector3f vtx = new Vector3f();
+		Vec3 vtx = new Vec3();
 		float newDot;
 
 		float radius = getRadius();
 
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
-		Vector3f pos = new Vector3f();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
+		Vec3 pos = new Vec3();
 
 		{
 			pos.set(0f, 0f, 0f);
@@ -121,13 +121,13 @@ public class CapsuleShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		// TODO: implement
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		// as an approximation, take the inertia of the box that bounds the spheres
 
 		Transform ident = new Transform();
@@ -135,7 +135,7 @@ public class CapsuleShape extends ConvexInternalShape {
 
 		float radius = getRadius();
 
-		Vector3f halfExtents = new Vector3f();
+		Vec3 halfExtents = new Vec3();
 		halfExtents.set(radius, radius, radius);
 		VectorUtil.setCoord(halfExtents, getUpAxis(), radius + getHalfHeight());
 
@@ -160,10 +160,10 @@ public class CapsuleShape extends ConvexInternalShape {
 	}
 	
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
-		Vector3f tmp = new Vector3f();
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
+		Vec3 tmp = new Vec3();
 
-		Vector3f halfExtents = new Vector3f();
+		Vec3 halfExtents = new Vec3();
 		halfExtents.set(getRadius(), getRadius(), getRadius());
 		VectorUtil.setCoord(halfExtents, upAxis, getRadius() + getHalfHeight());
 
@@ -171,12 +171,12 @@ public class CapsuleShape extends ConvexInternalShape {
 		halfExtents.y += getMargin();
 		halfExtents.z += getMargin();
 
-		Matrix3f abs_b = new Matrix3f();
+		Mat3 abs_b = new Mat3();
 		abs_b.set(t.basis);
 		MatrixUtil.absolute(abs_b);
 
-		Vector3f center = t.origin;
-		Vector3f extent = new Vector3f();
+		Vec3 center = t.origin;
+		Vec3 extent = new Vec3();
 
 		abs_b.getRow(0, tmp);
 		extent.x = tmp.dot(halfExtents);

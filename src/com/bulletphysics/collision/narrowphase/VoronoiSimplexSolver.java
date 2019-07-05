@@ -27,7 +27,7 @@ package com.bulletphysics.collision.narrowphase;
 
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * VoronoiSimplexSolver is an implementation of the closest point distance algorithm
@@ -50,14 +50,14 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 
 	public int numVertices;
 
-	public final Vector3f[] simplexVectorW = new Vector3f[VORONOI_SIMPLEX_MAX_VERTS];
-	public final Vector3f[] simplexPointsP = new Vector3f[VORONOI_SIMPLEX_MAX_VERTS];
-	public final Vector3f[] simplexPointsQ = new Vector3f[VORONOI_SIMPLEX_MAX_VERTS];
+	public final Vec3[] simplexVectorW = new Vec3[VORONOI_SIMPLEX_MAX_VERTS];
+	public final Vec3[] simplexPointsP = new Vec3[VORONOI_SIMPLEX_MAX_VERTS];
+	public final Vec3[] simplexPointsQ = new Vec3[VORONOI_SIMPLEX_MAX_VERTS];
 
-	public final Vector3f cachedP1 = new Vector3f();
-	public final Vector3f cachedP2 = new Vector3f();
-	public final Vector3f cachedV = new Vector3f();
-	public final Vector3f lastW = new Vector3f();
+	public final Vec3 cachedP1 = new Vec3();
+	public final Vec3 cachedP2 = new Vec3();
+	public final Vec3 cachedV = new Vec3();
+	public final Vec3 lastW = new Vec3();
 	public boolean cachedValidClosest;
 
 	public final SubSimplexClosestResult cachedBC = new SubSimplexClosestResult();
@@ -66,9 +66,9 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 	
 	{
 		for (int i=0; i<VORONOI_SIMPLEX_MAX_VERTS; i++) {
-			simplexVectorW[i] = new Vector3f();
-			simplexPointsP[i] = new Vector3f();
-			simplexPointsQ[i] = new Vector3f();
+			simplexVectorW[i] = new Vec3();
+			simplexPointsP[i] = new Vec3();
+			simplexPointsQ[i] = new Vec3();
 		}
 	}
 
@@ -118,19 +118,19 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 				}
 			case 2:
 				{
-					Vector3f tmp = new Vector3f();
+					Vec3 tmp = new Vec3();
 					
 					//closest point origin from line segment
-					Vector3f from = simplexVectorW[0];
-					Vector3f to = simplexVectorW[1];
-					Vector3f nearest = new Vector3f();
+					Vec3 from = simplexVectorW[0];
+					Vec3 to = simplexVectorW[1];
+					Vec3 nearest = new Vec3();
 
-					Vector3f p = new Vector3f();
+					Vec3 p = new Vec3();
 					p.set(0f, 0f, 0f);
-					Vector3f diff = new Vector3f();
+					Vec3 diff = new Vec3();
 					diff.subHere(p, from);
 
-					Vector3f v = new Vector3f();
+					Vec3 v = new Vec3();
 					v.subHere(to, from);
 
 					float t = v.dot(diff);
@@ -177,17 +177,17 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 				}
 			case 3: 
 				{ 
-					Vector3f tmp1 = new Vector3f();
-					Vector3f tmp2 = new Vector3f();
-					Vector3f tmp3 = new Vector3f();
+					Vec3 tmp1 = new Vec3();
+					Vec3 tmp2 = new Vec3();
+					Vec3 tmp3 = new Vec3();
 					
 					// closest point origin from triangle 
-					Vector3f p = new Vector3f();
+					Vec3 p = new Vec3();
 					p.set(0f, 0f, 0f);
 
-					Vector3f a = simplexVectorW[0]; 
-					Vector3f b = simplexVectorW[1]; 
-					Vector3f c = simplexVectorW[2]; 
+					Vec3 a = simplexVectorW[0]; 
+					Vec3 b = simplexVectorW[1]; 
+					Vec3 c = simplexVectorW[2]; 
 
 					closestPtPointTriangle(p,a,b,c,cachedBC);
 
@@ -210,18 +210,18 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 				}
 			case 4:
 				{
-					Vector3f tmp1 = new Vector3f();
-					Vector3f tmp2 = new Vector3f();
-					Vector3f tmp3 = new Vector3f();
-					Vector3f tmp4 = new Vector3f();
+					Vec3 tmp1 = new Vec3();
+					Vec3 tmp2 = new Vec3();
+					Vec3 tmp3 = new Vec3();
+					Vec3 tmp4 = new Vec3();
 					
-					Vector3f p = new Vector3f();
+					Vec3 p = new Vec3();
 					p.set(0f, 0f, 0f);
 
-					Vector3f a = simplexVectorW[0];
-					Vector3f b = simplexVectorW[1];
-					Vector3f c = simplexVectorW[2];
-					Vector3f d = simplexVectorW[3];
+					Vec3 a = simplexVectorW[0];
+					Vec3 b = simplexVectorW[1];
+					Vec3 c = simplexVectorW[2];
+					Vec3 d = simplexVectorW[3];
 
 					boolean hasSeperation = closestPtPointTetrahedron(p,a,b,c,d,cachedBC);
 
@@ -272,17 +272,17 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		return cachedValidClosest;
 	}
 
-	public boolean closestPtPointTriangle(Vector3f p, Vector3f a, Vector3f b, Vector3f c, SubSimplexClosestResult result) {
+	public boolean closestPtPointTriangle(Vec3 p, Vec3 a, Vec3 b, Vec3 c, SubSimplexClosestResult result) {
 		result.usedVertices.reset();
 
 		// Check if P in vertex region outside A
-		Vector3f ab = new Vector3f();
+		Vec3 ab = new Vec3();
 		ab.subHere(b, a);
 
-		Vector3f ac = new Vector3f();
+		Vec3 ac = new Vec3();
 		ac.subHere(c, a);
 
-		Vector3f ap = new Vector3f();
+		Vec3 ap = new Vec3();
 		ap.subHere(p, a);
 
 		float d1 = ab.dot(ap);
@@ -297,7 +297,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		}
 
 		// Check if P in vertex region outside B
-		Vector3f bp = new Vector3f();
+		Vec3 bp = new Vec3();
 		bp.subHere(p, b);
 
 		float d3 = ab.dot(bp);
@@ -325,7 +325,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		}
 
 		// Check if P in vertex region outside C
-		Vector3f cp = new Vector3f();
+		Vec3 cp = new Vec3();
 		cp.subHere(p, c);
 
 		float d5 = ab.dot(cp);
@@ -356,7 +356,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		if (va <= 0f && (d4 - d3) >= 0f && (d5 - d6) >= 0f) {
 			float w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			tmp.subHere(c, b);
 			result.closestPointOnSimplex.scaleAddHere(w, tmp, b);
 
@@ -372,8 +372,8 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		float v = vb * denom;
 		float w = vc * denom;
 
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
 
 		tmp1.scale(v, ab);
 		tmp2.scale(w, ac);
@@ -388,11 +388,11 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 	}
 	
 	/// Test if point p and d lie on opposite sides of plane through abc
-	public static int pointOutsideOfPlane(Vector3f p, Vector3f a, Vector3f b, Vector3f c, Vector3f d)
+	public static int pointOutsideOfPlane(Vec3 p, Vec3 a, Vec3 b, Vec3 c, Vec3 d)
 	{
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
-		Vector3f normal = new Vector3f();
+		Vec3 normal = new Vec3();
 		normal.subHere(b, a);
 		tmp.subHere(c, a);
 		normal.crossHere(normal, tmp);
@@ -422,12 +422,12 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		return (signp * signd < 0f)? 1 : 0;
 	}
 	
-	public boolean closestPtPointTetrahedron(Vector3f p, Vector3f a, Vector3f b, Vector3f c, Vector3f d, SubSimplexClosestResult finalResult) {
+	public boolean closestPtPointTetrahedron(Vec3 p, Vec3 a, Vec3 b, Vec3 c, Vec3 d, SubSimplexClosestResult finalResult) {
 		SubSimplexClosestResult tempResult = subsimplexResultsPool.get();
 		tempResult.reset();
 		try {
-			Vector3f tmp = new Vector3f();
-			Vector3f q = new Vector3f();
+			Vec3 tmp = new Vec3();
+			Vec3 q = new Vec3();
 
 			// Start out assuming point inside all halfspaces, so closest to itself
 			finalResult.closestPointOnSimplex.set(p);
@@ -597,7 +597,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		cachedBC.reset();
 	}
 
-	public void addVertex(Vector3f w, Vector3f p, Vector3f q) {
+	public void addVertex(Vec3 w, Vec3 p, Vec3 q) {
 		lastW.set(w);
 		needsUpdate = true;
 
@@ -611,7 +611,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 	/**
 	 * Return/calculate the closest vertex.
 	 */
-	public boolean closest(Vector3f v) {
+	public boolean closest(Vec3 v) {
 		boolean succes = updateClosestVectorAndPoints();
 		v.set(cachedV);
 		return succes;
@@ -633,7 +633,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		return (numVertices == 4);
 	}
 
-	public int getSimplex(Vector3f[] pBuf, Vector3f[] qBuf, Vector3f[] yBuf) {
+	public int getSimplex(Vec3[] pBuf, Vec3[] qBuf, Vec3[] yBuf) {
 		for (int i = 0; i < numVertices(); i++) {
 			yBuf[i].set(simplexVectorW[i]);
 			pBuf[i].set(simplexPointsP[i]);
@@ -642,7 +642,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		return numVertices();
 	}
 
-	public boolean inSimplex(Vector3f w) {
+	public boolean inSimplex(Vec3 w) {
 		boolean found = false;
 		int i, numverts = numVertices();
 		//btScalar maxV = btScalar(0.);
@@ -662,7 +662,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		return found;
 	}
 
-	public void backup_closest(Vector3f v) {
+	public void backup_closest(Vec3 v) {
 		v.set(cachedV);
 	}
 
@@ -670,7 +670,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 		return (numVertices() == 0);
 	}
 
-	public void compute_points(Vector3f p1, Vector3f p2) {
+	public void compute_points(Vec3 p1, Vec3 p2) {
 		updateClosestVectorAndPoints();
 		p1.set(cachedP1);
 		p2.set(cachedP2);
@@ -697,7 +697,7 @@ public class VoronoiSimplexSolver extends SimplexSolverInterface {
 	}
 	
 	public static class SubSimplexClosestResult {
-		public final Vector3f closestPointOnSimplex = new Vector3f();
+		public final Vec3 closestPointOnSimplex = new Vec3();
 		//MASK for m_usedVertices
 		//stores the simplex vertex-usage, using the MASK, 
 		// if m_usedVertices & MASK then the related vertex is used

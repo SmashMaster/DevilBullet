@@ -50,7 +50,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -90,13 +90,13 @@ public class CharacterDemo extends DemoApplication {
 	}
 	
 	public void initPhysics() throws Exception {
-		CollisionShape groundShape = new BoxShape(new Vector3f(50, 3, 50));
+		CollisionShape groundShape = new BoxShape(new Vec3(50, 3, 50));
 		collisionShapes.add(groundShape);
 
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
-		Vector3f worldMin = new Vector3f(-1000f,-1000f,-1000f);
-		Vector3f worldMax = new Vector3f(1000f,1000f,1000f);
+		Vec3 worldMin = new Vec3(-1000f,-1000f,-1000f);
+		Vec3 worldMax = new Vec3(1000f,1000f,1000f);
 		AxisSweep3 sweepBP = new AxisSweep3(worldMin, worldMax);
 		overlappingPairCache = sweepBP;
 
@@ -145,18 +145,18 @@ public class CharacterDemo extends DemoApplication {
 			// set walkDirection for our character
 			Transform xform = ghostObject.getWorldTransform(new Transform());
 
-			Vector3f forwardDir = new Vector3f();
+			Vec3 forwardDir = new Vec3();
 			xform.basis.getRow(2, forwardDir);
 			//printf("forwardDir=%f,%f,%f\n",forwardDir[0],forwardDir[1],forwardDir[2]);
-			Vector3f upDir = new Vector3f();
+			Vec3 upDir = new Vec3();
 			xform.basis.getRow(1, upDir);
-			Vector3f strafeDir = new Vector3f();
+			Vec3 strafeDir = new Vec3();
 			xform.basis.getRow(0, strafeDir);
 			forwardDir.normalize();
 			upDir.normalize();
 			strafeDir.normalize();
 
-			Vector3f walkDirection = new Vector3f(0.0f, 0.0f, 0.0f);
+			Vec3 walkDirection = new Vec3(0.0f, 0.0f, 0.0f);
 			float walkVelocity = 1.1f * 4.0f; // 4 km/h -> 1.1 m/s
 			float walkSpeed = walkVelocity * dt * characterScale;
 
@@ -212,7 +212,7 @@ public class CharacterDemo extends DemoApplication {
 
 		character.reset();
 		///WTF
-		character.warp(new Vector3f(0, -2, 0));
+		character.warp(new Vec3(0, -2, 0));
 	}
 
 	@Override
@@ -284,9 +284,9 @@ public class CharacterDemo extends DemoApplication {
 
 		// look at the vehicle
 		Transform characterWorldTrans = ghostObject.getWorldTransform(new Transform());
-		Vector3f up = new Vector3f();
+		Vec3 up = new Vec3();
 		characterWorldTrans.basis.getRow(1, up);
-		Vector3f backward = new Vector3f();
+		Vec3 backward = new Vec3();
 		characterWorldTrans.basis.getRow(2, backward);
 		backward.mult(-1);
 		up.normalize ();
@@ -294,7 +294,7 @@ public class CharacterDemo extends DemoApplication {
 
 		cameraTargetPosition.set(characterWorldTrans.origin);
 
-		Vector3f cameraPosition = new Vector3f();
+		Vec3 cameraPosition = new Vec3();
 		cameraPosition.scale(2, up);
 		cameraPosition.add(cameraTargetPosition);
 		backward.mult(12);
@@ -323,7 +323,7 @@ public class CharacterDemo extends DemoApplication {
 	
 	private class BspToBulletConverter extends BspConverter {
 		@Override
-		public void addConvexVerticesCollider(ObjectArrayList<Vector3f> vertices) {
+		public void addConvexVerticesCollider(ObjectArrayList<Vec3> vertices) {
 			if (vertices.size() > 0) {
 				float mass = 0f;
 				Transform startTransform = new Transform();

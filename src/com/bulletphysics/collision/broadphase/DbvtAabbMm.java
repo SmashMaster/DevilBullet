@@ -30,7 +30,7 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -38,8 +38,8 @@ import javax.vecmath.Vector3f;
  */
 public class DbvtAabbMm {
 
-	private final Vector3f mi = new Vector3f();
-	private final Vector3f mx = new Vector3f();
+	private final Vec3 mi = new Vec3();
+	private final Vec3 mx = new Vec3();
 
 	public DbvtAabbMm() {
 	}
@@ -54,7 +54,7 @@ public class DbvtAabbMm {
 	}
 	
 	public static void swap(DbvtAabbMm p1, DbvtAabbMm p2) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		
 		tmp.set(p1.mi);
 		p1.mi.set(p2.mi);
@@ -65,45 +65,45 @@ public class DbvtAabbMm {
 		p2.mx.set(tmp);
 	}
 
-	public Vector3f Center(Vector3f out) {
+	public Vec3 Center(Vec3 out) {
 		out.addHere(mi, mx);
 		out.mult(0.5f);
 		return out;
 	}
 	
-	public Vector3f Lengths(Vector3f out) {
+	public Vec3 Lengths(Vec3 out) {
 		out.subHere(mx, mi);
 		return out;
 	}
 	
-	public Vector3f Extents(Vector3f out) {
+	public Vec3 Extents(Vec3 out) {
 		out.subHere(mx, mi);
 		out.mult(0.5f);
 		return out;
 	}
 	
-	public Vector3f Mins() {
+	public Vec3 Mins() {
 		return mi;
 	}
 
-	public Vector3f Maxs() {
+	public Vec3 Maxs() {
 		return mx;
 	}
 	
-	public static DbvtAabbMm FromCE(Vector3f c, Vector3f e, DbvtAabbMm out) {
+	public static DbvtAabbMm FromCE(Vec3 c, Vec3 e, DbvtAabbMm out) {
 		DbvtAabbMm box = out;
 		box.mi.subHere(c, e);
 		box.mx.addHere(c, e);
 		return box;
 	}
 
-	public static DbvtAabbMm FromCR(Vector3f c, float r, DbvtAabbMm out) {
-		Vector3f tmp = new Vector3f();
+	public static DbvtAabbMm FromCR(Vec3 c, float r, DbvtAabbMm out) {
+		Vec3 tmp = new Vec3();
 		tmp.set(r, r, r);
 		return FromCE(c, tmp, out);
 	}
 
-	public static DbvtAabbMm FromMM(Vector3f mi, Vector3f mx, DbvtAabbMm out) {
+	public static DbvtAabbMm FromMM(Vec3 mi, Vec3 mx, DbvtAabbMm out) {
 		DbvtAabbMm box = out;
 		box.mi.set(mi);
 		box.mx.set(mx);
@@ -113,12 +113,12 @@ public class DbvtAabbMm {
 	//public static  DbvtAabbMm	FromPoints( btVector3* pts,int n);
 	//public static  DbvtAabbMm	FromPoints( btVector3** ppts,int n);
 	
-	public void Expand(Vector3f e) {
+	public void Expand(Vec3 e) {
 		mi.sub(e);
 		mx.add(e);
 	}
 
-	public void SignedExpand(Vector3f e) {
+	public void SignedExpand(Vec3 e) {
 		if (e.x > 0) {
 			mx.x += e.x;
 		}
@@ -150,9 +150,9 @@ public class DbvtAabbMm {
 		        (mx.z >= a.mx.z));
 	}
 
-	public int Classify(Vector3f n, float o, int s) {
-		Vector3f pi = new Vector3f();
-		Vector3f px = new Vector3f();
+	public int Classify(Vec3 n, float o, int s) {
+		Vec3 pi = new Vec3();
+		Vec3 px = new Vec3();
 
 		switch (s) {
 			case (0 + 0 + 0):
@@ -198,9 +198,9 @@ public class DbvtAabbMm {
 		return 0;
 	}
 
-	public float ProjectMinimum(Vector3f v, int signs) {
-		Vector3f[] b = new Vector3f[] { mx, mi };
-		Vector3f p = new Vector3f();
+	public float ProjectMinimum(Vec3 v, int signs) {
+		Vec3[] b = new Vec3[] { mx, mi };
+		Vec3 p = new Vec3();
 		p.set(b[(signs >> 0) & 1].x,
 		      b[(signs >> 1) & 1].y,
 		      b[(signs >> 2) & 1].z);
@@ -217,9 +217,9 @@ public class DbvtAabbMm {
 	}
 
 	public static boolean Intersect(DbvtAabbMm a, DbvtAabbMm b, Transform xform) {
-		Vector3f d0 = new Vector3f();
-		Vector3f d1 = new Vector3f();
-		Vector3f tmp = new Vector3f();
+		Vec3 d0 = new Vec3();
+		Vec3 d1 = new Vec3();
+		Vec3 tmp = new Vec3();
 
 		// JAVA NOTE: check
 		b.Center(d0);
@@ -244,7 +244,7 @@ public class DbvtAabbMm {
 		return true;
 	}
 
-	public static boolean Intersect(DbvtAabbMm a, Vector3f b) {
+	public static boolean Intersect(DbvtAabbMm a, Vec3 b) {
 		return ((b.x >= a.mi.x) &&
 		        (b.y >= a.mi.y) &&
 		        (b.z >= a.mi.z) &&
@@ -253,8 +253,8 @@ public class DbvtAabbMm {
 		        (b.z <= a.mx.z));
 	}
 
-	public static boolean Intersect(DbvtAabbMm a, Vector3f org, Vector3f invdir, int[] signs) {
-		Vector3f[] bounds = new Vector3f[]{a.mi, a.mx};
+	public static boolean Intersect(DbvtAabbMm a, Vec3 org, Vec3 invdir, int[] signs) {
+		Vec3[] bounds = new Vec3[]{a.mi, a.mx};
 		float txmin = (bounds[signs[0]].x - org.x) * invdir.x;
 		float txmax = (bounds[1 - signs[0]].x - org.x) * invdir.x;
 		float tymin = (bounds[signs[1]].y - org.y) * invdir.y;
@@ -285,8 +285,8 @@ public class DbvtAabbMm {
 	}
 
 	public static float Proximity(DbvtAabbMm a, DbvtAabbMm b) {
-		Vector3f d = new Vector3f();
-		Vector3f tmp = new Vector3f();
+		Vec3 d = new Vec3();
+		Vec3 tmp = new Vec3();
 
 		d.addHere(a.mi, a.mx);
 		tmp.addHere(b.mi, b.mx);
@@ -321,7 +321,7 @@ public class DbvtAabbMm {
 		        (a.mx.z != b.mx.z));
 	}
 	
-	private void AddSpan(Vector3f d, float[] smi, int smi_idx, float[] smx, int smx_idx) {
+	private void AddSpan(Vec3 d, float[] smi, int smi_idx, float[] smx, int smx_idx) {
 		for (int i=0; i<3; i++) {
 			if (VectorUtil.getCoord(d, i) < 0) {
 				smi[smi_idx] += VectorUtil.getCoord(mx, i) * VectorUtil.getCoord(d, i);

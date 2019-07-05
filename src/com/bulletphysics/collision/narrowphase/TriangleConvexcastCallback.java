@@ -30,7 +30,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -54,7 +54,7 @@ public abstract class TriangleConvexcastCallback extends TriangleCallback {
 		this.triangleCollisionMargin = triangleCollisionMargin;
 	}
 	
-	public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
+	public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
 		TriangleShape triangleShape = new TriangleShape(triangle[0], triangle[1], triangle[2]);
 		triangleShape.setMargin(triangleCollisionMargin);
 
@@ -97,6 +97,6 @@ public abstract class TriangleConvexcastCallback extends TriangleCallback {
 		}
 	}
 
-	public abstract float reportHit(Vector3f hitNormalLocal, Vector3f hitPointLocal, float hitFraction, int partId, int triangleIndex);
+	public abstract float reportHit(Vec3 hitNormalLocal, Vec3 hitPointLocal, float hitFraction, int partId, int triangleIndex);
 	
 }

@@ -35,7 +35,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * This class manages a sub part of a mesh supplied by the StridingMeshInterface interface.<p>
@@ -114,7 +114,7 @@ public class GImpactMeshShapePart extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		lockChildShapes();
 		
 		//#define CALC_EXACT_INERTIA 1
@@ -124,7 +124,7 @@ public class GImpactMeshShapePart extends GImpactShapeInterface {
 		int i = getVertexCount();
 		float pointmass = mass / (float)i;
 
-		Vector3f pointintertia = new Vector3f();
+		Vec3 pointintertia = new Vec3();
 
 		while ((i--) != 0) {
 			getVertex(i, pointintertia);
@@ -185,7 +185,7 @@ public class GImpactMeshShapePart extends GImpactShapeInterface {
 		return primitive_manager.get_vertex_count();
 	}
 
-	public void getVertex(int vertex_index, Vector3f vertex) {
+	public void getVertex(int vertex_index, Vec3 vertex) {
 		primitive_manager.get_vertex(vertex_index, vertex);
 	}
 
@@ -201,13 +201,13 @@ public class GImpactMeshShapePart extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void setLocalScaling(Vector3f scaling) {
+	public void setLocalScaling(Vec3 scaling) {
 		primitive_manager.scale.set(scaling);
 		postUpdate();
 	}
 
 	@Override
-	public Vector3f getLocalScaling(Vector3f out) {
+	public Vec3 getLocalScaling(Vec3 out) {
 		out.set(primitive_manager.scale);
 		return out;
 	}
@@ -217,7 +217,7 @@ public class GImpactMeshShapePart extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void processAllTriangles(TriangleCallback callback, Vector3f aabbMin, Vector3f aabbMax) {
+	public void processAllTriangles(TriangleCallback callback, Vec3 aabbMin, Vec3 aabbMax) {
 		lockChildShapes();
 		AABB box = new AABB();
 		box.min.set(aabbMin);

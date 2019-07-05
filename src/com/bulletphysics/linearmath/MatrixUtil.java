@@ -28,8 +28,8 @@ package com.bulletphysics.linearmath;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * Utility functions for matrices.
@@ -38,13 +38,13 @@ import javax.vecmath.Vector3f;
  */
 public class MatrixUtil {
 	
-	public static void scale(Matrix3f dest, Matrix3f mat, Vector3f s) {
+	public static void scale(Mat3 dest, Mat3 mat, Vec3 s) {
 		dest.a = mat.a * s.x;   dest.b = mat.b * s.y;   dest.c = mat.c * s.z;
 		dest.d = mat.d * s.x;   dest.e = mat.e * s.y;   dest.f = mat.f * s.z;
 		dest.g = mat.g * s.x;   dest.h = mat.h * s.y;   dest.i = mat.i * s.z;
 	}
 	
-	public static void absolute(Matrix3f mat) {
+	public static void absolute(Mat3 mat) {
 		mat.a = Math.abs(mat.a);
 		mat.b = Math.abs(mat.b);
 		mat.c = Math.abs(mat.c);
@@ -56,13 +56,13 @@ public class MatrixUtil {
 		mat.i = Math.abs(mat.i);
 	}
 	
-	public static void setFromOpenGLSubMatrix(Matrix3f mat, float[] m) {
+	public static void setFromOpenGLSubMatrix(Mat3 mat, float[] m) {
 		mat.a = m[0]; mat.b = m[4]; mat.c = m[8];
 		mat.d = m[1]; mat.e = m[5]; mat.f = m[9];
 		mat.g = m[2]; mat.h = m[6]; mat.i = m[10];
 	}
 
-	public static void getOpenGLSubMatrix(Matrix3f mat, float[] m) {
+	public static void getOpenGLSubMatrix(Mat3 mat, float[] m) {
 		m[0] = mat.a;
 		m[1] = mat.d;
 		m[2] = mat.g;
@@ -81,7 +81,7 @@ public class MatrixUtil {
 	 * Sets rotation matrix from euler angles. The euler angles are applied in ZYX
 	 * order. This means a vector is first rotated about X then Y and then Z axis.
 	 */
-	public static void setEulerZYX(Matrix3f mat, float eulerX, float eulerY, float eulerZ) {
+	public static void setEulerZYX(Mat3 mat, float eulerX, float eulerY, float eulerZ) {
 		float ci = (float) Math.cos(eulerX);
 		float cj = (float) Math.cos(eulerY);
 		float ch = (float) Math.cos(eulerZ);
@@ -98,19 +98,19 @@ public class MatrixUtil {
 		mat.setRow(2, -sj, cj * si, cj * ci);
 	}
 	
-	private static float tdotx(Matrix3f mat, Vector3f vec) {
+	private static float tdotx(Mat3 mat, Vec3 vec) {
 		return mat.a * vec.x + mat.d * vec.y + mat.g * vec.z;
 	}
 
-	private static float tdoty(Matrix3f mat, Vector3f vec) {
+	private static float tdoty(Mat3 mat, Vec3 vec) {
 		return mat.b * vec.x + mat.e * vec.y + mat.h * vec.z;
 	}
 
-	private static float tdotz(Matrix3f mat, Vector3f vec) {
+	private static float tdotz(Mat3 mat, Vec3 vec) {
 		return mat.c * vec.x + mat.f * vec.y + mat.i * vec.z;
 	}
 	
-	public static void transposeTransform(Vector3f dest, Vector3f vec, Matrix3f mat) {
+	public static void transposeTransform(Vec3 dest, Vec3 vec, Mat3 mat) {
 		float x = tdotx(mat, vec);
 		float y = tdoty(mat, vec);
 		float z = tdotz(mat, vec);
@@ -119,7 +119,7 @@ public class MatrixUtil {
 		dest.z = z;
 	}
 	
-	public static void setRotation(Matrix3f dest, Quat q) {
+	public static void setRotation(Mat3 dest, Quat q) {
 		float d = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
 		assert (d != 0f);
 		float s = 2f / d;
@@ -138,7 +138,7 @@ public class MatrixUtil {
 		dest.i = 1f - (xx + yy);
 	}
 	
-	public static void getRotation(Matrix3f mat, Quat dest) {
+	public static void getRotation(Mat3 mat, Quat dest) {
 		ArrayPool<float[]> floatArrays = ArrayPool.get(float.class);
 		
 		float trace = mat.a + mat.e + mat.i;
@@ -171,11 +171,11 @@ public class MatrixUtil {
 		floatArrays.release(temp);
 	}
 
-	private static float cofac(Matrix3f mat, int r1, int c1, int r2, int c2) {
+	private static float cofac(Mat3 mat, int r1, int c1, int r2, int c2) {
 		return mat.getEntry(r1, c1) * mat.getEntry(r2, c2) - mat.getEntry(r1, c2) * mat.getEntry(r2, c1);
 	}
 	
-	public static void invert(Matrix3f mat) {
+	public static void invert(Mat3 mat) {
 		float co_x = cofac(mat, 1, 1, 2, 2);
 		float co_y = cofac(mat, 1, 2, 2, 0);
 		float co_z = cofac(mat, 1, 0, 2, 1);
@@ -214,8 +214,8 @@ public class MatrixUtil {
 	 * been executed. Note that this matrix is assumed to be symmetric.
 	 */
 	// JAVA NOTE: diagonalize method from 2.71
-	public static void diagonalize(Matrix3f mat, Matrix3f rot, float threshold, int maxSteps) {
-		Vector3f row = new Vector3f();
+	public static void diagonalize(Mat3 mat, Mat3 rot, float threshold, int maxSteps) {
+		Vec3 row = new Vec3();
 
 		rot.setIdentity();
 		for (int step = maxSteps; step > 0; step--) {

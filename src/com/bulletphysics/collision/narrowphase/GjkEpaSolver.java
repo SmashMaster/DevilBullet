@@ -35,8 +35,8 @@ import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectStackList;
 import com.samrj.devil.math.Quat;
 import java.util.Arrays;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /*
 GJK-EPA collision solver by Nathanael Presson
@@ -77,8 +77,8 @@ public class GjkEpaSolver {
 	
 	public static class Results {
 		public ResultsStatus status;
-		public final Vector3f[] witnesses/*[2]*/ = new Vector3f[] { new Vector3f(), new Vector3f() };
-		public final Vector3f normal = new Vector3f();
+		public final Vec3[] witnesses/*[2]*/ = new Vec3[] { new Vec3(), new Vec3() };
+		public final Vec3 normal = new Vec3();
 		public float depth;
 		public int epa_iterations;
 		public int gjk_iterations;
@@ -101,8 +101,8 @@ public class GjkEpaSolver {
 	////////////////////////////////////////////////////////////////////////////
 
 	public static class Mkv {
-		public final Vector3f w = new Vector3f(); // Minkowski vertice
-		public final Vector3f r = new Vector3f(); // Ray
+		public final Vec3 w = new Vec3(); // Minkowski vertice
+		public final Vec3 r = new Vec3(); // Ray
 
 		public void set(Mkv m) {
 			w.set(m.w);
@@ -111,7 +111,7 @@ public class GjkEpaSolver {
 	}
 
 	public static class He {
-		public final Vector3f v = new Vector3f();
+		public final Vec3 v = new Vec3();
 		public He n;
 	}
 	
@@ -121,11 +121,11 @@ public class GjkEpaSolver {
 		//public btStackAlloc sa;
 		//public Block sablock;
 		public final He[] table = new He[GJK_hashsize];
-		public final Matrix3f[] wrotations/*[2]*/ = new Matrix3f[] { new Matrix3f(), new Matrix3f() };
-		public final Vector3f[] positions/*[2]*/ = new Vector3f[] { new Vector3f(), new Vector3f() };
+		public final Mat3[] wrotations/*[2]*/ = new Mat3[] { new Mat3(), new Mat3() };
+		public final Vec3[] positions/*[2]*/ = new Vec3[] { new Vec3(), new Vec3() };
 		public final ConvexShape[] shapes = new ConvexShape[2];
 		public final Mkv[] simplex = new Mkv[5];
-		public final Vector3f ray = new Vector3f();
+		public final Vec3 ray = new Vec3();
 		public /*unsigned*/ int order;
 		public /*unsigned*/ int iterations;
 		public float margin;
@@ -139,21 +139,21 @@ public class GjkEpaSolver {
 		}
 
 		public GJK(/*StackAlloc psa,*/
-				Matrix3f wrot0, Vector3f pos0, ConvexShape shape0,
-				Matrix3f wrot1, Vector3f pos1, ConvexShape shape1) {
+				Mat3 wrot0, Vec3 pos0, ConvexShape shape0,
+				Mat3 wrot1, Vec3 pos1, ConvexShape shape1) {
 			this(wrot0, pos0, shape0, wrot1, pos1, shape1, 0f);
 		}
 
 		public GJK(/*StackAlloc psa,*/
-				Matrix3f wrot0, Vector3f pos0, ConvexShape shape0,
-				Matrix3f wrot1, Vector3f pos1, ConvexShape shape1,
+				Mat3 wrot0, Vec3 pos0, ConvexShape shape0,
+				Mat3 wrot1, Vec3 pos1, ConvexShape shape1,
 				float pmargin) {
 			init(wrot0, pos0, shape0, wrot1, pos1, shape1, pmargin);
 		}
 		
 		public void init(/*StackAlloc psa,*/
-				Matrix3f wrot0, Vector3f pos0, ConvexShape shape0,
-				Matrix3f wrot1, Vector3f pos1, ConvexShape shape1,
+				Mat3 wrot0, Vec3 pos0, ConvexShape shape0,
+				Mat3 wrot1, Vec3 pos1, ConvexShape shape1,
 				float pmargin) {
 			pushStack();
 			wrotations[0].set(wrot0);
@@ -173,13 +173,13 @@ public class GjkEpaSolver {
 		}
 		
 		// vdh: very dummy hash
-		public /*unsigned*/ int Hash(Vector3f v) {
+		public /*unsigned*/ int Hash(Vec3 v) {
 			int h = (int)(v.x * 15461) ^ (int)(v.y * 83003) ^ (int)(v.z * 15473);
 			return (h * 169639) & GJK_hashmask;
 		}
 
-		public Vector3f LocalSupport(Vector3f d, /*unsigned*/ int i, Vector3f out) {
-			Vector3f tmp = new Vector3f();
+		public Vec3 LocalSupport(Vec3 d, /*unsigned*/ int i, Vec3 out) {
+			Vec3 tmp = new Vec3();
 			MatrixUtil.transposeTransform(tmp, d, wrotations[i]);
 
 			shapes[i].localGetSupportingVertex(tmp, out);
@@ -189,15 +189,15 @@ public class GjkEpaSolver {
 			return out;
 		}
 		
-		public void Support(Vector3f d, Mkv v) {
+		public void Support(Vec3 d, Mkv v) {
 			v.r.set(d);
 
-			Vector3f tmp1 = LocalSupport(d, 0, new Vector3f());
+			Vec3 tmp1 = LocalSupport(d, 0, new Vec3());
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			tmp.set(d);
 			tmp.negate();
-			Vector3f tmp2 = LocalSupport(tmp, 1, new Vector3f());
+			Vec3 tmp2 = LocalSupport(tmp, 1, new Vec3());
 
 			v.w.subHere(tmp1, tmp2);
 			v.w.scaleAddHere(margin, d, v.w);
@@ -225,9 +225,9 @@ public class GjkEpaSolver {
 			return (ray.dot(simplex[order].w) > 0);
 		}
 
-		public boolean SolveSimplex2(Vector3f ao, Vector3f ab) {
+		public boolean SolveSimplex2(Vec3 ao, Vec3 ab) {
 			if (ab.dot(ao) >= 0) {
-				Vector3f cabo = new Vector3f();
+				Vec3 cabo = new Vec3();
 				cabo.crossHere(ab, ao);
 				if (cabo.squareLength() > GJK_sqinsimplex_eps) {
 					ray.crossHere(cabo, ab);
@@ -244,20 +244,20 @@ public class GjkEpaSolver {
 			return (false);
 		}
 
-		public boolean SolveSimplex3(Vector3f ao, Vector3f ab, Vector3f ac)
+		public boolean SolveSimplex3(Vec3 ao, Vec3 ab, Vec3 ac)
 		{
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			tmp.crossHere(ab, ac);
 			return (SolveSimplex3a(ao,ab,ac,tmp));
 		}
 		
-		public boolean SolveSimplex3a(Vector3f ao, Vector3f ab, Vector3f ac, Vector3f cabc) {
+		public boolean SolveSimplex3a(Vec3 ao, Vec3 ab, Vec3 ac, Vec3 cabc) {
 			// TODO: optimize
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			tmp.crossHere(cabc, ab);
 
-			Vector3f tmp2 = new Vector3f();
+			Vec3 tmp2 = new Vec3();
 			tmp2.crossHere(cabc, ac);
 
 			if (tmp.dot(ao) < -GJK_insimplex_eps) {
@@ -293,18 +293,18 @@ public class GjkEpaSolver {
 			}
 		}
 		
-		public boolean SolveSimplex4(Vector3f ao, Vector3f ab, Vector3f ac, Vector3f ad) {
+		public boolean SolveSimplex4(Vec3 ao, Vec3 ab, Vec3 ac, Vec3 ad) {
 			// TODO: optimize
 
-			Vector3f crs = new Vector3f();
+			Vec3 crs = new Vec3();
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			tmp.crossHere(ab, ac);
 
-			Vector3f tmp2 = new Vector3f();
+			Vec3 tmp2 = new Vec3();
 			tmp2.crossHere(ac, ad);
 
-			Vector3f tmp3 = new Vector3f();
+			Vec3 tmp3 = new Vec3();
 			tmp3.crossHere(ad, ab);
 
 			if (tmp.dot(ao) > GJK_insimplex_eps) {
@@ -335,16 +335,16 @@ public class GjkEpaSolver {
 		}
 		
 		public boolean SearchOrigin() {
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			tmp.set(1f, 0f, 0f);
 			return SearchOrigin(tmp);
 		}
 		
-		public boolean SearchOrigin(Vector3f initray) {
-			Vector3f tmp1 = new Vector3f();
-			Vector3f tmp2 = new Vector3f();
-			Vector3f tmp3 = new Vector3f();
-			Vector3f tmp4 = new Vector3f();
+		public boolean SearchOrigin(Vec3 initray) {
+			Vec3 tmp1 = new Vec3();
+			Vec3 tmp2 = new Vec3();
+			Vec3 tmp3 = new Vec3();
+			Vec3 tmp4 = new Vec3();
 
 			iterations = 0;
 			order = -1;
@@ -397,9 +397,9 @@ public class GjkEpaSolver {
 		}
 		
 		public boolean EncloseOrigin() {
-			Vector3f tmp = new Vector3f();
-			Vector3f tmp1 = new Vector3f();
-			Vector3f tmp2 = new Vector3f();
+			Vec3 tmp = new Vec3();
+			Vec3 tmp1 = new Vec3();
+			Vec3 tmp2 = new Vec3();
 
 			switch (order) {
 				// Point
@@ -407,10 +407,10 @@ public class GjkEpaSolver {
 					break;
 				// Line
 				case 1: {
-					Vector3f ab = new Vector3f();
+					Vec3 ab = new Vec3();
 					ab.subHere(simplex[1].w, simplex[0].w);
 
-					Vector3f[] b = new Vector3f[] { new Vector3f(), new Vector3f(), new Vector3f() };
+					Vec3[] b = new Vec3[] { new Vec3(), new Vec3(), new Vec3() };
 					b[0].set(1f, 0f, 0f);
 					b[1].set(0f, 1f, 0f);
 					b[2].set(0f, 0f, 1f);
@@ -425,10 +425,10 @@ public class GjkEpaSolver {
 					tmp.normalizeHere(ab);
 					QuaternionUtil.setRotation(tmpQuat, tmp, cst2Pi / 3f);
 
-					Matrix3f r = new Matrix3f();
+					Mat3 r = new Mat3();
 					MatrixUtil.setRotation(r, tmpQuat);
 
-					Vector3f w = new Vector3f();
+					Vec3 w = new Vec3();
 					w.set(b[m[0] > m[1] ? m[0] > m[2] ? 0 : 2 : m[1] > m[2] ? 1 : 2]);
 
 					tmp.normalizeHere(w);
@@ -444,7 +444,7 @@ public class GjkEpaSolver {
 				case 2: {
 					tmp1.subHere(simplex[1].w, simplex[0].w);
 					tmp2.subHere(simplex[2].w, simplex[0].w);
-					Vector3f n = new Vector3f();
+					Vec3 n = new Vec3();
 					n.crossHere(tmp1, tmp2);
 					n.normalize();
 
@@ -481,7 +481,7 @@ public class GjkEpaSolver {
 		public final Mkv[] v = new Mkv[3];
 		public final Face[] f = new Face[3];
 		public final int[] e = new int[3];
-		public final Vector3f n = new Vector3f();
+		public final Vec3 n = new Vec3();
 		public float d;
 		public int mark;
 		public Face prev;
@@ -496,16 +496,16 @@ public class GjkEpaSolver {
 		public Face root;
 		public int nfaces;
 		public int iterations;
-		public final Vector3f[][] features = new Vector3f[2][3];
-		public final Vector3f[] nearest/*[2]*/ = new Vector3f[] { new Vector3f(), new Vector3f() };
-		public final Vector3f normal = new Vector3f();
+		public final Vec3[][] features = new Vec3[2][3];
+		public final Vec3[] nearest/*[2]*/ = new Vec3[] { new Vec3(), new Vec3() };
+		public final Vec3 normal = new Vec3();
 		public float depth;
 		public boolean failed;
 		
 		{
 			for (int i=0; i<features.length; i++) {
 				for (int j=0; j<features[i].length; j++) {
-					features[i][j] = new Vector3f();
+					features[i][j] = new Vec3();
 				}
 			}
 		}
@@ -515,12 +515,12 @@ public class GjkEpaSolver {
 			//sa = pgjk->sa;
 		}
 		
-		public Vector3f GetCoordinates(Face face, Vector3f out) {
-			Vector3f tmp = new Vector3f();
-			Vector3f tmp1 = new Vector3f();
-			Vector3f tmp2 = new Vector3f();
+		public Vec3 GetCoordinates(Face face, Vec3 out) {
+			Vec3 tmp = new Vec3();
+			Vec3 tmp1 = new Vec3();
+			Vec3 tmp2 = new Vec3();
 
-			Vector3f o = new Vector3f();
+			Vec3 o = new Vec3();
 			o.scale(-face.d, face.n);
 
 			float[] a = floatArrays.getFixed(3);
@@ -567,11 +567,11 @@ public class GjkEpaSolver {
 		}
 
 		public boolean Set(Face f, Mkv a, Mkv b, Mkv c) {
-			Vector3f tmp1 = new Vector3f();
-			Vector3f tmp2 = new Vector3f();
-			Vector3f tmp3 = new Vector3f();
+			Vec3 tmp1 = new Vec3();
+			Vec3 tmp2 = new Vec3();
+			Vec3 tmp3 = new Vec3();
 
-			Vector3f nrm = new Vector3f();
+			Vec3 nrm = new Vec3();
 			tmp1.subHere(b.w, a.w);
 			tmp2.subHere(c.w, a.w);
 			nrm.crossHere(tmp1, tmp2);
@@ -638,7 +638,7 @@ public class GjkEpaSolver {
 			f1.f[e1] = f0; f0.e[e0] = e1;
 		}
 
-		public Mkv Support(Vector3f w) {
+		public Mkv Support(Vec3 w) {
 			//Mkv v = new Mkv();
 			Mkv v = stackMkv.get();
 			gjk.Support(w, v);
@@ -679,7 +679,7 @@ public class GjkEpaSolver {
 		public float EvaluatePD(float accuracy) {
 			pushStack();
 			try {
-				Vector3f tmp = new Vector3f();
+				Vec3 tmp = new Vec3();
 
 				//btBlock* sablock = sa->beginBlock();
 				Face bestface = null;
@@ -787,7 +787,7 @@ public class GjkEpaSolver {
 				}
 				/* Extract contact	*/
 				if (bestface != null) {
-					Vector3f b = GetCoordinates(bestface, new Vector3f());
+					Vec3 b = GetCoordinates(bestface, new Vec3());
 					normal.set(bestface.n);
 					depth = Math.max(0, bestface.d);
 					for (int i = 0; i < 2; ++i) {
@@ -798,9 +798,9 @@ public class GjkEpaSolver {
 						}
 					}
 
-					Vector3f tmp1 = new Vector3f();
-					Vector3f tmp2 = new Vector3f();
-					Vector3f tmp3 = new Vector3f();
+					Vec3 tmp1 = new Vec3();
+					Vec3 tmp2 = new Vec3();
+					Vec3 tmp3 = new Vec3();
 
 					tmp1.scale(b.x, features[0][0]);
 					tmp2.scale(b.y, features[0][1]);

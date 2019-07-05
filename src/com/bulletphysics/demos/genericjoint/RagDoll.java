@@ -39,7 +39,7 @@ import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -93,15 +93,15 @@ public class RagDoll {
 	private RigidBody[] bodies = new RigidBody[BodyPart.BODYPART_COUNT.ordinal()];
 	private TypedConstraint[] joints = new TypedConstraint[JointType.JOINT_COUNT.ordinal()];
 
-	public RagDoll(DynamicsWorld ownerWorld, Vector3f positionOffset) {
+	public RagDoll(DynamicsWorld ownerWorld, Vec3 positionOffset) {
 		this(ownerWorld, positionOffset, 1.0f);
 	}
 
-	public RagDoll(DynamicsWorld ownerWorld, Vector3f positionOffset, float scale_ragdoll) {
+	public RagDoll(DynamicsWorld ownerWorld, Vec3 positionOffset, float scale_ragdoll) {
 		this.ownerWorld = ownerWorld;
 
 		Transform tmpTrans = new Transform();
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		// Setup the geometry
 		shapes[BodyPart.BODYPART_PELVIS.ordinal()] = new CapsuleShape(scale_ragdoll * 0.15f, scale_ragdoll * 0.20f);
@@ -466,7 +466,7 @@ public class RagDoll {
 	private RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {
 		boolean isDynamic = (mass != 0f);
 
-		Vector3f localInertia = new Vector3f();
+		Vec3 localInertia = new Vec3();
 		localInertia.set(0f, 0f, 0f);
 		if (isDynamic) {
 			shape.calculateLocalInertia(mass, localInertia);

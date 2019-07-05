@@ -28,7 +28,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * MinkowskiSumShape is only for advanced users. This shape represents implicit
@@ -51,10 +51,10 @@ public class MinkowskiSumShape extends ConvexInternalShape {
 	}
 	
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec, Vector3f out) {
-		Vector3f tmp = new Vector3f();
-		Vector3f supVertexA = new Vector3f();
-		Vector3f supVertexB = new Vector3f();
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec, Vec3 out) {
+		Vec3 tmp = new Vec3();
+		Vec3 supVertexA = new Vec3();
+		Vec3 supVertexB = new Vec3();
 
 		// btVector3 supVertexA = m_transA(m_shapeA->localGetSupportingVertexWithoutMargin(-vec*m_transA.getBasis()));
 		tmp.negateHere(vec);
@@ -73,7 +73,7 @@ public class MinkowskiSumShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		//todo: could make recursive use of batching. probably this shape is not used frequently.
 		for (int i = 0; i < numVectors; i++) {
 			localGetSupportingVertexWithoutMargin(vectors[i], supportVerticesOut[i]);
@@ -81,7 +81,7 @@ public class MinkowskiSumShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
@@ -91,7 +91,7 @@ public class MinkowskiSumShape extends ConvexInternalShape {
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		assert (false);
 		inertia.set(0, 0, 0);
 	}

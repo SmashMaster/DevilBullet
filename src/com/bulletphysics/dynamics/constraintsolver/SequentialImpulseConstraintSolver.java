@@ -40,8 +40,8 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * SequentialImpulseConstraintSolver uses a Propagation Method and Sequentially applies impulses.
@@ -210,7 +210,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 			normalImpulse = contactConstraint.appliedPushImpulse - oldNormalImpulse;
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 
 			tmp.scale(body1.invMass, contactConstraint.contactNormal);
 			body1.internalApplyPushImpulse(tmp, contactConstraint.angularComponentA, normalImpulse);
@@ -264,7 +264,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 			normalImpulse = contactConstraint.appliedImpulse - oldNormalImpulse;
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 
 			tmp.scale(body1.invMass, contactConstraint.contactNormal);
 			body1.internalApplyImpulse(tmp, contactConstraint.angularComponentA, normalImpulse);
@@ -328,7 +328,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 				//GEN_set_max(contactConstraint.m_appliedImpulse, -limit);
 			}
 
-			Vector3f tmp = new Vector3f();
+			Vec3 tmp = new Vec3();
 			
 			tmp.scale(body1.invMass, contactConstraint.contactNormal);
 			body1.internalApplyImpulse(tmp, contactConstraint.angularComponentA, j1);
@@ -339,7 +339,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 		return 0f;
 	}
 	
-	protected void addFrictionConstraint(Vector3f normalAxis, int solverBodyIdA, int solverBodyIdB, int frictionIndex, ManifoldPoint cp, Vector3f rel_pos1, Vector3f rel_pos2, CollisionObject colObj0, CollisionObject colObj1, float relaxation) {
+	protected void addFrictionConstraint(Vec3 normalAxis, int solverBodyIdA, int solverBodyIdB, int frictionIndex, ManifoldPoint cp, Vec3 rel_pos1, Vec3 rel_pos2, CollisionObject colObj0, CollisionObject colObj1, float relaxation) {
 		RigidBody body0 = RigidBody.upcast(colObj0);
 		RigidBody body1 = RigidBody.upcast(colObj1);
 
@@ -360,8 +360,8 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 		solverConstraint.appliedPushImpulse = 0f;
 		solverConstraint.penetration = 0f;
 		
-		Vector3f ftorqueAxis1 = new Vector3f();
-		Matrix3f tmpMat = new Matrix3f();
+		Vec3 ftorqueAxis1 = new Vec3();
+		Mat3 tmpMat = new Mat3();
 		
 		{
 			ftorqueAxis1.crossHere(rel_pos1, solverConstraint.contactNormal);
@@ -390,7 +390,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 		//	btScalar denom0 = rb0->computeImpulseDenominator(pos1,solverConstraint.m_contactNormal);
 		//	btScalar denom1 = rb1->computeImpulseDenominator(pos2,solverConstraint.m_contactNormal);
 		//#else
-		Vector3f vec = new Vector3f();
+		Vec3 vec = new Vec3();
 		float denom0 = 0f;
 		float denom1 = 0f;
 		if (body0 != null) {
@@ -485,21 +485,21 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 				{
 					int i;
 					
-					Vector3f rel_pos1 = new Vector3f();
-					Vector3f rel_pos2 = new Vector3f();
+					Vec3 rel_pos1 = new Vec3();
+					Vec3 rel_pos2 = new Vec3();
 
-					Vector3f pos1 = new Vector3f();
-					Vector3f pos2 = new Vector3f();
-					Vector3f vel = new Vector3f();
-					Vector3f torqueAxis0 = new Vector3f();
-					Vector3f torqueAxis1 = new Vector3f();
-					Vector3f vel1 = new Vector3f();
-					Vector3f vel2 = new Vector3f();
-					Vector3f frictionDir1 = new Vector3f();
-					Vector3f frictionDir2 = new Vector3f();
-					Vector3f vec = new Vector3f();
+					Vec3 pos1 = new Vec3();
+					Vec3 pos2 = new Vec3();
+					Vec3 vel = new Vec3();
+					Vec3 torqueAxis0 = new Vec3();
+					Vec3 torqueAxis1 = new Vec3();
+					Vec3 vel1 = new Vec3();
+					Vec3 vel2 = new Vec3();
+					Vec3 frictionDir1 = new Vec3();
+					Vec3 frictionDir2 = new Vec3();
+					Vec3 vec = new Vec3();
 
-					Matrix3f tmpMat = new Matrix3f();
+					Mat3 tmpMat = new Mat3();
 					
 					for (i = 0; i < numManifolds; i++) {
 						manifold = manifoldPtr.getQuick(manifold_offset+i);
@@ -660,7 +660,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 										solverConstraint.penetration = 0f;
 									}
 									
-									Vector3f tmp = new Vector3f();
+									Vec3 tmp = new Vec3();
 
 									// warm starting (or zero if disabled)
 									if ((infoGlobal.solverMode & SolverMode.SOLVER_USE_WARMSTARTING) != 0) {
@@ -1041,21 +1041,21 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 			BulletStats.gTotalContactPoints += numpoints;
 			
-			Vector3f tmpVec = new Vector3f();
-			Matrix3f tmpMat3 = new Matrix3f();
+			Vec3 tmpVec = new Vec3();
+			Mat3 tmpMat3 = new Mat3();
 
-			Vector3f pos1 = new Vector3f();
-			Vector3f pos2 = new Vector3f();
-			Vector3f rel_pos1 = new Vector3f();
-			Vector3f rel_pos2 = new Vector3f();
-			Vector3f vel1 = new Vector3f();
-			Vector3f vel2 = new Vector3f();
-			Vector3f vel = new Vector3f();
-			Vector3f totalImpulse = new Vector3f();
-			Vector3f torqueAxis0 = new Vector3f();
-			Vector3f torqueAxis1 = new Vector3f();
-			Vector3f ftorqueAxis0 = new Vector3f();
-			Vector3f ftorqueAxis1 = new Vector3f();
+			Vec3 pos1 = new Vec3();
+			Vec3 pos2 = new Vec3();
+			Vec3 rel_pos1 = new Vec3();
+			Vec3 rel_pos2 = new Vec3();
+			Vec3 vel1 = new Vec3();
+			Vec3 vel2 = new Vec3();
+			Vec3 vel = new Vec3();
+			Vec3 totalImpulse = new Vec3();
+			Vec3 torqueAxis0 = new Vec3();
+			Vec3 torqueAxis1 = new Vec3();
+			Vec3 ftorqueAxis0 = new Vec3();
+			Vec3 ftorqueAxis1 = new Vec3();
 			
 			for (int i = 0; i < numpoints; i++) {
 				ManifoldPoint cp = manifoldPtr.getContactPoint(i);
@@ -1067,17 +1067,17 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 					rel_pos2.subHere(pos2, body1.getCenterOfMassPosition(tmpVec));
 
 					// this jacobian entry is re-used for all iterations
-					Matrix3f mat1 = body0.getCenterOfMassTransform(new Transform()).basis;
+					Mat3 mat1 = body0.getCenterOfMassTransform(new Transform()).basis;
 					mat1.transpose();
 
-					Matrix3f mat2 = body1.getCenterOfMassTransform(new Transform()).basis;
+					Mat3 mat2 = body1.getCenterOfMassTransform(new Transform()).basis;
 					mat2.transpose();
 
 					JacobianEntry jac = jacobiansPool.get();
 					jac.init(mat1, mat2,
 							rel_pos1, rel_pos2, cp.normalWorldOnB,
-							body0.getInvInertiaDiagLocal(new Vector3f()), body0.getInvMass(),
-							body1.getInvInertiaDiagLocal(new Vector3f()), body1.getInvMass());
+							body0.getInvInertiaDiagLocal(new Vec3()), body0.getInvMass(),
+							body1.getInvInertiaDiagLocal(new Vec3()), body1.getInvMass());
 
 					float jacDiagAB = jac.getDiagonal();
 					jacobiansPool.release(jac);

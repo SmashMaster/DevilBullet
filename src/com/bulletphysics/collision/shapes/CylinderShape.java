@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * CylinderShape class implements a cylinder shape primitive, centered around
@@ -42,34 +42,34 @@ public class CylinderShape extends BoxShape {
 
 	protected int upAxis;
 
-	public CylinderShape(Vector3f halfExtents) {
+	public CylinderShape(Vec3 halfExtents) {
 		super(halfExtents);
 		upAxis = 1;
 		recalcLocalAabb();
 	}
 
-	protected CylinderShape(Vector3f halfExtents, boolean unused) {
+	protected CylinderShape(Vec3 halfExtents, boolean unused) {
 		super(halfExtents);
 	}
 
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		_PolyhedralConvexShape_getAabb(t, aabbMin, aabbMax);
 	}
 
-	protected Vector3f cylinderLocalSupportX(Vector3f halfExtents, Vector3f v, Vector3f out) {
+	protected Vec3 cylinderLocalSupportX(Vec3 halfExtents, Vec3 v, Vec3 out) {
 		return cylinderLocalSupport(halfExtents, v, 0, 1, 0, 2, out);
 	}
 
-	protected Vector3f cylinderLocalSupportY(Vector3f halfExtents, Vector3f v, Vector3f out) {
+	protected Vec3 cylinderLocalSupportY(Vec3 halfExtents, Vec3 v, Vec3 out) {
 		return cylinderLocalSupport(halfExtents, v, 1, 0, 1, 2, out);
 	}
 
-	protected Vector3f cylinderLocalSupportZ(Vector3f halfExtents, Vector3f v, Vector3f out) {
+	protected Vec3 cylinderLocalSupportZ(Vec3 halfExtents, Vec3 v, Vec3 out) {
 		return cylinderLocalSupport(halfExtents, v, 2, 0, 2, 1, out);
 	}
 	
-	private Vector3f cylinderLocalSupport(Vector3f halfExtents, Vector3f v, int cylinderUpAxis, int XX, int YY, int ZZ, Vector3f out) {
+	private Vec3 cylinderLocalSupport(Vec3 halfExtents, Vec3 v, int cylinderUpAxis, int XX, int YY, int ZZ, Vec3 out) {
 		//mapping depends on how cylinder local orientation is
 		// extents of the cylinder is: X,Y is for radius, and Z for height
 
@@ -95,24 +95,24 @@ public class CylinderShape extends BoxShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec, Vector3f out) {
-		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(new Vector3f()), vec, out);
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec, Vec3 out) {
+		return cylinderLocalSupportY(getHalfExtentsWithoutMargin(new Vec3()), vec, out);
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		for (int i = 0; i < numVectors; i++) {
-			cylinderLocalSupportY(getHalfExtentsWithoutMargin(new Vector3f()), vectors[i], supportVerticesOut[i]);
+			cylinderLocalSupportY(getHalfExtentsWithoutMargin(new Vec3()), vectors[i], supportVerticesOut[i]);
 		}
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertex(Vector3f vec, Vector3f out) {
-		Vector3f supVertex = out;
+	public Vec3 localGetSupportingVertex(Vec3 vec, Vec3 out) {
+		Vec3 supVertex = out;
 		localGetSupportingVertexWithoutMargin(vec, supVertex);
 
 		if (getMargin() != 0f) {
-			Vector3f vecnorm = new Vector3f(vec);
+			Vec3 vecnorm = new Vec3(vec);
 			if (vecnorm.squareLength() < (BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
@@ -132,7 +132,7 @@ public class CylinderShape extends BoxShape {
 	}
 	
 	public float getRadius() {
-		return getHalfExtentsWithMargin(new Vector3f()).x;
+		return getHalfExtentsWithMargin(new Vec3()).x;
 	}
 
 	@Override

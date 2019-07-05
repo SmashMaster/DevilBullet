@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.broadphase;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * BroadphaseInterface for AABB overlapping object pairs.
@@ -34,11 +34,11 @@ import javax.vecmath.Vector3f;
  */
 public abstract class BroadphaseInterface {
 
-	public abstract BroadphaseProxy createProxy(Vector3f aabbMin, Vector3f aabbMax, BroadphaseNativeType shapeType, Object userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, Object multiSapProxy);
+	public abstract BroadphaseProxy createProxy(Vec3 aabbMin, Vec3 aabbMax, BroadphaseNativeType shapeType, Object userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, Object multiSapProxy);
 
 	public abstract void destroyProxy(BroadphaseProxy proxy, Dispatcher dispatcher);
 
-	public abstract void setAabb(BroadphaseProxy proxy, Vector3f aabbMin, Vector3f aabbMax, Dispatcher dispatcher);
+	public abstract void setAabb(BroadphaseProxy proxy, Vec3 aabbMin, Vec3 aabbMax, Dispatcher dispatcher);
 
 	///calculateOverlappingPairs is optional: incremental algorithms (sweep and prune) might do it during the set aabb
 	public abstract void calculateOverlappingPairs(Dispatcher dispatcher);
@@ -47,7 +47,7 @@ public abstract class BroadphaseInterface {
 	
 	///getAabb returns the axis aligned bounding box in the 'global' coordinate frame
 	///will add some transform later
-	public abstract void getBroadphaseAabb(Vector3f aabbMin, Vector3f aabbMax);
+	public abstract void getBroadphaseAabb(Vec3 aabbMin, Vec3 aabbMax);
 
 	public abstract void printStats();
 	

@@ -30,7 +30,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * GjkConvexCast performs a raycast on a convex object using support mapping.
@@ -65,24 +65,24 @@ public class GjkConvexCast extends ConvexCast {
 
 		// compute linear velocity for this interval, to interpolate
 		// assume no rotation/angular velocity, assert here?
-		Vector3f linVelA = new Vector3f();
-		Vector3f linVelB = new Vector3f();
+		Vec3 linVelA = new Vec3();
+		Vec3 linVelB = new Vec3();
 
 		linVelA.subHere(toA.origin, fromA.origin);
 		linVelB.subHere(toB.origin, fromB.origin);
 
 		float radius = 0.001f;
 		float lambda = 0f;
-		Vector3f v = new Vector3f();
+		Vec3 v = new Vec3();
 		v.set(1f, 0f, 0f);
 
 		int maxIter = MAX_ITERATIONS;
 
-		Vector3f n = new Vector3f();
+		Vec3 n = new Vec3();
 		n.set(0f, 0f, 0f);
 		boolean hasResult = false;
-		Vector3f c = new Vector3f();
-		Vector3f r = new Vector3f();
+		Vec3 c = new Vec3();
+		Vec3 r = new Vec3();
 		r.subHere(linVelA, linVelB);
 
 		float lastLambda = lambda;

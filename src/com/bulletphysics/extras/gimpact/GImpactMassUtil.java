@@ -29,7 +29,7 @@
 
 package com.bulletphysics.extras.gimpact;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -37,7 +37,7 @@ import javax.vecmath.Vector3f;
  */
 class GImpactMassUtil {
 
-	public static Vector3f get_point_inertia(Vector3f point, float mass, Vector3f out) {
+	public static Vec3 get_point_inertia(Vec3 point, float mass, Vec3 out) {
 		float x2 = point.x * point.x;
 		float y2 = point.y * point.y;
 		float z2 = point.z * point.z;

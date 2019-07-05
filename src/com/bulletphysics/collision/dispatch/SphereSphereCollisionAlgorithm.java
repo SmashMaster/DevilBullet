@@ -34,7 +34,7 @@ import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Provides collision detection between two spheres.
@@ -85,7 +85,7 @@ public class SphereSphereCollisionAlgorithm extends CollisionAlgorithm {
 		SphereShape sphere0 = (SphereShape) col0.getCollisionShape();
 		SphereShape sphere1 = (SphereShape) col1.getCollisionShape();
 
-		Vector3f diff = new Vector3f();
+		Vec3 diff = new Vec3();
 		diff.subHere(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
 
 		float len = diff.length();
@@ -106,21 +106,21 @@ public class SphereSphereCollisionAlgorithm extends CollisionAlgorithm {
 		// distance (negative means penetration)
 		float dist = len - (radius0 + radius1);
 
-		Vector3f normalOnSurfaceB = new Vector3f();
+		Vec3 normalOnSurfaceB = new Vec3();
 		normalOnSurfaceB.set(1f, 0f, 0f);
 		if (len > BulletGlobals.FLT_EPSILON) {
 			normalOnSurfaceB.scale(1f / len, diff);
 		}
 
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		// point on A (worldspace)
-		Vector3f pos0 = new Vector3f();
+		Vec3 pos0 = new Vec3();
 		tmp.scale(radius0, normalOnSurfaceB);
 		pos0.subHere(col0.getWorldTransform(tmpTrans1).origin, tmp);
 
 		// point on B (worldspace)
-		Vector3f pos1 = new Vector3f();
+		Vec3 pos1 = new Vec3();
 		tmp.scale(radius1, normalOnSurfaceB);
 		pos1.addHere(col1.getWorldTransform(tmpTrans2).origin, tmp);
 

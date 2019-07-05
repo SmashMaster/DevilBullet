@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.broadphase;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -33,13 +33,13 @@ import javax.vecmath.Vector3f;
  */
 class SimpleBroadphaseProxy extends BroadphaseProxy {
 
-	protected final Vector3f min = new Vector3f();
-	protected final Vector3f max = new Vector3f();
+	protected final Vec3 min = new Vec3();
+	protected final Vec3 max = new Vec3();
 	
 	public SimpleBroadphaseProxy() {
 	}
 
-	public SimpleBroadphaseProxy(Vector3f minpt, Vector3f maxpt, BroadphaseNativeType shapeType, Object userPtr, short collisionFilterGroup, short collisionFilterMask, Object multiSapProxy) {
+	public SimpleBroadphaseProxy(Vec3 minpt, Vec3 maxpt, BroadphaseNativeType shapeType, Object userPtr, short collisionFilterGroup, short collisionFilterMask, Object multiSapProxy) {
 		super(userPtr, collisionFilterGroup, collisionFilterMask, multiSapProxy);
 		this.min.set(minpt);
 		this.max.set(maxpt);

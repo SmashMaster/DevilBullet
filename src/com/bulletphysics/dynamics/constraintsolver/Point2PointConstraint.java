@@ -28,8 +28,8 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * Point to point constraint between two rigid bodies each with a pivot point that
@@ -41,8 +41,8 @@ public class Point2PointConstraint extends TypedConstraint {
 
 	private final JacobianEntry[] jac = new JacobianEntry[]/*[3]*/ { new JacobianEntry(), new JacobianEntry(), new JacobianEntry() }; // 3 orthogonal linear constraints
 	
-	private final Vector3f pivotInA = new Vector3f();
-	private final Vector3f pivotInB = new Vector3f();
+	private final Vec3 pivotInA = new Vec3();
+	private final Vec3 pivotInB = new Vec3();
 
 	public ConstraintSetting setting = new ConstraintSetting();
 	
@@ -50,13 +50,13 @@ public class Point2PointConstraint extends TypedConstraint {
 		super(TypedConstraintType.POINT2POINT_CONSTRAINT_TYPE);
 	}
 
-	public Point2PointConstraint(RigidBody rbA, RigidBody rbB, Vector3f pivotInA, Vector3f pivotInB) {
+	public Point2PointConstraint(RigidBody rbA, RigidBody rbB, Vec3 pivotInA, Vec3 pivotInB) {
 		super(TypedConstraintType.POINT2POINT_CONSTRAINT_TYPE, rbA, rbB);
 		this.pivotInA.set(pivotInA);
 		this.pivotInB.set(pivotInB);
 	}
 
-	public Point2PointConstraint(RigidBody rbA, Vector3f pivotInA) {
+	public Point2PointConstraint(RigidBody rbA, Vec3 pivotInA) {
 		super(TypedConstraintType.POINT2POINT_CONSTRAINT_TYPE, rbA);
 		this.pivotInA.set(pivotInA);
 		this.pivotInB.set(pivotInA);
@@ -67,14 +67,14 @@ public class Point2PointConstraint extends TypedConstraint {
 	public void buildJacobian() {
 		appliedImpulse = 0f;
 
-		Vector3f normal = new Vector3f();
+		Vec3 normal = new Vec3();
 		normal.set(0f, 0f, 0f);
 
-		Matrix3f tmpMat1 = new Matrix3f();
-		Matrix3f tmpMat2 = new Matrix3f();
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
-		Vector3f tmpVec = new Vector3f();
+		Mat3 tmpMat1 = new Mat3();
+		Mat3 tmpMat2 = new Mat3();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
+		Vec3 tmpVec = new Vec3();
 		
 		Transform centerOfMassA = rbA.getCenterOfMassTransform(new Transform());
 		Transform centerOfMassB = rbB.getCenterOfMassTransform(new Transform());
@@ -99,9 +99,9 @@ public class Point2PointConstraint extends TypedConstraint {
 					tmp1,
 					tmp2,
 					normal,
-					rbA.getInvInertiaDiagLocal(new Vector3f()),
+					rbA.getInvInertiaDiagLocal(new Vec3()),
 					rbA.getInvMass(),
-					rbB.getInvInertiaDiagLocal(new Vector3f()),
+					rbB.getInvInertiaDiagLocal(new Vec3()),
 					rbB.getInvMass());
 			VectorUtil.setCoord(normal, i, 0f);
 		}
@@ -109,20 +109,20 @@ public class Point2PointConstraint extends TypedConstraint {
 
 	@Override
 	public void solveConstraint(float timeStep) {
-		Vector3f tmp = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
-		Vector3f tmpVec = new Vector3f();
+		Vec3 tmp = new Vec3();
+		Vec3 tmp2 = new Vec3();
+		Vec3 tmpVec = new Vec3();
 
 		Transform centerOfMassA = rbA.getCenterOfMassTransform(new Transform());
 		Transform centerOfMassB = rbB.getCenterOfMassTransform(new Transform());
 		
-		Vector3f pivotAInW = new Vector3f(pivotInA);
+		Vec3 pivotAInW = new Vec3(pivotInA);
 		centerOfMassA.transform(pivotAInW);
 
-		Vector3f pivotBInW = new Vector3f(pivotInB);
+		Vec3 pivotBInW = new Vec3(pivotInB);
 		centerOfMassB.transform(pivotBInW);
 
-		Vector3f normal = new Vector3f();
+		Vec3 normal = new Vec3();
 		normal.set(0f, 0f, 0f);
 
 		//btVector3 angvelA = m_rbA.getCenterOfMassTransform().getBasis().transpose() * m_rbA.getAngularVelocity();
@@ -132,15 +132,15 @@ public class Point2PointConstraint extends TypedConstraint {
 			VectorUtil.setCoord(normal, i, 1f);
 			float jacDiagABInv = 1f / jac[i].getDiagonal();
 
-			Vector3f rel_pos1 = new Vector3f();
+			Vec3 rel_pos1 = new Vec3();
 			rel_pos1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
-			Vector3f rel_pos2 = new Vector3f();
+			Vec3 rel_pos2 = new Vec3();
 			rel_pos2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 			// this jacobian entry could be re-used for all iterations
 
-			Vector3f vel1 = rbA.getVelocityInLocalPoint(rel_pos1, new Vector3f());
-			Vector3f vel2 = rbB.getVelocityInLocalPoint(rel_pos2, new Vector3f());
-			Vector3f vel = new Vector3f();
+			Vec3 vel1 = rbA.getVelocityInLocalPoint(rel_pos1, new Vec3());
+			Vec3 vel2 = rbB.getVelocityInLocalPoint(rel_pos2, new Vec3());
+			Vec3 vel = new Vec3();
 			vel.subHere(vel1, vel2);
 
 			float rel_vel;
@@ -169,7 +169,7 @@ public class Point2PointConstraint extends TypedConstraint {
 			}
 
 			appliedImpulse += impulse;
-			Vector3f impulse_vector = new Vector3f();
+			Vec3 impulse_vector = new Vec3();
 			impulse_vector.scale(impulse, normal);
 			tmp.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 			rbA.applyImpulse(impulse_vector, tmp);
@@ -184,20 +184,20 @@ public class Point2PointConstraint extends TypedConstraint {
 	public void updateRHS(float timeStep) {
 	}
 
-	public void setPivotA(Vector3f pivotA) {
+	public void setPivotA(Vec3 pivotA) {
 		pivotInA.set(pivotA);
 	}
 
-	public void setPivotB(Vector3f pivotB) {
+	public void setPivotB(Vec3 pivotB) {
 		pivotInB.set(pivotB);
 	}
 
-	public Vector3f getPivotInA(Vector3f out) {
+	public Vec3 getPivotInA(Vec3 out) {
 		out.set(pivotInA);
 		return out;
 	}
 
-	public Vector3f getPivotInB(Vector3f out) {
+	public Vec3 getPivotInB(Vec3 out) {
 		out.set(pivotInB);
 		return out;
 	}

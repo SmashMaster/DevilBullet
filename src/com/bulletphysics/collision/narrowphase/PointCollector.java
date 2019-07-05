@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.narrowphase;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -33,8 +33,8 @@ import javax.vecmath.Vector3f;
  */
 public class PointCollector extends DiscreteCollisionDetectorInterface.Result {
 
-	public final Vector3f normalOnBInWorld = new Vector3f();
-	public final Vector3f pointInWorld = new Vector3f();
+	public final Vec3 normalOnBInWorld = new Vec3();
+	public final Vec3 pointInWorld = new Vec3();
 	public float distance = 1e30f; // negative means penetration
 
 	public boolean hasResult = false;
@@ -43,7 +43,7 @@ public class PointCollector extends DiscreteCollisionDetectorInterface.Result {
 		// ??
 	}
 
-	public void addContactPoint(Vector3f normalOnBInWorld, Vector3f pointInWorld, float depth) {
+	public void addContactPoint(Vec3 normalOnBInWorld, Vec3 pointInWorld, float depth) {
 		if (depth < distance) {
 			hasResult = true;
 			this.normalOnBInWorld.set(normalOnBInWorld);

@@ -45,7 +45,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -65,8 +65,8 @@ public class GenericJointDemo extends DemoApplication {
 
 		CollisionDispatcher dispatcher = new CollisionDispatcher(collision_config);
 
-		Vector3f worldAabbMin = new Vector3f(-10000, -10000, -10000);
-		Vector3f worldAabbMax = new Vector3f(10000, 10000, 10000);
+		Vec3 worldAabbMin = new Vec3(-10000, -10000, -10000);
+		Vec3 worldAabbMax = new Vec3(10000, 10000, 10000);
 		//BroadphaseInterface overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
 		//BroadphaseInterface overlappingPairCache = new SimpleBroadphase();
 		BroadphaseInterface overlappingPairCache = new DbvtBroadphase();
@@ -79,13 +79,13 @@ public class GenericJointDemo extends DemoApplication {
 
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, constraintSolver, collision_config);
 
-		dynamicsWorld.setGravity(new Vector3f(0f, -30f, 0f));
+		dynamicsWorld.setGravity(new Vec3(0f, -30f, 0f));
 
 		dynamicsWorld.setDebugDrawer(new GLDebugDrawer(gl));
 
 		// Setup a big ground box
 		{
-			CollisionShape groundShape = new BoxShape(new Vector3f(200f, 10f, 200f));
+			CollisionShape groundShape = new BoxShape(new Vec3(200f, 10f, 200f));
 			Transform groundTransform = new Transform();
 			groundTransform.setIdentity();
 			groundTransform.origin.set(0f, -15f, 0f);
@@ -103,7 +103,7 @@ public class GenericJointDemo extends DemoApplication {
 	}
 	
 	public void spawnRagdoll(boolean random) {
-		RagDoll ragDoll = new RagDoll(dynamicsWorld, new Vector3f(0f, 0f, 10f), 5f);
+		RagDoll ragDoll = new RagDoll(dynamicsWorld, new Vec3(0f, 0f, 10f), 5f);
 		ragdolls.add(ragDoll);
 	}
 	

@@ -56,8 +56,8 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * CollisionWorld is interface and container for the collision detection.
@@ -113,8 +113,8 @@ public class CollisionWorld {
 		// TODO: check if it's overwritten or not
 		Transform trans = collisionObject.getWorldTransform(new Transform());
 
-		Vector3f minAabb = new Vector3f();
-		Vector3f maxAabb = new Vector3f();
+		Vec3 minAabb = new Vec3();
+		Vec3 maxAabb = new Vec3();
 		collisionObject.getCollisionShape().getAabb(trans, minAabb, maxAabb);
 
 		BroadphaseNativeType type = collisionObject.getCollisionShape().getShapeType();
@@ -204,13 +204,13 @@ public class CollisionWorld {
 
 	// JAVA NOTE: ported from 2.74, missing contact threshold stuff
 	public void updateSingleAabb(CollisionObject colObj) {
-		Vector3f minAabb = new Vector3f(), maxAabb = new Vector3f();
-		Vector3f tmp = new Vector3f();
+		Vec3 minAabb = new Vec3(), maxAabb = new Vec3();
+		Vec3 tmp = new Vec3();
 		Transform tmpTrans = new Transform();
 
 		colObj.getCollisionShape().getAabb(colObj.getWorldTransform(tmpTrans), minAabb, maxAabb);
 		// need to increase the aabb for contact thresholds
-		Vector3f contactThreshold = new Vector3f();
+		Vec3 contactThreshold = new Vec3();
 		contactThreshold.set(BulletGlobals.getContactBreakingThreshold(), BulletGlobals.getContactBreakingThreshold(), BulletGlobals.getContactBreakingThreshold());
 		minAabb.sub(contactThreshold);
 		maxAabb.add(contactThreshold);
@@ -320,9 +320,9 @@ public class CollisionWorld {
 					BvhTriangleMeshShape triangleMesh = (BvhTriangleMeshShape)collisionShape;
 					Transform worldTocollisionObject = new Transform();
 					worldTocollisionObject.inverse(colObjWorldTransform);
-					Vector3f rayFromLocal = new Vector3f(rayFromTrans.origin);
+					Vec3 rayFromLocal = new Vec3(rayFromTrans.origin);
 					worldTocollisionObject.transform(rayFromLocal);
-					Vector3f rayToLocal = new Vector3f(rayToTrans.origin);
+					Vec3 rayToLocal = new Vec3(rayToTrans.origin);
 					worldTocollisionObject.transform(rayToLocal);
 
 					BridgeTriangleRaycastCallback rcb = new BridgeTriangleRaycastCallback(rayFromLocal, rayToLocal, resultCallback, collisionObject, triangleMesh);
@@ -335,17 +335,17 @@ public class CollisionWorld {
 					Transform worldTocollisionObject = new Transform();
 					worldTocollisionObject.inverse(colObjWorldTransform);
 
-					Vector3f rayFromLocal = new Vector3f(rayFromTrans.origin);
+					Vec3 rayFromLocal = new Vec3(rayFromTrans.origin);
 					worldTocollisionObject.transform(rayFromLocal);
-					Vector3f rayToLocal = new Vector3f(rayToTrans.origin);
+					Vec3 rayToLocal = new Vec3(rayToTrans.origin);
 					worldTocollisionObject.transform(rayToLocal);
 
 					BridgeTriangleRaycastCallback rcb = new BridgeTriangleRaycastCallback(rayFromLocal, rayToLocal, resultCallback, collisionObject, triangleMesh);
 					rcb.hitFraction = resultCallback.closestHitFraction;
 
-					Vector3f rayAabbMinLocal = new Vector3f(rayFromLocal);
+					Vec3 rayAabbMinLocal = new Vec3(rayFromLocal);
 					VectorUtil.setMin(rayAabbMinLocal, rayToLocal);
-					Vector3f rayAabbMaxLocal = new Vector3f(rayFromLocal);
+					Vec3 rayAabbMaxLocal = new Vec3(rayFromLocal);
 					VectorUtil.setMax(rayAabbMaxLocal, rayToLocal);
 
 					triangleMesh.processAllTriangles(rcb, rayAabbMinLocal, rayAabbMaxLocal);
@@ -392,7 +392,7 @@ public class CollisionWorld {
 		}
 
 		@Override
-		public float reportHit(Vector3f hitNormalLocal, Vector3f hitPointLocal, float hitFraction, int partId, int triangleIndex) {
+		public float reportHit(Vec3 hitNormalLocal, Vec3 hitPointLocal, float hitFraction, int partId, int triangleIndex) {
 			LocalShapeInfo shapeInfo = new LocalShapeInfo();
 			shapeInfo.shapePart = partId;
 			shapeInfo.triangleIndex = triangleIndex;
@@ -444,17 +444,17 @@ public class CollisionWorld {
 					Transform worldTocollisionObject = new Transform();
 					worldTocollisionObject.inverse(colObjWorldTransform);
 
-					Vector3f convexFromLocal = new Vector3f();
+					Vec3 convexFromLocal = new Vec3();
 					convexFromLocal.set(convexFromTrans.origin);
 					worldTocollisionObject.transform(convexFromLocal);
 
-					Vector3f convexToLocal = new Vector3f();
+					Vec3 convexToLocal = new Vec3();
 					convexToLocal.set(convexToTrans.origin);
 					worldTocollisionObject.transform(convexToLocal);
 
 					// rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
 					Transform rotationXform = new Transform();
-					Matrix3f tmpMat = new Matrix3f();
+					Mat3 tmpMat = new Mat3();
 					tmpMat.multHere(worldTocollisionObject.basis, convexToTrans.basis);
 					rotationXform.set(tmpMat);
 
@@ -462,8 +462,8 @@ public class CollisionWorld {
 					tccb.hitFraction = resultCallback.closestHitFraction;
 					tccb.normalInWorldSpace = true;
 					
-					Vector3f boxMinLocal = new Vector3f();
-					Vector3f boxMaxLocal = new Vector3f();
+					Vec3 boxMinLocal = new Vec3();
+					Vec3 boxMaxLocal = new Vec3();
 					castShape.getAabb(rotationXform, boxMinLocal, boxMaxLocal);
 					triangleMesh.performConvexcast(tccb, convexFromLocal, convexToLocal, boxMinLocal, boxMaxLocal);
 				}
@@ -472,30 +472,30 @@ public class CollisionWorld {
 					Transform worldTocollisionObject = new Transform();
 					worldTocollisionObject.inverse(colObjWorldTransform);
 
-					Vector3f convexFromLocal = new Vector3f();
+					Vec3 convexFromLocal = new Vec3();
 					convexFromLocal.set(convexFromTrans.origin);
 					worldTocollisionObject.transform(convexFromLocal);
 
-					Vector3f convexToLocal = new Vector3f();
+					Vec3 convexToLocal = new Vec3();
 					convexToLocal.set(convexToTrans.origin);
 					worldTocollisionObject.transform(convexToLocal);
 
 					// rotation of box in local mesh space = MeshRotation^-1 * ConvexToRotation
 					Transform rotationXform = new Transform();
-					Matrix3f tmpMat = new Matrix3f();
+					Mat3 tmpMat = new Mat3();
 					tmpMat.multHere(worldTocollisionObject.basis, convexToTrans.basis);
 					rotationXform.set(tmpMat);
 
 					BridgeTriangleConvexcastCallback tccb = new BridgeTriangleConvexcastCallback(castShape, convexFromTrans, convexToTrans, resultCallback, collisionObject, triangleMesh, colObjWorldTransform);
 					tccb.hitFraction = resultCallback.closestHitFraction;
 					tccb.normalInWorldSpace = false;
-					Vector3f boxMinLocal = new Vector3f();
-					Vector3f boxMaxLocal = new Vector3f();
+					Vec3 boxMinLocal = new Vec3();
+					Vec3 boxMaxLocal = new Vec3();
 					castShape.getAabb(rotationXform, boxMinLocal, boxMaxLocal);
 
-					Vector3f rayAabbMinLocal = new Vector3f(convexFromLocal);
+					Vec3 rayAabbMinLocal = new Vec3(convexFromLocal);
 					VectorUtil.setMin(rayAabbMinLocal, convexToLocal);
-					Vector3f rayAabbMaxLocal = new Vector3f(convexFromLocal);
+					Vec3 rayAabbMaxLocal = new Vec3(convexFromLocal);
 					VectorUtil.setMax(rayAabbMaxLocal, convexToLocal);
 					rayAabbMinLocal.add(boxMinLocal);
 					rayAabbMaxLocal.add(boxMaxLocal);
@@ -531,7 +531,7 @@ public class CollisionWorld {
 	 * rayTest performs a raycast on all objects in the CollisionWorld, and calls the resultCallback.
 	 * This allows for several queries: first hit, all hits, any hit, dependent on the value returned by the callback.
 	 */
-	public void rayTest(Vector3f rayFromWorld, Vector3f rayToWorld, RayResultCallback resultCallback) {
+	public void rayTest(Vec3 rayFromWorld, Vec3 rayToWorld, RayResultCallback resultCallback) {
 		Transform rayFromTrans = new Transform(), rayToTrans = new Transform();
 		rayFromTrans.setIdentity();
 		rayFromTrans.origin.set(rayFromWorld);
@@ -540,7 +540,7 @@ public class CollisionWorld {
 		rayToTrans.origin.set(rayToWorld);
 
 		// go over all objects, and if the ray intersects their aabb, do a ray-shape query using convexCaster (CCD)
-		Vector3f collisionObjectAabbMin = new Vector3f(), collisionObjectAabbMax = new Vector3f();
+		Vec3 collisionObjectAabbMin = new Vec3(), collisionObjectAabbMax = new Vec3();
 		float[] hitLambda = new float[1];
 
 		Transform tmpTrans = new Transform();
@@ -558,7 +558,7 @@ public class CollisionWorld {
 				collisionObject.getCollisionShape().getAabb(collisionObject.getWorldTransform(tmpTrans), collisionObjectAabbMin, collisionObjectAabbMax);
 
 				hitLambda[0] = resultCallback.closestHitFraction;
-				Vector3f hitNormal = new Vector3f();
+				Vec3 hitNormal = new Vec3();
 				if (AabbUtil2.rayAabb(rayFromWorld, rayToWorld, collisionObjectAabbMin, collisionObjectAabbMax, hitLambda, hitNormal)) {
 					rayTestSingle(rayFromTrans, rayToTrans,
 							collisionObject,
@@ -582,13 +582,13 @@ public class CollisionWorld {
 		convexFromTrans.set(convexFromWorld);
 		convexToTrans.set(convexToWorld);
 
-		Vector3f castShapeAabbMin = new Vector3f();
-		Vector3f castShapeAabbMax = new Vector3f();
+		Vec3 castShapeAabbMin = new Vec3();
+		Vec3 castShapeAabbMax = new Vec3();
 
 		// Compute AABB that encompasses angular movement
 		{
-			Vector3f linVel = new Vector3f();
-			Vector3f angVel = new Vector3f();
+			Vec3 linVel = new Vec3();
+			Vec3 angVel = new Vec3();
 			TransformUtil.calculateVelocity(convexFromTrans, convexToTrans, 1f, linVel, angVel);
 			Transform R = new Transform();
 			R.setIdentity();
@@ -597,8 +597,8 @@ public class CollisionWorld {
 		}
 
 		Transform tmpTrans = new Transform();
-		Vector3f collisionObjectAabbMin = new Vector3f();
-		Vector3f collisionObjectAabbMax = new Vector3f();
+		Vec3 collisionObjectAabbMin = new Vec3();
+		Vec3 collisionObjectAabbMax = new Vec3();
 		float[] hitLambda = new float[1];
 
 		// go over all objects, and if the ray intersects their aabb + cast shape aabb,
@@ -613,7 +613,7 @@ public class CollisionWorld {
 				collisionObject.getCollisionShape().getAabb(tmpTrans, collisionObjectAabbMin, collisionObjectAabbMax);
 				AabbUtil2.aabbExpand(collisionObjectAabbMin, collisionObjectAabbMax, castShapeAabbMin, castShapeAabbMax);
 				hitLambda[0] = 1f; // could use resultCallback.closestHitFraction, but needs testing
-				Vector3f hitNormal = new Vector3f();
+				Vec3 hitNormal = new Vec3();
 				if (AabbUtil2.rayAabb(convexFromWorld.origin, convexToWorld.origin, collisionObjectAabbMin, collisionObjectAabbMax, hitLambda, hitNormal)) {
 					objectQuerySingle(castShape, convexFromTrans, convexToTrans,
 					                  collisionObject,
@@ -646,10 +646,10 @@ public class CollisionWorld {
 	public static class LocalRayResult {
 		public CollisionObject collisionObject;
 		public LocalShapeInfo localShapeInfo;
-		public final Vector3f hitNormalLocal = new Vector3f();
+		public final Vec3 hitNormalLocal = new Vec3();
 		public float hitFraction;
 
-		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo, Vector3f hitNormalLocal, float hitFraction) {
+		public LocalRayResult(CollisionObject collisionObject, LocalShapeInfo localShapeInfo, Vec3 hitNormalLocal, float hitFraction) {
 			this.collisionObject = collisionObject;
 			this.localShapeInfo = localShapeInfo;
 			this.hitNormalLocal.set(hitNormalLocal);
@@ -680,13 +680,13 @@ public class CollisionWorld {
 	}
 	
 	public static class ClosestRayResultCallback extends RayResultCallback {
-		public final Vector3f rayFromWorld = new Vector3f(); //used to calculate hitPointWorld from hitFraction
-		public final Vector3f rayToWorld = new Vector3f();
+		public final Vec3 rayFromWorld = new Vec3(); //used to calculate hitPointWorld from hitFraction
+		public final Vec3 rayToWorld = new Vec3();
 
-		public final Vector3f hitNormalWorld = new Vector3f();
-		public final Vector3f hitPointWorld = new Vector3f();
+		public final Vec3 hitNormalWorld = new Vec3();
+		public final Vec3 hitPointWorld = new Vec3();
 		
-		public ClosestRayResultCallback(Vector3f rayFromWorld, Vector3f rayToWorld) {
+		public ClosestRayResultCallback(Vec3 rayFromWorld, Vec3 rayToWorld) {
 			this.rayFromWorld.set(rayFromWorld);
 			this.rayToWorld.set(rayToWorld);
 		}
@@ -715,11 +715,11 @@ public class CollisionWorld {
 	public static class LocalConvexResult {
 		public CollisionObject hitCollisionObject;
 		public LocalShapeInfo localShapeInfo;
-		public final Vector3f hitNormalLocal = new Vector3f();
-		public final Vector3f hitPointLocal = new Vector3f();
+		public final Vec3 hitNormalLocal = new Vec3();
+		public final Vec3 hitPointLocal = new Vec3();
 		public float hitFraction;
 
-		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo, Vector3f hitNormalLocal, Vector3f hitPointLocal, float hitFraction) {
+		public LocalConvexResult(CollisionObject hitCollisionObject, LocalShapeInfo localShapeInfo, Vec3 hitNormalLocal, Vec3 hitPointLocal, float hitFraction) {
 			this.hitCollisionObject = hitCollisionObject;
 			this.localShapeInfo = localShapeInfo;
 			this.hitNormalLocal.set(hitNormalLocal);
@@ -747,13 +747,13 @@ public class CollisionWorld {
 	}
 	
 	public static class ClosestConvexResultCallback extends ConvexResultCallback {
-		public final Vector3f convexFromWorld = new Vector3f(); // used to calculate hitPointWorld from hitFraction
-		public final Vector3f convexToWorld = new Vector3f();
-		public final Vector3f hitNormalWorld = new Vector3f();
-		public final Vector3f hitPointWorld = new Vector3f();
+		public final Vec3 convexFromWorld = new Vec3(); // used to calculate hitPointWorld from hitFraction
+		public final Vec3 convexToWorld = new Vec3();
+		public final Vec3 hitNormalWorld = new Vec3();
+		public final Vec3 hitPointWorld = new Vec3();
 		public CollisionObject hitCollisionObject;
 
-		public ClosestConvexResultCallback(Vector3f convexFromWorld, Vector3f convexToWorld) {
+		public ClosestConvexResultCallback(Vec3 convexFromWorld, Vec3 convexToWorld) {
 			this.convexFromWorld.set(convexFromWorld);
 			this.convexToWorld.set(convexToWorld);
 			this.hitCollisionObject = null;
@@ -791,14 +791,14 @@ public class CollisionWorld {
 		public CollisionObject collisionObject;
 		public ConcaveShape triangleMesh;
 
-		public BridgeTriangleRaycastCallback(Vector3f from, Vector3f to, RayResultCallback resultCallback, CollisionObject collisionObject, ConcaveShape triangleMesh) {
+		public BridgeTriangleRaycastCallback(Vec3 from, Vec3 to, RayResultCallback resultCallback, CollisionObject collisionObject, ConcaveShape triangleMesh) {
 			super(from, to);
 			this.resultCallback = resultCallback;
 			this.collisionObject = collisionObject;
 			this.triangleMesh = triangleMesh;
 		}
 	
-		public float reportHit(Vector3f hitNormalLocal, float hitFraction, int partId, int triangleIndex) {
+		public float reportHit(Vec3 hitNormalLocal, float hitFraction, int partId, int triangleIndex) {
 			LocalShapeInfo shapeInfo = new LocalShapeInfo();
 			shapeInfo.shapePart = partId;
 			shapeInfo.triangleIndex = triangleIndex;

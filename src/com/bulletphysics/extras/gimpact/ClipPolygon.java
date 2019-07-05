@@ -34,7 +34,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -42,14 +42,14 @@ import javax.vecmath.Vector3f;
  */
 class ClipPolygon {
 	
-	public static float distance_point_plane(Vec4 plane, Vector3f point) {
+	public static float distance_point_plane(Vec4 plane, Vec3 point) {
 		return VectorUtil.dot3(point, plane) - plane.w;
 	}
 
 	/**
 	 * Vector blending. Takes two vectors a, b, blends them together.
 	 */
-	public static void vec_blend(Vector3f vr, Vector3f va, Vector3f vb, float blend_factor) {
+	public static void vec_blend(Vec3 vr, Vec3 va, Vec3 vb, float blend_factor) {
 		vr.scale(1f - blend_factor, va);
 		vr.scaleAddHere(blend_factor, vb, vr);
 	}
@@ -57,7 +57,7 @@ class ClipPolygon {
 	/**
 	 * This function calcs the distance from a 3D plane.
 	 */
-	public static void plane_clip_polygon_collect(Vector3f point0, Vector3f point1, float dist0, float dist1, ObjectArrayList<Vector3f> clipped, int[] clipped_count) {
+	public static void plane_clip_polygon_collect(Vec3 point0, Vec3 point1, float dist0, float dist1, ObjectArrayList<Vec3> clipped, int[] clipped_count) {
 		boolean _prevclassif = (dist0 > BulletGlobals.SIMD_EPSILON);
 		boolean _classif = (dist1 > BulletGlobals.SIMD_EPSILON);
 		if (_classif != _prevclassif) {
@@ -76,7 +76,7 @@ class ClipPolygon {
 	 * 
 	 * @return The count of the clipped counts
 	 */
-	public static int plane_clip_polygon(Vec4 plane, ObjectArrayList<Vector3f> polygon_points, int polygon_point_count, ObjectArrayList<Vector3f> clipped) {
+	public static int plane_clip_polygon(Vec4 plane, ObjectArrayList<Vec3> polygon_points, int polygon_point_count, ObjectArrayList<Vec3> clipped) {
 		ArrayPool<int[]> intArrays = ArrayPool.get(int.class);
 
 		int[] clipped_count = intArrays.getFixed(1);
@@ -124,7 +124,7 @@ class ClipPolygon {
 	 * @param clipped must be an array of 16 points.
 	 * @return the count of the clipped counts
 	 */
-	public static int plane_clip_triangle(Vec4 plane, Vector3f point0, Vector3f point1, Vector3f point2, ObjectArrayList<Vector3f> clipped) {
+	public static int plane_clip_triangle(Vec4 plane, Vec3 point0, Vec3 point1, Vec3 point2, ObjectArrayList<Vec3> clipped) {
 		ArrayPool<int[]> intArrays = ArrayPool.get(int.class);
 
 		int[] clipped_count = intArrays.getFixed(1);

@@ -30,7 +30,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * SubsimplexConvexCast implements Gino van den Bergens' paper
@@ -65,12 +65,12 @@ public class SubsimplexConvexCast extends ConvexCast {
 	}
 	
 	public boolean calcTimeOfImpact(Transform fromA, Transform toA, Transform fromB, Transform toB, CastResult result) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		
 		simplexSolver.reset();
 
-		Vector3f linVelA = new Vector3f();
-		Vector3f linVelB = new Vector3f();
+		Vec3 linVelA = new Vec3();
+		Vec3 linVelB = new Vec3();
 		linVelA.subHere(toA.origin, fromA.origin);
 		linVelB.subHere(toB.origin, fromB.origin);
 		
@@ -80,28 +80,28 @@ public class SubsimplexConvexCast extends ConvexCast {
 		Transform interpolatedTransB = new Transform(fromB);
 
 		// take relative motion
-		Vector3f r = new Vector3f();
+		Vec3 r = new Vec3();
 		r.subHere(linVelA, linVelB);
 		
-		Vector3f v = new Vector3f();
+		Vec3 v = new Vec3();
 
 		tmp.negateHere(r);
 		MatrixUtil.transposeTransform(tmp, tmp, fromA.basis);
-		Vector3f supVertexA = convexA.localGetSupportingVertex(tmp, new Vector3f());
+		Vec3 supVertexA = convexA.localGetSupportingVertex(tmp, new Vec3());
 		fromA.transform(supVertexA);
 		
 		MatrixUtil.transposeTransform(tmp, r, fromB.basis);
-		Vector3f supVertexB = convexB.localGetSupportingVertex(tmp, new Vector3f());
+		Vec3 supVertexB = convexB.localGetSupportingVertex(tmp, new Vec3());
 		fromB.transform(supVertexB);
 		
 		v.subHere(supVertexA, supVertexB);
 		
 		int maxIter = MAX_ITERATIONS;
 
-		Vector3f n = new Vector3f();
+		Vec3 n = new Vec3();
 		n.set(0f, 0f, 0f);
 		boolean hasResult = false;
-		Vector3f c = new Vector3f();
+		Vec3 c = new Vec3();
 
 		float lastLambda = lambda;
 
@@ -111,7 +111,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 		//#else
 		float epsilon = 0.0001f;
 		//#endif
-		Vector3f w = new Vector3f(), p = new Vector3f();
+		Vec3 w = new Vec3(), p = new Vec3();
 		float VdotR;
 
 		while ((dist2 > epsilon) && (maxIter--) != 0) {
@@ -185,8 +185,8 @@ public class SubsimplexConvexCast extends ConvexCast {
 		if (result.normal.dot(r) >= -result.allowedPenetration)
 			return false;
 
-		Vector3f hitA = new Vector3f();
-		Vector3f hitB = new Vector3f();
+		Vec3 hitA = new Vec3();
+		Vec3 hitB = new Vec3();
 		simplexSolver.compute_points(hitA,hitB);
 		result.hitPoint.set(hitB);
 		return true;

@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ConvexInternalShape is an internal base class, shared by most convex shape implementations.
@@ -39,24 +39,24 @@ import javax.vecmath.Vector3f;
 public abstract class ConvexInternalShape extends ConvexShape {
 
 	// local scaling. collisionMargin is not scaled !
-	protected final Vector3f localScaling = new Vector3f(1f, 1f, 1f);
-	protected final Vector3f implicitShapeDimensions = new Vector3f();
+	protected final Vec3 localScaling = new Vec3(1f, 1f, 1f);
+	protected final Vec3 implicitShapeDimensions = new Vec3();
 	protected float collisionMargin = BulletGlobals.CONVEX_DISTANCE_MARGIN;
 
 	/**
 	 * getAabb's default implementation is brute force, expected derived classes to implement a fast dedicated version.
 	 */
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		getAabbSlow(t, aabbMin, aabbMax);
 	}
 	
 	@Override
-	public void getAabbSlow(Transform trans, Vector3f minAabb, Vector3f maxAabb) {
+	public void getAabbSlow(Transform trans, Vec3 minAabb, Vec3 maxAabb) {
 		float margin = getMargin();
-		Vector3f vec = new Vector3f();
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
+		Vec3 vec = new Vec3();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
 		
 		for (int i=0;i<3;i++)
 		{
@@ -81,11 +81,11 @@ public abstract class ConvexInternalShape extends ConvexShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertex(Vector3f vec, Vector3f out) {
-		Vector3f supVertex = localGetSupportingVertexWithoutMargin(vec, out);
+	public Vec3 localGetSupportingVertex(Vec3 vec, Vec3 out) {
+		Vec3 supVertex = localGetSupportingVertexWithoutMargin(vec, out);
 
 		if (getMargin() != 0f) {
-			Vector3f vecnorm = new Vector3f(vec);
+			Vec3 vecnorm = new Vec3(vec);
 			if (vecnorm.squareLength() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
@@ -95,11 +95,11 @@ public abstract class ConvexInternalShape extends ConvexShape {
 		return out;
 	}
 	
-	public void setLocalScaling(Vector3f scaling) {
+	public void setLocalScaling(Vec3 scaling) {
 		localScaling.absoluteHere(scaling);
 	}
 	
-	public Vector3f getLocalScaling(Vector3f out) {
+	public Vec3 getLocalScaling(Vec3 out) {
 		out.set(localScaling);
 		return out;
 	}
@@ -118,7 +118,7 @@ public abstract class ConvexInternalShape extends ConvexShape {
 	}
 
 	@Override
-	public void getPreferredPenetrationDirection(int index, Vector3f penetrationVector) {
+	public void getPreferredPenetrationDirection(int index, Vec3 penetrationVector) {
 		throw new InternalError();
 	}
 	

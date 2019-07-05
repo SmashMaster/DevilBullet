@@ -25,7 +25,7 @@
 
 package com.bulletphysics.dynamics.constraintsolver;
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * 1D constraint along a normal axis between bodyA and bodyB. It can be combined
@@ -35,13 +35,13 @@ import javax.vecmath.Vector3f;
  */
 public class SolverConstraint {
 
-	public final Vector3f relpos1CrossNormal = new Vector3f();
-	public final Vector3f contactNormal = new Vector3f();
+	public final Vec3 relpos1CrossNormal = new Vec3();
+	public final Vec3 contactNormal = new Vec3();
 
-	public final Vector3f relpos2CrossNormal = new Vector3f();
-	public final Vector3f angularComponentA = new Vector3f();
+	public final Vec3 relpos2CrossNormal = new Vec3();
+	public final Vec3 angularComponentA = new Vec3();
 
-	public final Vector3f angularComponentB = new Vector3f();
+	public final Vec3 angularComponentB = new Vec3();
 	
 	public float appliedPushImpulse;
 	

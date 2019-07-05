@@ -48,7 +48,7 @@ import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.Transform;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * 
@@ -110,7 +110,7 @@ public class MovingConcaveDemo extends DemoApplication {
 				Bunny.NUM_VERTICES, Bunny.getVertexBuffer(), 4 * 3);
 
 		GImpactMeshShape trimesh = new GImpactMeshShape(indexVertexArrays);
-		trimesh.setLocalScaling(new Vector3f(4f, 4f, 4f));
+		trimesh.setLocalScaling(new Vec3(4f, 4f, 4f));
 		trimesh.updateBound();
 		trimeshShape = trimesh;
 
@@ -139,7 +139,7 @@ public class MovingConcaveDemo extends DemoApplication {
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 		//dynamicsWorld = new SimpleDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-		dynamicsWorld.setGravity(new Vector3f(0f, -10f, 0f));
+		dynamicsWorld.setGravity(new Vec3(0f, -10f, 0f));
 		
 		initGImpactCollision();
 
@@ -147,11 +147,11 @@ public class MovingConcaveDemo extends DemoApplication {
 		Transform startTransform = new Transform();
 		startTransform.setIdentity();
 
-		CollisionShape staticboxShape1 = new BoxShape(new Vector3f(200f, 1f, 200f)); // floor
-		CollisionShape staticboxShape2 = new BoxShape(new Vector3f(1f, 50f, 200f)); // left wall
-		CollisionShape staticboxShape3 = new BoxShape(new Vector3f(1f, 50f, 200f)); // right wall
-		CollisionShape staticboxShape4 = new BoxShape(new Vector3f(200f, 50f, 1f)); // front wall
-		CollisionShape staticboxShape5 = new BoxShape(new Vector3f(200f, 50f, 1f)); // back wall
+		CollisionShape staticboxShape1 = new BoxShape(new Vec3(200f, 1f, 200f)); // floor
+		CollisionShape staticboxShape2 = new BoxShape(new Vec3(1f, 50f, 200f)); // left wall
+		CollisionShape staticboxShape3 = new BoxShape(new Vec3(1f, 50f, 200f)); // right wall
+		CollisionShape staticboxShape4 = new BoxShape(new Vec3(200f, 50f, 1f)); // front wall
+		CollisionShape staticboxShape5 = new BoxShape(new Vec3(200f, 50f, 1f)); // back wall
 
 		CompoundShape staticScenario = new CompoundShape(); // static scenario
 
@@ -176,7 +176,7 @@ public class MovingConcaveDemo extends DemoApplication {
 		//staticBody.setCollisionFlags(staticBody.getCollisionFlags() | CollisionFlags.CUSTOM_MATERIAL_CALLBACK);
 
 		// static plane
-		Vector3f normal = new Vector3f(0.4f, 1.5f, -0.4f);
+		Vec3 normal = new Vec3(0.4f, 1.5f, -0.4f);
 		normal.normalize();
 		CollisionShape staticplaneShape6 = new StaticPlaneShape(normal, 0f); // A plane
 
@@ -187,23 +187,23 @@ public class MovingConcaveDemo extends DemoApplication {
 		staticBody2.setCollisionFlags(staticBody2.getCollisionFlags() | CollisionFlags.STATIC_OBJECT);
 
 		for (int i=0; i<9; i++) {
-			CollisionShape boxShape = new BoxShape(new Vector3f(1f, 1f, 1f));
+			CollisionShape boxShape = new BoxShape(new Vec3(1f, 1f, 1f));
 			startTransform.origin.set(2f * i - 5f, 2f, -3f);
 			localCreateRigidBody(1, startTransform, boxShape);
 		}
 	}
 	
-	public void shootTrimesh(Vector3f destination) {
+	public void shootTrimesh(Vec3 destination) {
 		if (dynamicsWorld != null) {
 			float mass = 4f;
 			Transform startTransform = new Transform();
 			startTransform.setIdentity();
-			Vector3f camPos = getCameraPosition();
+			Vec3 camPos = getCameraPosition();
 			startTransform.origin.set(camPos);
 
 			RigidBody body = localCreateRigidBody(mass, startTransform, trimeshShape);
 
-			Vector3f linVel = new Vector3f(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
+			Vec3 linVel = new Vec3(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
 			linVel.normalize();
 			linVel.mult(ShootBoxInitialSpeed * 0.25f);
 
@@ -213,7 +213,7 @@ public class MovingConcaveDemo extends DemoApplication {
 			body.setWorldTransform(tr);
 
 			body.setLinearVelocity(linVel);
-			body.setAngularVelocity(new Vector3f(0f, 0f, 0f));
+			body.setAngularVelocity(new Vec3(0f, 0f, 0f));
 		}
 	}
 

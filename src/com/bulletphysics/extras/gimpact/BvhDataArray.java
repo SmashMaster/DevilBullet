@@ -30,7 +30,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -96,13 +96,13 @@ class BvhDataArray {
 		return out;
 	}
 
-	public Vector3f getBoundMin(int idx, Vector3f out) {
+	public Vec3 getBoundMin(int idx, Vec3 out) {
 		int pos = idx*6;
 		out.set(bound[pos+0], bound[pos+1], bound[pos+2]);
 		return out;
 	}
 
-	public Vector3f getBoundMax(int idx, Vector3f out) {
+	public Vec3 getBoundMax(int idx, Vec3 out) {
 		int pos = idx*6;
 		out.set(bound[pos+3], bound[pos+4], bound[pos+5]);
 		return out;

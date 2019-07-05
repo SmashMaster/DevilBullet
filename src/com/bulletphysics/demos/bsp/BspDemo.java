@@ -41,7 +41,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * BspDemo shows the convex collision detection, by converting a Quake BSP file
@@ -76,8 +76,8 @@ public class BspDemo extends DemoApplication {
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		// btCollisionShape* groundShape = new btBoxShape(btVector3(50,3,50));
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
-		Vector3f worldMin = new Vector3f(-1000f,-1000f,-1000f);
-		Vector3f worldMax = new Vector3f(1000f,1000f,1000f);
+		Vec3 worldMin = new Vec3(-1000f,-1000f,-1000f);
+		Vec3 worldMax = new Vec3(1000f,1000f,1000f);
 		//broadphase = new AxisSweep3(worldMin, worldMax);
 		//broadphase = new SimpleBroadphase();
 		broadphase = new DbvtBroadphase();
@@ -86,7 +86,7 @@ public class BspDemo extends DemoApplication {
 		//ConstraintSolver* solver = new OdeConstraintSolver;
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
-		Vector3f gravity = new Vector3f();
+		Vec3 gravity = new Vec3();
 		gravity.negateHere(cameraUp);
 		gravity.mult(10f);
 		dynamicsWorld.setGravity(gravity);
@@ -134,7 +134,7 @@ public class BspDemo extends DemoApplication {
 	
 	private class BspToBulletConverter extends BspConverter {
 		@Override
-		public void addConvexVerticesCollider(ObjectArrayList<Vector3f> vertices) {
+		public void addConvexVerticesCollider(ObjectArrayList<Vec3> vertices) {
 			if (vertices.size() > 0) {
 				float mass = 0f;
 				Transform startTransform = new Transform();

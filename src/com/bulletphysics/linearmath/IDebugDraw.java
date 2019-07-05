@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * IDebugDraw interface class allows hooking up a debug renderer to visually debug
@@ -45,42 +45,42 @@ public abstract class IDebugDraw {
 	
 	//protected final BulletStack stack = BulletStack.get();
 
-	public abstract void drawLine(Vector3f from, Vector3f to, Vector3f color);
+	public abstract void drawLine(Vec3 from, Vec3 to, Vec3 color);
 	
-	public void drawTriangle(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f n0, Vector3f n1, Vector3f n2, Vector3f color, float alpha) {
+	public void drawTriangle(Vec3 v0, Vec3 v1, Vec3 v2, Vec3 n0, Vec3 n1, Vec3 n2, Vec3 color, float alpha) {
 		drawTriangle(v0, v1, v2, color, alpha);
 	}
 	
-	public void drawTriangle(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f color, float alpha) {
+	public void drawTriangle(Vec3 v0, Vec3 v1, Vec3 v2, Vec3 color, float alpha) {
 		drawLine(v0, v1, color);
 		drawLine(v1, v2, color);
 		drawLine(v2, v0, color);
 	}
 
-	public abstract void drawContactPoint(Vector3f PointOnB, Vector3f normalOnB, float distance, int lifeTime, Vector3f color);
+	public abstract void drawContactPoint(Vec3 PointOnB, Vec3 normalOnB, float distance, int lifeTime, Vec3 color);
 
 	public abstract void reportErrorWarning(String warningString);
 
-	public abstract void draw3dText(Vector3f location, String textString);
+	public abstract void draw3dText(Vec3 location, String textString);
 
 	public abstract void setDebugMode(int debugMode);
 
 	public abstract int getDebugMode();
 
-	public void drawAabb(Vector3f from, Vector3f to, Vector3f color) {
-		Vector3f halfExtents = new Vector3f(to);
+	public void drawAabb(Vec3 from, Vec3 to, Vec3 color) {
+		Vec3 halfExtents = new Vec3(to);
 		halfExtents.sub(from);
 		halfExtents.mult(0.5f);
 
-		Vector3f center = new Vector3f(to);
+		Vec3 center = new Vec3(to);
 		center.add(from);
 		center.mult(0.5f);
 
 		int i, j;
 
-		Vector3f edgecoord = new Vector3f();
+		Vec3 edgecoord = new Vec3();
 		edgecoord.set(1f, 1f, 1f);
-		Vector3f pa = new Vector3f(), pb = new Vector3f();
+		Vec3 pa = new Vec3(), pb = new Vec3();
 		for (i = 0; i < 4; i++) {
 			for (j = 0; j < 3; j++) {
 				pa.set(edgecoord.x * halfExtents.x, edgecoord.y * halfExtents.y, edgecoord.z * halfExtents.z);

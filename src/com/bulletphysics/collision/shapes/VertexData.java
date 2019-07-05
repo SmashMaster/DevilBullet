@@ -26,7 +26,7 @@
 package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Allows accessing vertex data.
@@ -39,17 +39,17 @@ public abstract class VertexData {
 
 	public abstract int getIndexCount();
 
-	public abstract <T extends Vector3f> T getVertex(int idx, T out);
+	public abstract <T extends Vec3> T getVertex(int idx, T out);
 
 	public abstract void setVertex(int idx, float x, float y, float z);
 
-	public void setVertex(int idx, Vector3f t) {
+	public void setVertex(int idx, Vec3 t) {
 		setVertex(idx, t.x, t.y, t.z);
 	}
 
 	public abstract int getIndex(int idx);
 
-	public void getTriangle(int firstIndex, Vector3f scale, Vector3f[] triangle) {
+	public void getTriangle(int firstIndex, Vec3 scale, Vec3[] triangle) {
 		for (int i=0; i<3; i++) {
 			getVertex(getIndex(firstIndex+i), triangle[i]);
 			VectorUtil.mul(triangle[i], triangle[i], scale);

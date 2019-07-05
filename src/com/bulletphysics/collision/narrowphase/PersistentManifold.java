@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 
 /**
@@ -101,51 +101,51 @@ public class PersistentManifold {
 
 		float res0 = 0f, res1 = 0f, res2 = 0f, res3 = 0f;
 		if (maxPenetrationIndex != 0) {
-			Vector3f a0 = new Vector3f(pt.localPointA);
+			Vec3 a0 = new Vec3(pt.localPointA);
 			a0.sub(pointCache[1].localPointA);
 
-			Vector3f b0 = new Vector3f(pointCache[3].localPointA);
+			Vec3 b0 = new Vec3(pointCache[3].localPointA);
 			b0.sub(pointCache[2].localPointA);
 
-			Vector3f cross = new Vector3f();
+			Vec3 cross = new Vec3();
 			cross.crossHere(a0, b0);
 
 			res0 = cross.squareLength();
 		}
 
 		if (maxPenetrationIndex != 1) {
-			Vector3f a1 = new Vector3f(pt.localPointA);
+			Vec3 a1 = new Vec3(pt.localPointA);
 			a1.sub(pointCache[0].localPointA);
 
-			Vector3f b1 = new Vector3f(pointCache[3].localPointA);
+			Vec3 b1 = new Vec3(pointCache[3].localPointA);
 			b1.sub(pointCache[2].localPointA);
 
-			Vector3f cross = new Vector3f();
+			Vec3 cross = new Vec3();
 			cross.crossHere(a1, b1);
 			res1 = cross.squareLength();
 		}
 
 		if (maxPenetrationIndex != 2) {
-			Vector3f a2 = new Vector3f(pt.localPointA);
+			Vec3 a2 = new Vec3(pt.localPointA);
 			a2.sub(pointCache[0].localPointA);
 
-			Vector3f b2 = new Vector3f(pointCache[3].localPointA);
+			Vec3 b2 = new Vec3(pointCache[3].localPointA);
 			b2.sub(pointCache[1].localPointA);
 
-			Vector3f cross = new Vector3f();
+			Vec3 cross = new Vec3();
 			cross.crossHere(a2, b2);
 
 			res2 = cross.squareLength();
 		}
 
 		if (maxPenetrationIndex != 3) {
-			Vector3f a3 = new Vector3f(pt.localPointA);
+			Vec3 a3 = new Vec3(pt.localPointA);
 			a3.sub(pointCache[0].localPointA);
 
-			Vector3f b3 = new Vector3f(pointCache[2].localPointA);
+			Vec3 b3 = new Vec3(pointCache[2].localPointA);
 			b3.sub(pointCache[1].localPointA);
 
-			Vector3f cross = new Vector3f();
+			Vec3 cross = new Vec3();
 			cross.crossHere(a3, b3);
 			res3 = cross.squareLength();
 		}
@@ -216,7 +216,7 @@ public class PersistentManifold {
 		float shortestDist = getContactBreakingThreshold() * getContactBreakingThreshold();
 		int size = getNumContacts();
 		int nearestPoint = -1;
-		Vector3f diffA = new Vector3f();
+		Vec3 diffA = new Vec3();
 		for (int i = 0; i < size; i++) {
 			ManifoldPoint mp = pointCache[i];
 
@@ -311,7 +311,7 @@ public class PersistentManifold {
 
 	/// calculated new worldspace coordinates and depth, and reject points that exceed the collision margin
 	public void refreshContactPoints(Transform trA, Transform trB) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		int i;
 //#ifdef DEBUG_PERSISTENCY
 //	printf("refreshContactPoints posA = (%f,%f,%f) posB = (%f,%f,%f)\n",
@@ -341,7 +341,7 @@ public class PersistentManifold {
 
 		// then 
 		float distance2d;
-		Vector3f projectedDifference = new Vector3f(), projectedPoint = new Vector3f();
+		Vec3 projectedDifference = new Vec3(), projectedPoint = new Vec3();
 
 		for (i = getNumContacts() - 1; i >= 0; i--) {
 

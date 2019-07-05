@@ -32,7 +32,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -40,25 +40,25 @@ import javax.vecmath.Vector3f;
  */
 public class PrimitiveTriangle {
 
-	private final ObjectArrayList<Vector3f> tmpVecList1 = new ObjectArrayList<Vector3f>(TriangleContact.MAX_TRI_CLIPPING);
-	private final ObjectArrayList<Vector3f> tmpVecList2 = new ObjectArrayList<Vector3f>(TriangleContact.MAX_TRI_CLIPPING);
-	private final ObjectArrayList<Vector3f> tmpVecList3 = new ObjectArrayList<Vector3f>(TriangleContact.MAX_TRI_CLIPPING);
+	private final ObjectArrayList<Vec3> tmpVecList1 = new ObjectArrayList<Vec3>(TriangleContact.MAX_TRI_CLIPPING);
+	private final ObjectArrayList<Vec3> tmpVecList2 = new ObjectArrayList<Vec3>(TriangleContact.MAX_TRI_CLIPPING);
+	private final ObjectArrayList<Vec3> tmpVecList3 = new ObjectArrayList<Vec3>(TriangleContact.MAX_TRI_CLIPPING);
 	
 	{
 		for (int i=0; i<TriangleContact.MAX_TRI_CLIPPING; i++) {
-			tmpVecList1.add(new Vector3f());
-			tmpVecList2.add(new Vector3f());
-			tmpVecList3.add(new Vector3f());
+			tmpVecList1.add(new Vec3());
+			tmpVecList2.add(new Vec3());
+			tmpVecList3.add(new Vec3());
 		}
 	}
 	
-	public final Vector3f[] vertices = new Vector3f[3];
+	public final Vec3[] vertices = new Vec3[3];
 	public final Vec4 plane = new Vec4();
 	public float margin = 0.01f;
 
 	public PrimitiveTriangle() {
 		for (int i=0; i<vertices.length; i++) {
-			vertices[i] = new Vector3f();
+			vertices[i] = new Vec3();
 		}
 	}
 	
@@ -67,10 +67,10 @@ public class PrimitiveTriangle {
 	}
 	
 	public void buildTriPlane() {
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
 
-		Vector3f normal = new Vector3f();
+		Vec3 normal = new Vec3();
 		tmp1.subHere(vertices[1], vertices[0]);
 		tmp2.subHere(vertices[2], vertices[0]);
 		normal.crossHere(tmp1, tmp2);
@@ -112,10 +112,10 @@ public class PrimitiveTriangle {
 	 * This triangle must have its plane calculated.
 	 */
 	public void get_edge_plane(int edge_index, Vec4 plane) {
-		Vector3f e0 = vertices[edge_index];
-		Vector3f e1 = vertices[(edge_index + 1) % 3];
+		Vec3 e0 = vertices[edge_index];
+		Vec3 e1 = vertices[(edge_index + 1) % 3];
 
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		tmp.set(this.plane.x, this.plane.y, this.plane.z);
 
 		GeometryOperations.edge_plane(e0, e1, tmp, plane);
@@ -133,9 +133,9 @@ public class PrimitiveTriangle {
 	 * @param clipped_points must have MAX_TRI_CLIPPING size, and this triangle must have its plane calculated.
 	 * @return the number of clipped points
 	 */
-	public int clip_triangle(PrimitiveTriangle other, ObjectArrayList<Vector3f> clipped_points) {
+	public int clip_triangle(PrimitiveTriangle other, ObjectArrayList<Vec3> clipped_points) {
 		// edge 0
-		ObjectArrayList<Vector3f> temp_points = tmpVecList1;
+		ObjectArrayList<Vec3> temp_points = tmpVecList1;
 
 		Vec4 edgeplane = new Vec4();
 
@@ -146,7 +146,7 @@ public class PrimitiveTriangle {
 		if (clipped_count == 0) {
 			return 0;
 		}
-		ObjectArrayList<Vector3f> temp_points1 = tmpVecList2;
+		ObjectArrayList<Vec3> temp_points1 = tmpVecList2;
 
 		// edge 1
 		get_edge_plane(1, edgeplane);
@@ -170,7 +170,7 @@ public class PrimitiveTriangle {
 	public boolean find_triangle_collision_clip_method(PrimitiveTriangle other, TriangleContact contacts) {
 		float margin = this.margin + other.margin;
 
-		ObjectArrayList<Vector3f> clipped_points = tmpVecList3;
+		ObjectArrayList<Vec3> clipped_points = tmpVecList3;
 
 		int clipped_count;
 		//create planes

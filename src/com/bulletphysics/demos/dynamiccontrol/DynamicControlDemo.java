@@ -45,7 +45,7 @@ import com.bulletphysics.dynamics.constraintsolver.HingeConstraint;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -75,8 +75,8 @@ public class DynamicControlDemo extends DemoApplication {
 
 		CollisionDispatcher dispatcher = new CollisionDispatcher(collision_config);
 
-		Vector3f worldAabbMin = new Vector3f(-10000,-10000,-10000);
-		Vector3f worldAabbMax = new Vector3f(10000,10000,10000);
+		Vec3 worldAabbMin = new Vec3(-10000,-10000,-10000);
+		Vec3 worldAabbMax = new Vec3(10000,10000,10000);
 		//BroadphaseInterface overlappingPairCache = new AxisSweep3(worldAabbMin, worldAabbMax);
 		//BroadphaseInterface overlappingPairCache = new SimpleBroadphase();
 		BroadphaseInterface overlappingPairCache = new DbvtBroadphase();
@@ -87,7 +87,7 @@ public class DynamicControlDemo extends DemoApplication {
 
 		// Setup a big ground box
 		{
-			CollisionShape groundShape = new BoxShape(new Vector3f(200f, 10f, 200f));
+			CollisionShape groundShape = new BoxShape(new Vec3(200f, 10f, 200f));
 			// TODO
 			//m_collisionShapes.push_back(groundShape);
 			Transform groundTransform = new Transform();
@@ -97,7 +97,7 @@ public class DynamicControlDemo extends DemoApplication {
 		}
 
 		// Spawn one TestRig
-		Vector3f startOffset = new Vector3f(1.0f, 0.5f, 0.0f);
+		Vec3 startOffset = new Vec3(1.0f, 0.5f, 0.0f);
 		spawnTestRig(startOffset, false);
 		startOffset.set(-2.0f, 0.5f, 0.0f);
 		spawnTestRig(startOffset, true);
@@ -105,7 +105,7 @@ public class DynamicControlDemo extends DemoApplication {
 		clientResetScene();
 	}
 
-	public void spawnTestRig(Vector3f startOffset, boolean fixed) {
+	public void spawnTestRig(Vec3 startOffset, boolean fixed) {
 		TestRig rig = new TestRig(dynamicsWorld, startOffset, fixed);
 		rigs.add(rig);
 	}
@@ -197,7 +197,7 @@ public class DynamicControlDemo extends DemoApplication {
 		}
 	}
 
-	private void vertex(Vector3f v) {
+	private void vertex(Vec3 v) {
 		gl.glVertex3f(v.x, v.y, v.z);
 	}
 
@@ -208,7 +208,7 @@ public class DynamicControlDemo extends DemoApplication {
 
 		// x
 		gl.glColor3f(255.f,0,0);
-		Vector3f vX = new Vector3f();
+		Vec3 vX = new Vec3();
 		vX.set(size,0,0);
 		tr.transform(vX);
 		vertex(tr.origin);
@@ -216,7 +216,7 @@ public class DynamicControlDemo extends DemoApplication {
 
 		// y
 		gl.glColor3f(0,255.f,0);
-		Vector3f vY = new Vector3f();
+		Vec3 vY = new Vec3();
 		vY.set(0,size,0);
 		tr.transform(vY);
 		vertex(tr.origin);
@@ -224,7 +224,7 @@ public class DynamicControlDemo extends DemoApplication {
 
 		// z
 		gl.glColor3f(0,0,255.f);
-		Vector3f vZ = new Vector3f();
+		Vec3 vZ = new Vec3();
 		vZ.set(0,0,size);
 		tr.transform(vZ);
 		vertex(tr.origin);

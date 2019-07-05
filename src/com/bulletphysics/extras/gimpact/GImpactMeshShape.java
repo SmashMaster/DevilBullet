@@ -36,7 +36,7 @@ import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -59,7 +59,7 @@ public class GImpactMeshShape extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void setLocalScaling(Vector3f scaling) {
+	public void setLocalScaling(Vec3 scaling) {
 		localScaling.set(scaling);
 
 		int i = mesh_parts.size();
@@ -96,14 +96,14 @@ public class GImpactMeshShape extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		//#ifdef CALC_EXACT_INERTIA
 		inertia.set(0f, 0f, 0f);
 
 		int i = getMeshPartCount();
 		float partmass = mass / (float) i;
 
-		Vector3f partinertia = new Vector3f();
+		Vec3 partinertia = new Vec3();
 
 		while ((i--) != 0) {
 			getMeshPart(i).calculateLocalInertia(partmass, partinertia);
@@ -177,7 +177,7 @@ public class GImpactMeshShape extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void getChildAabb(int child_index, Transform t, Vector3f aabbMin, Vector3f aabbMax) {
+	public void getChildAabb(int child_index, Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		assert (false);
 	}
 
@@ -209,11 +209,11 @@ public class GImpactMeshShape extends GImpactShapeInterface {
 	}
 
 	@Override
-	public void rayTest(Vector3f rayFrom, Vector3f rayTo, RayResultCallback resultCallback) {
+	public void rayTest(Vec3 rayFrom, Vec3 rayTo, RayResultCallback resultCallback) {
 	}
 
 	@Override
-	public void processAllTriangles(TriangleCallback callback, Vector3f aabbMin, Vector3f aabbMax) {
+	public void processAllTriangles(TriangleCallback callback, Vec3 aabbMin, Vec3 aabbMax) {
 		int i = mesh_parts.size();
 		while ((i--) != 0) {
 			mesh_parts.getQuick(i).processAllTriangles(callback, aabbMin, aabbMax);

@@ -28,7 +28,7 @@ package com.bulletphysics.collision.dispatch;
 import com.bulletphysics.collision.broadphase.BroadphaseProxy;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * CollisionObject can be used to manage collision detection objects.
@@ -54,8 +54,8 @@ public class CollisionObject {
 	protected final Transform interpolationWorldTransform = new Transform();
 	//those two are experimental: just added for bullet time effect, so you can still apply impulses (directly modifying velocities) 
 	//without destroying the continuous interpolated motion (which uses this interpolation velocities)
-	protected final Vector3f interpolationLinearVelocity = new Vector3f();
-	protected final Vector3f interpolationAngularVelocity = new Vector3f();
+	protected final Vec3 interpolationLinearVelocity = new Vec3();
+	protected final Vec3 interpolationAngularVelocity = new Vec3();
 	protected BroadphaseProxy broadphaseHandle;
 	protected CollisionShape collisionShape;
 	
@@ -228,20 +228,20 @@ public class CollisionObject {
 		this.interpolationWorldTransform.set(interpolationWorldTransform);
 	}
 
-	public void setInterpolationLinearVelocity(Vector3f linvel) {
+	public void setInterpolationLinearVelocity(Vec3 linvel) {
 		interpolationLinearVelocity.set(linvel);
 	}
 
-	public void setInterpolationAngularVelocity(Vector3f angvel) {
+	public void setInterpolationAngularVelocity(Vec3 angvel) {
 		interpolationAngularVelocity.set(angvel);
 	}
 
-	public Vector3f getInterpolationLinearVelocity(Vector3f out) {
+	public Vec3 getInterpolationLinearVelocity(Vec3 out) {
 		out.set(interpolationLinearVelocity);
 		return out;
 	}
 
-	public Vector3f getInterpolationAngularVelocity(Vector3f out) {
+	public Vec3 getInterpolationAngularVelocity(Vec3 out) {
 		out.set(interpolationAngularVelocity);
 		return out;
 	}

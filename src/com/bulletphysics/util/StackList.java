@@ -32,12 +32,12 @@ package com.bulletphysics.util;
  * Example code:
  * 
  * <pre>
- * StackList&lt;Vector3f&gt; vectors;
+ * StackList&lt;Vec3&gt; vectors;
  * ...
  * 
  * vectors.push();
  * try {
- *     Vector3f vec = vectors.get();
+ *     Vec3 vec = vectors.get();
  *     ...
  *     return vectors.returning(vec);
  * }

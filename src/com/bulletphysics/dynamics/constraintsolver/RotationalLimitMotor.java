@@ -34,7 +34,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.dynamics.RigidBody;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Rotation limit structure for generic joints.
@@ -134,7 +134,7 @@ public class RotationalLimitMotor {
 	/**
 	 * Apply the correction impulses for two bodies.
 	 */
-	public float solveAngularLimits(float timeStep, Vector3f axis, float jacDiagABInv, RigidBody body0, RigidBody body1) {
+	public float solveAngularLimits(float timeStep, Vec3 axis, float jacDiagABInv, RigidBody body0, RigidBody body1) {
 		if (needApplyTorques() == false) {
 			return 0.0f;
 		}
@@ -151,9 +151,9 @@ public class RotationalLimitMotor {
 		maxMotorForce *= timeStep;
 
 		// current velocity difference
-		Vector3f vel_diff = body0.getAngularVelocity(new Vector3f());
+		Vec3 vel_diff = body0.getAngularVelocity(new Vec3());
 		if (body1 != null) {
-			vel_diff.sub(body1.getAngularVelocity(new Vector3f()));
+			vel_diff.sub(body1.getAngularVelocity(new Vec3()));
 		}
 
 		float rel_vel = axis.dot(vel_diff);
@@ -189,7 +189,7 @@ public class RotationalLimitMotor {
 
 		clippedMotorImpulse = accumulatedImpulse - oldaccumImpulse;
 
-		Vector3f motorImp = new Vector3f();
+		Vec3 motorImp = new Vec3();
 		motorImp.scale(clippedMotorImpulse, axis);
 
 		body0.applyTorqueImpulse(motorImp);

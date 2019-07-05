@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath.convexhull;
 
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -38,7 +38,7 @@ class PHullResult {
 	public int vcount = 0;
 	public int indexCount = 0;
 	public int faceCount = 0;
-	public ObjectArrayList<Vector3f> vertices = null;
+	public ObjectArrayList<Vec3> vertices = null;
 	public IntArrayList indices = new IntArrayList();
 	
 }

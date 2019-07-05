@@ -60,7 +60,7 @@ import com.bulletphysics.util.ObjectArrayList;
 import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -88,8 +88,8 @@ public class ForkLiftDemo extends DemoApplication {
 	private int rightIndex = 0;
 	private int upIndex = 1;
 	private int forwardIndex = 2;
-	private final Vector3f wheelDirectionCS0 = new Vector3f(0, -1, 0);
-	private final Vector3f wheelAxleCS = new Vector3f(-1, 0, 0);
+	private final Vec3 wheelDirectionCS0 = new Vec3(0, -1, 0);
+	private final Vec3 wheelAxleCS = new Vec3(-1, 0, 0);
 	//#endif
 
 	private static final int maxProxies = 32766;
@@ -129,15 +129,15 @@ public class ForkLiftDemo extends DemoApplication {
 	//----------------------------
 	
 	public RigidBody liftBody;
-	public final Vector3f liftStartPos = new Vector3f();
+	public final Vec3 liftStartPos = new Vec3();
 	public HingeConstraint liftHinge;
 
 	public RigidBody forkBody;
-	public Vector3f forkStartPos = new Vector3f();
+	public Vec3 forkStartPos = new Vec3();
 	public SliderConstraint forkSlider;
 
 	public RigidBody loadBody;
-	public Vector3f loadStartPos = new Vector3f();
+	public Vec3 loadStartPos = new Vec3();
 
 	public boolean useDefaultCamera;
 
@@ -269,8 +269,8 @@ public class ForkLiftDemo extends DemoApplication {
 		Transform tr = new Transform();
 		tr.setIdentity();
 		carChassis.setCenterOfMassTransform(tr);
-		carChassis.setLinearVelocity(new Vector3f(0,0,0));
-		carChassis.setAngularVelocity(new Vector3f(0,0,0));
+		carChassis.setLinearVelocity(new Vec3(0,0,0));
+		carChassis.setAngularVelocity(new Vec3(0,0,0));
 		dynamicsWorld.getBroadphase().getOverlappingPairCache().cleanProxyFromPairs(carChassis.getBroadphaseHandle(),getDynamicsWorld().getDispatcher());
 		if (vehicle != null)
 		{
@@ -286,16 +286,16 @@ public class ForkLiftDemo extends DemoApplication {
 		liftTrans.origin.set(liftStartPos);
 		liftBody.activate();
 		liftBody.setCenterOfMassTransform(liftTrans);
-		liftBody.setLinearVelocity(new Vector3f(0,0,0));
-		liftBody.setAngularVelocity(new Vector3f(0,0,0));
+		liftBody.setLinearVelocity(new Vec3(0,0,0));
+		liftBody.setAngularVelocity(new Vec3(0,0,0));
 
 		Transform forkTrans = new Transform();
 		forkTrans.setIdentity();
 		forkTrans.origin.set(forkStartPos);
 		forkBody.activate();
 		forkBody.setCenterOfMassTransform(forkTrans);
-		forkBody.setLinearVelocity(new Vector3f(0,0,0));
-		forkBody.setAngularVelocity(new Vector3f(0,0,0));
+		forkBody.setLinearVelocity(new Vec3(0,0,0));
+		forkBody.setAngularVelocity(new Vec3(0,0,0));
 
 		liftHinge.setLimit(-LIFT_EPS, LIFT_EPS);
 		liftHinge.enableAngularMotor(false, 0, 0);
@@ -309,8 +309,8 @@ public class ForkLiftDemo extends DemoApplication {
 		loadTrans.origin.set(loadStartPos);
 		loadBody.activate();
 		loadBody.setCenterOfMassTransform(loadTrans);
-		loadBody.setLinearVelocity(new Vector3f(0,0,0));
-		loadBody.setAngularVelocity(new Vector3f(0,0,0));
+		loadBody.setLinearVelocity(new Vec3(0,0,0));
+		loadBody.setAngularVelocity(new Vec3(0,0,0));
 	}
 
 	@Override
@@ -356,7 +356,7 @@ public class ForkLiftDemo extends DemoApplication {
 		cameraPosition.y = (15.0f*cameraPosition.y + cameraTargetPosition.y + cameraHeight) / 16.0f;
 		//#endif
 
-		Vector3f camToObject = new Vector3f();
+		Vec3 camToObject = new Vec3();
 		camToObject.subHere(cameraTargetPosition, cameraPosition);
 
 		// keep distance between min and max distance
@@ -370,7 +370,7 @@ public class ForkLiftDemo extends DemoApplication {
 		{
 			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
 		}
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		tmp.scale(correctionFactor, camToObject);
 		cameraPosition.sub(tmp);
 
@@ -497,10 +497,10 @@ public class ForkLiftDemo extends DemoApplication {
 		//float[] m = new float[16];
 		//int i;
 
-		CylinderShapeX wheelShape = new CylinderShapeX(new Vector3f(wheelWidth,wheelRadius,wheelRadius));
-		Vector3f wheelColor = new Vector3f(1,0,0);
+		CylinderShapeX wheelShape = new CylinderShapeX(new Vec3(wheelWidth,wheelRadius,wheelRadius));
+		Vec3 wheelColor = new Vec3(1,0,0);
 
-		Vector3f worldBoundsMin = new Vector3f(),worldBoundsMax = new Vector3f();
+		Vec3 worldBoundsMin = new Vec3(),worldBoundsMax = new Vec3();
 		getDynamicsWorld().getBroadphase().getBroadphaseAabb(worldBoundsMin,worldBoundsMax);
 
 		for (int i=0;i<vehicle.getNumWheels();i++)
@@ -535,12 +535,12 @@ public class ForkLiftDemo extends DemoApplication {
 		//forwardAxis = 1;
 		//#endif
 
-		CollisionShape groundShape = new BoxShape(new Vector3f(50,3,50));
+		CollisionShape groundShape = new BoxShape(new Vec3(50,3,50));
 		collisionShapes.add(groundShape);
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
-		Vector3f worldMin = new Vector3f(-1000,-1000,-1000);
-		Vector3f worldMax = new Vector3f(1000,1000,1000);
+		Vec3 worldMin = new Vec3(-1000,-1000,-1000);
+		Vec3 worldMax = new Vec3(1000,1000,1000);
 		//overlappingPairCache = new AxisSweep3(worldMin,worldMax);
 		overlappingPairCache = new DbvtBroadphase();
 		constraintSolver = new SequentialImpulseConstraintSolver();
@@ -683,7 +683,7 @@ public class ForkLiftDemo extends DemoApplication {
 		////localTrans effectively shifts the center of mass with respect to the chassis
 		//localTrans.setOrigin(btVector3(0,0,1));
 		//#else
-		CollisionShape chassisShape = new BoxShape(new Vector3f(1.f,0.5f,2.f));
+		CollisionShape chassisShape = new BoxShape(new Vec3(1.f,0.5f,2.f));
 		collisionShapes.add(chassisShape);
 
 		CompoundShape compound = new CompoundShape();
@@ -697,7 +697,7 @@ public class ForkLiftDemo extends DemoApplication {
 		compound.addChildShape(localTrans,chassisShape);
 
 		{
-			CollisionShape suppShape = new BoxShape(new Vector3f(0.5f,0.1f,0.5f));
+			CollisionShape suppShape = new BoxShape(new Vec3(0.5f,0.1f,0.5f));
 			collisionShapes.add(chassisShape);
 			Transform suppLocalTrans = new Transform();
 			suppLocalTrans.setIdentity();
@@ -713,7 +713,7 @@ public class ForkLiftDemo extends DemoApplication {
 
 
 		{
-			CollisionShape liftShape = new BoxShape(new Vector3f(0.5f,2.0f,0.05f));
+			CollisionShape liftShape = new BoxShape(new Vec3(0.5f,2.0f,0.05f));
 			collisionShapes.add(liftShape);
 			Transform liftTrans = new Transform();
 			liftStartPos.set(0.0f, 2.5f, 3.05f);
@@ -732,7 +732,7 @@ public class ForkLiftDemo extends DemoApplication {
 			liftHinge.setLimit(-LIFT_EPS, LIFT_EPS);
 			dynamicsWorld.addConstraint(liftHinge, true);
 
-			CollisionShape forkShapeA = new BoxShape(new Vector3f(1.0f,0.1f,0.1f));
+			CollisionShape forkShapeA = new BoxShape(new Vec3(1.0f,0.1f,0.1f));
 			collisionShapes.add(forkShapeA);
 			CompoundShape forkCompound = new CompoundShape();
 			collisionShapes.add(forkCompound);
@@ -740,13 +740,13 @@ public class ForkLiftDemo extends DemoApplication {
 			forkLocalTrans.setIdentity();
 			forkCompound.addChildShape(forkLocalTrans, forkShapeA);
 
-			CollisionShape forkShapeB = new BoxShape(new Vector3f(0.1f,0.02f,0.6f));
+			CollisionShape forkShapeB = new BoxShape(new Vec3(0.1f,0.02f,0.6f));
 			collisionShapes.add(forkShapeB);
 			forkLocalTrans.setIdentity();
 			forkLocalTrans.origin.set(-0.9f, -0.08f, 0.7f);
 			forkCompound.addChildShape(forkLocalTrans, forkShapeB);
 
-			CollisionShape forkShapeC = new BoxShape(new Vector3f(0.1f,0.02f,0.6f));
+			CollisionShape forkShapeC = new BoxShape(new Vec3(0.1f,0.02f,0.6f));
 			collisionShapes.add(forkShapeC);
 			forkLocalTrans.setIdentity();
 			forkLocalTrans.origin.set(0.9f, -0.08f, 0.7f);
@@ -773,17 +773,17 @@ public class ForkLiftDemo extends DemoApplication {
 			
 			CompoundShape loadCompound = new CompoundShape();
 			collisionShapes.add(loadCompound);
-			CollisionShape loadShapeA = new BoxShape(new Vector3f(2.0f,0.5f,0.5f));
+			CollisionShape loadShapeA = new BoxShape(new Vec3(2.0f,0.5f,0.5f));
 			collisionShapes.add(loadShapeA);
 			Transform loadTrans = new Transform();
 			loadTrans.setIdentity();
 			loadCompound.addChildShape(loadTrans, loadShapeA);
-			CollisionShape loadShapeB = new BoxShape(new Vector3f(0.1f,1.0f,1.0f));
+			CollisionShape loadShapeB = new BoxShape(new Vec3(0.1f,1.0f,1.0f));
 			collisionShapes.add(loadShapeB);
 			loadTrans.setIdentity();
 			loadTrans.origin.set(2.1f, 0.0f, 0.0f);
 			loadCompound.addChildShape(loadTrans, loadShapeB);
-			CollisionShape loadShapeC = new BoxShape(new Vector3f(0.1f,1.0f,1.0f));
+			CollisionShape loadShapeC = new BoxShape(new Vec3(0.1f,1.0f,1.0f));
 			collisionShapes.add(loadShapeC);
 			loadTrans.setIdentity();
 			loadTrans.origin.set(-2.1f, 0.0f, 0.0f);
@@ -817,28 +817,28 @@ public class ForkLiftDemo extends DemoApplication {
 			//#ifdef FORCE_ZAXIS_UP
 			//btVector3 connectionPointCS0(CUBE_HALF_EXTENTS-(0.3*wheelWidth),2*CUBE_HALF_EXTENTS-wheelRadius, connectionHeight);
 			//#else
-			Vector3f connectionPointCS0 = new Vector3f(CUBE_HALF_EXTENTS-(0.3f*wheelWidth),connectionHeight,2f*CUBE_HALF_EXTENTS-wheelRadius);
+			Vec3 connectionPointCS0 = new Vec3(CUBE_HALF_EXTENTS-(0.3f*wheelWidth),connectionHeight,2f*CUBE_HALF_EXTENTS-wheelRadius);
 			//#endif
 
 			vehicle.addWheel(connectionPointCS0,wheelDirectionCS0,wheelAxleCS,suspensionRestLength,wheelRadius,tuning,isFrontWheel);
 			//#ifdef FORCE_ZAXIS_UP
 			//connectionPointCS0 = btVector3(-CUBE_HALF_EXTENTS+(0.3*wheelWidth),2*CUBE_HALF_EXTENTS-wheelRadius, connectionHeight);
 			//#else
-			connectionPointCS0 = new Vector3f(-CUBE_HALF_EXTENTS+(0.3f*wheelWidth),connectionHeight,2f*CUBE_HALF_EXTENTS-wheelRadius);
+			connectionPointCS0 = new Vec3(-CUBE_HALF_EXTENTS+(0.3f*wheelWidth),connectionHeight,2f*CUBE_HALF_EXTENTS-wheelRadius);
 			//#endif
 
 			vehicle.addWheel(connectionPointCS0,wheelDirectionCS0,wheelAxleCS,suspensionRestLength,wheelRadius,tuning,isFrontWheel);
 			//#ifdef FORCE_ZAXIS_UP
 			//connectionPointCS0 = btVector3(-CUBE_HALF_EXTENTS+(0.3*wheelWidth),-2*CUBE_HALF_EXTENTS+wheelRadius, connectionHeight);
 			//#else
-			connectionPointCS0 = new Vector3f(-CUBE_HALF_EXTENTS+(0.3f*wheelWidth),connectionHeight,-2f*CUBE_HALF_EXTENTS+wheelRadius);
+			connectionPointCS0 = new Vec3(-CUBE_HALF_EXTENTS+(0.3f*wheelWidth),connectionHeight,-2f*CUBE_HALF_EXTENTS+wheelRadius);
 			//#endif //FORCE_ZAXIS_UP
 			isFrontWheel = false;
 			vehicle.addWheel(connectionPointCS0,wheelDirectionCS0,wheelAxleCS,suspensionRestLength,wheelRadius,tuning,isFrontWheel);
 			//#ifdef FORCE_ZAXIS_UP
 			//connectionPointCS0 = btVector3(CUBE_HALF_EXTENTS-(0.3*wheelWidth),-2*CUBE_HALF_EXTENTS+wheelRadius, connectionHeight);
 			//#else
-			connectionPointCS0 = new Vector3f(CUBE_HALF_EXTENTS-(0.3f*wheelWidth),connectionHeight,-2f*CUBE_HALF_EXTENTS+wheelRadius);
+			connectionPointCS0 = new Vec3(CUBE_HALF_EXTENTS-(0.3f*wheelWidth),connectionHeight,-2f*CUBE_HALF_EXTENTS+wheelRadius);
 			//#endif
 			vehicle.addWheel(connectionPointCS0,wheelDirectionCS0,wheelAxleCS,suspensionRestLength,wheelRadius,tuning,isFrontWheel);
 

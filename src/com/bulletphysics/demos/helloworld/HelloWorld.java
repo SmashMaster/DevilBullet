@@ -41,7 +41,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * This is a Hello World program for running a basic Bullet physics simulation.
@@ -65,8 +65,8 @@ public class HelloWorld
 		// within these boundaries
 		// Don't make the world AABB size too large, it will harm simulation
 		// quality and performance
-		Vector3f worldAabbMin = new Vector3f(-10000, -10000, -10000);
-		Vector3f worldAabbMax = new Vector3f(10000, 10000, 10000);
+		Vec3 worldAabbMin = new Vec3(-10000, -10000, -10000);
+		Vec3 worldAabbMax = new Vec3(10000, 10000, 10000);
 		int maxProxies = 1024;
 		AxisSweep3 overlappingPairCache =
 				new AxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
@@ -81,10 +81,10 @@ public class HelloWorld
 				dispatcher, overlappingPairCache, solver,
 				collisionConfiguration);
 
-		dynamicsWorld.setGravity(new Vector3f(0, -10, 0));
+		dynamicsWorld.setGravity(new Vec3(0, -10, 0));
 
 		// create a few basic rigid bodies
-		CollisionShape groundShape = new BoxShape(new Vector3f(50.f, 50.f, 50.f));
+		CollisionShape groundShape = new BoxShape(new Vec3(50.f, 50.f, 50.f));
 
 		// keep track of the shapes, we release memory at exit.
 		// make sure to re-use collision shapes among rigid bodies whenever
@@ -95,7 +95,7 @@ public class HelloWorld
 
 		Transform groundTransform = new Transform();
 		groundTransform.setIdentity();
-		groundTransform.origin.set(new Vector3f(0.f, -56.f, 0.f));
+		groundTransform.origin.set(new Vec3(0.f, -56.f, 0.f));
 
 		{
 			float mass = 0f;
@@ -104,7 +104,7 @@ public class HelloWorld
 			// otherwise static
 			boolean isDynamic = (mass != 0f);
 
-			Vector3f localInertia = new Vector3f(0, 0, 0);
+			Vec3 localInertia = new Vec3(0, 0, 0);
 			if (isDynamic) {
 				groundShape.calculateLocalInertia(mass, localInertia);
 			}
@@ -138,12 +138,12 @@ public class HelloWorld
 			// otherwise static
 			boolean isDynamic = (mass != 0f);
 
-			Vector3f localInertia = new Vector3f(0, 0, 0);
+			Vec3 localInertia = new Vec3(0, 0, 0);
 			if (isDynamic) {
 				colShape.calculateLocalInertia(mass, localInertia);
 			}
 
-			startTransform.origin.set(new Vector3f(2, 10, 0));
+			startTransform.origin.set(new Vec3(2, 10, 0));
 
 			// using motionstate is recommended, it provides
 			// interpolation capabilities, and only synchronizes

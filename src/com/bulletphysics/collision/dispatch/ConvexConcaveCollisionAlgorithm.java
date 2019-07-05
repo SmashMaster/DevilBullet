@@ -40,7 +40,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ConvexConcaveCollisionAlgorithm supports collision between convex shapes
@@ -86,8 +86,8 @@ public class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm {
 
 				concaveShape.processAllTriangles(
 						btConvexTriangleCallback,
-						btConvexTriangleCallback.getAabbMin(new Vector3f()),
-						btConvexTriangleCallback.getAabbMax(new Vector3f()));
+						btConvexTriangleCallback.getAabbMin(new Vec3()),
+						btConvexTriangleCallback.getAabbMax(new Vec3()));
 
 				resultOut.refreshContactPoints();
 			}
@@ -96,7 +96,7 @@ public class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm {
 
 	@Override
 	public float calculateTimeOfImpact(CollisionObject body0, CollisionObject body1, DispatcherInfo dispatchInfo, ManifoldResult resultOut) {
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
 		CollisionObject convexbody = isSwapped ? body1 : body0;
 		CollisionObject triBody = isSwapped ? body0 : body1;
@@ -127,10 +127,10 @@ public class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm {
 		convexToLocal.mul(triInv, convexbody.getInterpolationWorldTransform(tmpTrans));
 
 		if (triBody.getCollisionShape().isConcave()) {
-			Vector3f rayAabbMin = new Vector3f(convexFromLocal.origin);
+			Vec3 rayAabbMin = new Vec3(convexFromLocal.origin);
 			VectorUtil.setMin(rayAabbMin, convexToLocal.origin);
 
-			Vector3f rayAabbMax = new Vector3f(convexFromLocal.origin);
+			Vec3 rayAabbMax = new Vec3(convexFromLocal.origin);
 			VectorUtil.setMax(rayAabbMax, convexToLocal.origin);
 
 			float ccdRadius0 = convexbody.getCcdSweptSphereRadius();
@@ -194,7 +194,7 @@ public class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm {
 			ident.setIdentity();
 		}
 		
-		public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
+		public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
 			// do a swept sphere for now
 			
 			//btTransform ident;

@@ -46,8 +46,8 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -94,12 +94,12 @@ public abstract class DemoApplication {
 	
 	protected float ele = 20f;
 	protected float azi = 0f;
-	protected final Vector3f cameraPosition = new Vector3f(0f, 0f, 0f);
-	protected final Vector3f cameraTargetPosition = new Vector3f(0f, 0f, 0f); // look at
+	protected final Vec3 cameraPosition = new Vec3(0f, 0f, 0f);
+	protected final Vec3 cameraTargetPosition = new Vec3(0f, 0f, 0f); // look at
 
 	protected float scaleBottom = 0.5f;
 	protected float scaleFactor = 2f;
-	protected final Vector3f cameraUp = new Vector3f(0f, 1f, 0f);
+	protected final Vec3 cameraUp = new Vec3(0f, 1f, 0f);
 	protected int forwardAxis = 2;
 
 	protected int glutScreenWidth = 0;
@@ -187,22 +187,22 @@ public abstract class DemoApplication {
 		Quat rot = new Quat();
 		QuaternionUtil.setRotation(rot, cameraUp, razi);
 
-		Vector3f eyePos = new Vector3f();
+		Vec3 eyePos = new Vec3();
 		eyePos.set(0f, 0f, 0f);
 		VectorUtil.setCoord(eyePos, forwardAxis, -cameraDistance);
 
-		Vector3f forward = new Vector3f();
+		Vec3 forward = new Vec3();
 		forward.set(eyePos.x, eyePos.y, eyePos.z);
 		if (forward.squareLength() < BulletGlobals.FLT_EPSILON) {
 			forward.set(1f, 0f, 0f);
 		}
-		Vector3f right = new Vector3f();
+		Vec3 right = new Vec3();
 		right.crossHere(cameraUp, forward);
 		Quat roll = new Quat();
 		QuaternionUtil.setRotation(roll, right, -rele);
 
-		Matrix3f tmpMat1 = new Matrix3f();
-		Matrix3f tmpMat2 = new Matrix3f();
+		Mat3 tmpMat1 = new Mat3();
+		Mat3 tmpMat2 = new Mat3();
 		tmpMat1.setRotation(rot);
 		tmpMat2.setRotation(roll);
 		tmpMat1.mult(tmpMat2);
@@ -527,12 +527,12 @@ public abstract class DemoApplication {
 	public void displayCallback() {
 	}
 
-	public void shootBox(Vector3f destination) {
+	public void shootBox(Vec3 destination) {
 		if (dynamicsWorld != null) {
 			float mass = 10f;
 			Transform startTransform = new Transform();
 			startTransform.setIdentity();
-			Vector3f camPos = new Vector3f(getCameraPosition());
+			Vec3 camPos = new Vec3(getCameraPosition());
 			startTransform.origin.set(camPos);
 
 			if (shootBoxShape == null) {
@@ -541,13 +541,13 @@ public abstract class DemoApplication {
 				//btConvexShape* childShape = new btBoxShape(btVector3(1.f,1.f,1.f));
 				//m_shootBoxShape = new btUniformScalingShape(childShape,0.5f);
 				//#else
-				shootBoxShape = new BoxShape(new Vector3f(1f, 1f, 1f));
+				shootBoxShape = new BoxShape(new Vec3(1f, 1f, 1f));
 				//#endif//
 			}
 
 			RigidBody body = this.localCreateRigidBody(mass, startTransform, shootBoxShape);
 
-			Vector3f linVel = new Vector3f(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
+			Vec3 linVel = new Vec3(destination.x - camPos.x, destination.y - camPos.y, destination.z - camPos.z);
 			linVel.normalize();
 			linVel.mult(ShootBoxInitialSpeed);
 
@@ -557,31 +557,31 @@ public abstract class DemoApplication {
 			body.setWorldTransform(worldTrans);
 			
 			body.setLinearVelocity(linVel);
-			body.setAngularVelocity(new Vector3f(0f, 0f, 0f));
+			body.setAngularVelocity(new Vec3(0f, 0f, 0f));
 
 			body.setCcdMotionThreshold(1f);
 			body.setCcdSweptSphereRadius(0.2f);
 		}
 	}
 	
-	public Vector3f getRayTo(int x, int y) {
+	public Vec3 getRayTo(int x, int y) {
 		float top = 1f;
 		float bottom = -1f;
 		float nearPlane = 1f;
 		float tanFov = (top - bottom) * 0.5f / nearPlane;
 		float fov = 2f * (float) Math.atan(tanFov);
 
-		Vector3f rayFrom = new Vector3f(getCameraPosition());
-		Vector3f rayForward = new Vector3f();
+		Vec3 rayFrom = new Vec3(getCameraPosition());
+		Vec3 rayForward = new Vec3();
 		rayForward.subHere(getCameraTargetPosition(), getCameraPosition());
 		rayForward.normalize();
 		float farPlane = 10000f;
 		rayForward.mult(farPlane);
 
-		Vector3f rightOffset = new Vector3f();
-		Vector3f vertical = new Vector3f(cameraUp);
+		Vec3 rightOffset = new Vec3();
+		Vec3 vertical = new Vec3(cameraUp);
 
-		Vector3f hor = new Vector3f();
+		Vec3 hor = new Vec3();
 		// TODO: check: hor = rayForward.cross(vertical);
 		hor.crossHere(rayForward, vertical);
 		hor.normalize();
@@ -603,19 +603,19 @@ public abstract class DemoApplication {
 			vertical.mult(aspect);
 		}
 		
-		Vector3f rayToCenter = new Vector3f();
+		Vec3 rayToCenter = new Vec3();
 		rayToCenter.addHere(rayFrom, rayForward);
-		Vector3f dHor = new Vector3f(hor);
+		Vec3 dHor = new Vec3(hor);
 		dHor.mult(1f / (float) glutScreenWidth);
-		Vector3f dVert = new Vector3f(vertical);
+		Vec3 dVert = new Vec3(vertical);
 		dVert.mult(1.f / (float) glutScreenHeight);
 
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
 		tmp1.scale(0.5f, hor);
 		tmp2.scale(0.5f, vertical);
 
-		Vector3f rayTo = new Vector3f();
+		Vec3 rayTo = new Vec3();
 		rayTo.subHere(rayToCenter, tmp1);
 		rayTo.add(tmp2);
 
@@ -631,7 +631,7 @@ public abstract class DemoApplication {
 		//printf("button %i, state %i, x=%i,y=%i\n",button,state,x,y);
 		//button 0, state 0 means left mouse down
 
-		Vector3f rayTo = new Vector3f(getRayTo(x, y));
+		Vec3 rayTo = new Vec3(getRayTo(x, y));
 
 		switch (button) {
 			case 2: {
@@ -650,12 +650,12 @@ public abstract class DemoApplication {
 							RigidBody body = RigidBody.upcast(rayCallback.collisionObject);
 							if (body != null) {
 								body.setActivationState(CollisionObject.ACTIVE_TAG);
-								Vector3f impulse = new Vector3f(rayTo);
+								Vec3 impulse = new Vec3(rayTo);
 								impulse.normalize();
 								float impulseStrength = 10f;
 								impulse.mult(impulseStrength);
-								Vector3f relPos = new Vector3f();
-								relPos.subHere(rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vector3f()));
+								Vec3 relPos = new Vec3();
+								relPos.subHere(rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vec3()));
 								body.applyImpulse(impulse, relPos);
 							}
 						}
@@ -679,11 +679,11 @@ public abstract class DemoApplication {
 									pickedBody = body;
 									pickedBody.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
 
-									Vector3f pickPos = new Vector3f(rayCallback.hitPointWorld);
+									Vec3 pickPos = new Vec3(rayCallback.hitPointWorld);
 
 									Transform tmpTrans = body.getCenterOfMassTransform(new Transform());
 									tmpTrans.inverse();
-									Vector3f localPivot = new Vector3f(pickPos);
+									Vec3 localPivot = new Vec3(pickPos);
 									tmpTrans.transform(localPivot);
 
 									Point2PointConstraint p2p = new Point2PointConstraint(body, localPivot);
@@ -693,8 +693,8 @@ public abstract class DemoApplication {
 									pickConstraint = p2p;
 									// save mouse position for dragging
 									BulletStats.gOldPickingPos.set(rayTo);
-									Vector3f eyePos = new Vector3f(cameraPosition);
-									Vector3f tmp = new Vector3f();
+									Vec3 eyePos = new Vec3(cameraPosition);
+									Vec3 tmp = new Vec3();
 									tmp.subHere(pickPos, eyePos);
 									BulletStats.gOldPickingDist = tmp.length();
 									// very weak constraint for picking
@@ -731,14 +731,14 @@ public abstract class DemoApplication {
 			if (p2p != null) {
 				// keep it at the same picking distance
 
-				Vector3f newRayTo = new Vector3f(getRayTo(x, y));
-				Vector3f eyePos = new Vector3f(cameraPosition);
-				Vector3f dir = new Vector3f();
+				Vec3 newRayTo = new Vec3(getRayTo(x, y));
+				Vec3 eyePos = new Vec3(cameraPosition);
+				Vec3 dir = new Vec3();
 				dir.subHere(newRayTo, eyePos);
 				dir.normalize();
 				dir.mult(BulletStats.gOldPickingDist);
 
-				Vector3f newPos = new Vector3f();
+				Vec3 newPos = new Vec3();
 				newPos.addHere(eyePos, dir);
 				p2p.setPivotB(newPos);
 			}
@@ -749,7 +749,7 @@ public abstract class DemoApplication {
 		// rigidbody is dynamic if and only if mass is non zero, otherwise static
 		boolean isDynamic = (mass != 0f);
 
-		Vector3f localInertia = new Vector3f(0f, 0f, 0f);
+		Vec3 localInertia = new Vec3(0f, 0f, 0f);
 		if (isDynamic) {
 			shape.calculateLocalInertia(mass, localInertia);
 		}
@@ -882,8 +882,8 @@ public abstract class DemoApplication {
 	}
 
 	private final Transform m = new Transform();
-	private Vector3f wireColor = new Vector3f();
-	protected Vector3f TEXT_COLOR = new Vector3f(0f, 0f, 0f);
+	private Vec3 wireColor = new Vec3();
+	protected Vec3 TEXT_COLOR = new Vec3(0f, 0f, 0f);
 	private StringBuilder buf = new StringBuilder();
 
 	public void renderme() {
@@ -913,22 +913,22 @@ public abstract class DemoApplication {
 				if (colObj.getActivationState() == 1) // active
 				{
 					if ((i & 1) != 0) {
-						//wireColor.add(new Vector3f(1f, 0f, 0f));
+						//wireColor.add(new Vec3(1f, 0f, 0f));
 						wireColor.x += 1f;
 					}
 					else {
-						//wireColor.add(new Vector3f(0.5f, 0f, 0f));
+						//wireColor.add(new Vec3(0.5f, 0f, 0f));
 						wireColor.x += 0.5f;
 					}
 				}
 				if (colObj.getActivationState() == 2) // ISLAND_SLEEPING
 				{
 					if ((i & 1) != 0) {
-						//wireColor.add(new Vector3f(0f, 1f, 0f));
+						//wireColor.add(new Vec3(0f, 1f, 0f));
 						wireColor.y += 1f;
 					}
 					else {
-						//wireColor.add(new Vector3f(0f, 0.5f, 0f));
+						//wireColor.add(new Vec3(0f, 0.5f, 0f));
 						wireColor.y += 0.5f;
 					}
 				}
@@ -1138,8 +1138,8 @@ public abstract class DemoApplication {
 
 				body = RigidBody.upcast(colObj);
 				if (body != null && !body.isStaticObject()) {
-					RigidBody.upcast(colObj).setLinearVelocity(new Vector3f(0f, 0f, 0f));
-					RigidBody.upcast(colObj).setAngularVelocity(new Vector3f(0f, 0f, 0f));
+					RigidBody.upcast(colObj).setLinearVelocity(new Vec3(0f, 0f, 0f));
+					RigidBody.upcast(colObj).setAngularVelocity(new Vec3(0f, 0f, 0f));
 				}
 			}
 
@@ -1158,7 +1158,7 @@ public abstract class DemoApplication {
 		return dynamicsWorld;
 	}
 
-	public void setCameraUp(Vector3f camUp) {
+	public void setCameraUp(Vec3 camUp) {
 		cameraUp.set(camUp);
 	}
 
@@ -1166,11 +1166,11 @@ public abstract class DemoApplication {
 		forwardAxis = axis;
 	}
 
-	public Vector3f getCameraPosition() {
+	public Vec3 getCameraPosition() {
 		return cameraPosition;
 	}
 
-	public Vector3f getCameraTargetPosition() {
+	public Vec3 getCameraTargetPosition() {
 		return cameraTargetPosition;
 	}
 
@@ -1194,7 +1194,7 @@ public abstract class DemoApplication {
 		this.idle = idle;
 	}
 	
-	public void drawString(CharSequence s, int x, int y, Vector3f color) {
+	public void drawString(CharSequence s, int x, int y, Vec3 color) {
 		gl.drawString(s, x, y, color.x, color.y, color.z);
 	}
 	

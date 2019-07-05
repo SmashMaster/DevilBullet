@@ -33,7 +33,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.ContactSolverInfo;
 import com.bulletphysics.dynamics.constraintsolver.TypedConstraint;
 import com.bulletphysics.dynamics.vehicle.RaycastVehicle;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * DynamicsWorld is the interface class for several dynamics implementation,
@@ -103,9 +103,9 @@ public abstract class DynamicsWorld extends CollisionWorld {
 	 * Once a rigidbody is added to the dynamics world, it will get this gravity assigned.
 	 * Existing rigidbodies in the world get gravity assigned too, during this method.
 	 */
-	public abstract void setGravity(Vector3f gravity);
+	public abstract void setGravity(Vec3 gravity);
 	
-	public abstract Vector3f getGravity(Vector3f out);
+	public abstract Vec3 getGravity(Vec3 out);
 
 	public abstract void addRigidBody(RigidBody body);
 

@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.
@@ -40,7 +40,7 @@ import javax.vecmath.Vector3f;
  */
 public class ConvexHullShape extends PolyhedralConvexShape {
 
-	private final ObjectArrayList<Vector3f> points = new ObjectArrayList<Vector3f>();
+	private final ObjectArrayList<Vec3> points = new ObjectArrayList<Vec3>();
 	
 	/**
 	 * TODO: This constructor optionally takes in a pointer to points. Each point is assumed to be 3 consecutive float (x,y,z), the striding defines the number of bytes between each point, in memory.
@@ -48,28 +48,28 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	 * ConvexHullShape make an internal copy of the points.
 	 */
 	// TODO: make better constuctors (ByteBuffer, etc.)
-	public ConvexHullShape(ObjectArrayList<Vector3f> points) {
+	public ConvexHullShape(ObjectArrayList<Vec3> points) {
 		// JAVA NOTE: rewritten
 		
 		for (int i=0; i<points.size(); i++) {
-			this.points.add(new Vector3f(points.getQuick(i)));
+			this.points.add(new Vec3(points.getQuick(i)));
 		}
 		
 		recalcLocalAabb();
 	}
 
 	@Override
-	public void setLocalScaling(Vector3f scaling) {
+	public void setLocalScaling(Vec3 scaling) {
 		localScaling.set(scaling);
 		recalcLocalAabb();
 	}
 	
-	public void addPoint(Vector3f point) {
-		points.add(new Vector3f(point));
+	public void addPoint(Vec3 point) {
+		points.add(new Vec3(point));
 		recalcLocalAabb();
 	}
 
-	public ObjectArrayList<Vector3f> getPoints() {
+	public ObjectArrayList<Vec3> getPoints() {
 		return points;
 	}
 
@@ -78,12 +78,12 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec0, Vector3f out) {
-		Vector3f supVec = out;
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec0, Vec3 out) {
+		Vec3 supVec = out;
 		supVec.set(0f, 0f, 0f);
 		float newDot, maxDot = -1e30f;
 
-		Vector3f vec = new Vector3f(vec0);
+		Vec3 vec = new Vec3(vec0);
 		float lenSqr = vec.squareLength();
 		if (lenSqr < 0.0001f) {
 			vec.set(1f, 0f, 0f);
@@ -94,7 +94,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 		}
 
 
-		Vector3f vtx = new Vector3f();
+		Vec3 vtx = new Vec3();
 		for (int i = 0; i < points.size(); i++) {
 			VectorUtil.mul(vtx, points.getQuick(i), localScaling);
 
@@ -108,7 +108,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		float newDot;
 
 		// JAVA NOTE: rewritten as code used W coord for temporary usage in Vector3
@@ -122,12 +122,12 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 				wcoords[i] = -1e30f;
 			}
 		}
-		Vector3f vtx = new Vector3f();
+		Vec3 vtx = new Vec3();
 		for (int i = 0; i < points.size(); i++) {
 			VectorUtil.mul(vtx, points.getQuick(i), localScaling);
 
 			for (int j = 0; j < numVectors; j++) {
-				Vector3f vec = vectors[j];
+				Vec3 vec = vectors[j];
 
 				newDot = vec.dot(vtx);
 				//if (newDot > supportVerticesOut[j][3])
@@ -142,11 +142,11 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertex(Vector3f vec, Vector3f out) {
-		Vector3f supVertex = localGetSupportingVertexWithoutMargin(vec, out);
+	public Vec3 localGetSupportingVertex(Vec3 vec, Vec3 out) {
+		Vec3 supVertex = localGetSupportingVertexWithoutMargin(vec, out);
 
 		if (getMargin() != 0f) {
-			Vector3f vecnorm = new Vector3f(vec);
+			Vec3 vecnorm = new Vec3(vec);
 			if (vecnorm.squareLength() < (BulletGlobals.FLT_EPSILON * BulletGlobals.FLT_EPSILON)) {
 				vecnorm.set(-1f, -1f, -1f);
 			}
@@ -171,7 +171,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	}
 
 	@Override
-	public void getEdge(int i, Vector3f pa, Vector3f pb) {
+	public void getEdge(int i, Vec3 pa, Vec3 pb) {
 		int index0 = i % points.size();
 		int index1 = (i + 1) % points.size();
 		VectorUtil.mul(pa, points.getQuick(index0), localScaling);
@@ -179,7 +179,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	}
 
 	@Override
-	public void getVertex(int i, Vector3f vtx) {
+	public void getVertex(int i, Vec3 vtx) {
 		VectorUtil.mul(vtx, points.getQuick(i), localScaling);
 	}
 
@@ -189,12 +189,12 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 	}
 
 	@Override
-	public void getPlane(Vector3f planeNormal, Vector3f planeSupport, int i) {
+	public void getPlane(Vec3 planeNormal, Vec3 planeSupport, int i) {
 		assert false;
 	}
 
 	@Override
-	public boolean isInside(Vector3f pt, float tolerance) {
+	public boolean isInside(Vec3 pt, float tolerance) {
 		assert false;
 		return false;
 	}

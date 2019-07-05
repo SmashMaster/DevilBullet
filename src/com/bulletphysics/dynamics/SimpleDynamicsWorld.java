@@ -36,7 +36,7 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.ContactSolverInfo;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * SimpleDynamicsWorld serves as unit-test and to verify more complicated and
@@ -49,7 +49,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
 
 	protected ConstraintSolver constraintSolver;
 	protected boolean ownsConstraintSolver;
-	protected final Vector3f gravity = new Vector3f(0f, 0f, -10f);
+	protected final Vec3 gravity = new Vec3(0f, 0f, -10f);
 	
 	public SimpleDynamicsWorld(Dispatcher dispatcher, BroadphaseInterface pairCache, ConstraintSolver constraintSolver, CollisionConfiguration collisionConfiguration) {
 		super(dispatcher, pairCache, collisionConfiguration);
@@ -145,7 +145,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
 	}
 
 	@Override
-	public void setGravity(Vector3f gravity) {
+	public void setGravity(Vec3 gravity) {
 		this.gravity.set(gravity);
 		for (int i = 0; i < collisionObjects.size(); i++) {
 			CollisionObject colObj = collisionObjects.getQuick(i);
@@ -157,7 +157,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
 	}
 
 	@Override
-	public Vector3f getGravity(Vector3f out) {
+	public Vec3 getGravity(Vec3 out) {
 		out.set(gravity);
 		return out;
 	}
@@ -180,7 +180,7 @@ public class SimpleDynamicsWorld extends DynamicsWorld {
 	public void updateAabbs() {
 		Transform tmpTrans = new Transform();
 		Transform predictedTrans = new Transform();
-		Vector3f minAabb = new Vector3f(), maxAabb = new Vector3f();
+		Vec3 minAabb = new Vec3(), maxAabb = new Vec3();
 
 		for (int i = 0; i < collisionObjects.size(); i++) {
 			CollisionObject colObj = collisionObjects.getQuick(i);

@@ -28,7 +28,7 @@
 package com.bulletphysics.collision.broadphase;
 
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -175,7 +175,7 @@ public class DbvtBroadphase extends BroadphaseInterface {
 		return list;
 	}
 
-	public BroadphaseProxy createProxy(Vector3f aabbMin, Vector3f aabbMax, BroadphaseNativeType shapeType, Object userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, Object multiSapProxy) {
+	public BroadphaseProxy createProxy(Vec3 aabbMin, Vec3 aabbMax, BroadphaseNativeType shapeType, Object userPtr, short collisionFilterGroup, short collisionFilterMask, Dispatcher dispatcher, Object multiSapProxy) {
 		DbvtProxy proxy = new DbvtProxy(userPtr, collisionFilterGroup, collisionFilterMask);
 		DbvtAabbMm.FromMM(aabbMin, aabbMax, proxy.aabb);
 		proxy.leaf = sets[0].insert(proxy.aabb, proxy);
@@ -198,7 +198,7 @@ public class DbvtBroadphase extends BroadphaseInterface {
 		//btAlignedFree(proxy);
 	}
 
-	public void setAabb(BroadphaseProxy absproxy, Vector3f aabbMin, Vector3f aabbMax, Dispatcher dispatcher) {
+	public void setAabb(BroadphaseProxy absproxy, Vec3 aabbMin, Vec3 aabbMax, Dispatcher dispatcher) {
 		DbvtProxy proxy = (DbvtProxy)absproxy;
 		DbvtAabbMm aabb = DbvtAabbMm.FromMM(aabbMin, aabbMax, new DbvtAabbMm());
 		if (proxy.stage == STAGECOUNT) {
@@ -209,10 +209,10 @@ public class DbvtBroadphase extends BroadphaseInterface {
 		else {
 			// dynamic set:
 			if (DbvtAabbMm.Intersect(proxy.leaf.volume, aabb)) {/* Moving				*/
-				Vector3f delta = new Vector3f();
+				Vec3 delta = new Vec3();
 				delta.addHere(aabbMin, aabbMax);
 				delta.mult(0.5f);
-				delta.sub(proxy.aabb.Center(new Vector3f()));
+				delta.sub(proxy.aabb.Center(new Vec3()));
 				//#ifdef DBVT_BP_MARGIN
 				delta.mult(predictedframes);
 				sets[0].update(proxy.leaf, aabb, delta, DBVT_BP_MARGIN);
@@ -262,7 +262,7 @@ public class DbvtBroadphase extends BroadphaseInterface {
 		return paircache;
 	}
 
-	public void getBroadphaseAabb(Vector3f aabbMin, Vector3f aabbMax) {
+	public void getBroadphaseAabb(Vec3 aabbMin, Vec3 aabbMax) {
 		DbvtAabbMm bounds = new DbvtAabbMm();
 		if (!sets[0].empty()) {
 			if (!sets[1].empty()) {
@@ -276,7 +276,7 @@ public class DbvtBroadphase extends BroadphaseInterface {
 			bounds.set(sets[1].root.volume);
 		}
 		else {
-			DbvtAabbMm.FromCR(new Vector3f(0f, 0f, 0f), 0f, bounds);
+			DbvtAabbMm.FromCR(new Vec3(0f, 0f, 0f), 0f, bounds);
 		}
 		aabbMin.set(bounds.Mins());
 		aabbMax.set(bounds.Maxs());

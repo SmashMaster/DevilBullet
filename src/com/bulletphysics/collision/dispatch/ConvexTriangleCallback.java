@@ -34,7 +34,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * For each triangle in the concave mesh that overlaps with the AABB of a convex
@@ -49,8 +49,8 @@ class ConvexTriangleCallback extends TriangleCallback {
 	private CollisionObject convexBody;
 	private CollisionObject triBody;
 
-	private final Vector3f aabbMin = new Vector3f();
-	private final Vector3f aabbMax = new Vector3f();
+	private final Vec3 aabbMin = new Vec3();
+	private final Vec3 aabbMax = new Vec3();
 
 	private ManifoldResult resultOut;
 
@@ -97,7 +97,7 @@ class ConvexTriangleCallback extends TriangleCallback {
 		//CollisionShape* triangleShape = static_cast<btCollisionShape*>(triBody->m_collisionShape);
 		convexShape.getAabb(convexInTriangleSpace, aabbMin, aabbMax);
 		float extraMargin = collisionMarginTriangle;
-		Vector3f extra = new Vector3f();
+		Vec3 extra = new Vec3();
 		extra.set(extraMargin, extraMargin, extraMargin);
 
 		aabbMax.add(extra);
@@ -107,7 +107,7 @@ class ConvexTriangleCallback extends TriangleCallback {
 	private CollisionAlgorithmConstructionInfo ci = new CollisionAlgorithmConstructionInfo();
 	private TriangleShape tm = new TriangleShape();
 	
-	public void processTriangle(Vector3f[] triangle, int partId, int triangleIndex) {
+	public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
 		// just for debugging purposes
 		//printf("triangle %d",m_triangleCount++);
 
@@ -119,12 +119,12 @@ class ConvexTriangleCallback extends TriangleCallback {
 
 		// debug drawing of the overlapping triangles
 		if (dispatchInfoPtr != null && dispatchInfoPtr.debugDraw != null && dispatchInfoPtr.debugDraw.getDebugMode() > 0) {
-			Vector3f color = new Vector3f();
+			Vec3 color = new Vec3();
 			color.set(255, 255, 0);
 			Transform tr = ob.getWorldTransform(new Transform());
 
-			Vector3f tmp1 = new Vector3f();
-			Vector3f tmp2 = new Vector3f();
+			Vec3 tmp1 = new Vec3();
+			Vec3 tmp2 = new Vec3();
 
 			tmp1.set(triangle[0]); tr.transform(tmp1);
 			tmp2.set(triangle[1]); tr.transform(tmp2);
@@ -172,12 +172,12 @@ class ConvexTriangleCallback extends TriangleCallback {
 		dispatcher.clearManifold(manifoldPtr);
 	}
 
-	public Vector3f getAabbMin(Vector3f out) {
+	public Vec3 getAabbMin(Vec3 out) {
 		out.set(aabbMin);
 		return out;
 	}
 
-	public Vector3f getAabbMax(Vector3f out) {
+	public Vec3 getAabbMax(Vec3 out) {
 		out.set(aabbMax);
 		return out;
 	}

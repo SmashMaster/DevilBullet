@@ -27,7 +27,7 @@ package com.bulletphysics.collision.narrowphase;
 
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * This interface is made to be used by an iterative approach to do TimeOfImpact calculations.<p>
@@ -45,7 +45,7 @@ public abstract class DiscreteCollisionDetectorInterface {
 		///setShapeIdentifiers provides experimental support for per-triangle material / custom material combiner
 		public abstract void setShapeIdentifiers(int partId0, int index0, int partId1, int index1);
 
-		public abstract void addContactPoint(Vector3f normalOnBInWorld, Vector3f pointInWorld, float depth);
+		public abstract void addContactPoint(Vec3 normalOnBInWorld, Vec3 pointInWorld, float depth);
 	}
 	
 	public static class ClosestPointInput {

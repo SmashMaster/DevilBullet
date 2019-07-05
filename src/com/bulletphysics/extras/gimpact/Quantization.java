@@ -30,7 +30,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -38,24 +38,24 @@ import javax.vecmath.Vector3f;
  */
 class Quantization {
 
-	public static void bt_calc_quantization_parameters(Vector3f outMinBound, Vector3f outMaxBound, Vector3f bvhQuantization, Vector3f srcMinBound, Vector3f srcMaxBound, float quantizationMargin) {
+	public static void bt_calc_quantization_parameters(Vec3 outMinBound, Vec3 outMaxBound, Vec3 bvhQuantization, Vec3 srcMinBound, Vec3 srcMaxBound, float quantizationMargin) {
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
-		Vector3f clampValue = new Vector3f();
+		Vec3 clampValue = new Vec3();
 		clampValue.set(quantizationMargin, quantizationMargin, quantizationMargin);
 		outMinBound.subHere(srcMinBound, clampValue);
 		outMaxBound.addHere(srcMaxBound, clampValue);
-		Vector3f aabbSize = new Vector3f();
+		Vec3 aabbSize = new Vec3();
 		aabbSize.subHere(outMaxBound, outMinBound);
 		bvhQuantization.set(65535.0f, 65535.0f, 65535.0f);
 		VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
 
-	public static void bt_quantize_clamp(short[] out, Vector3f point, Vector3f min_bound, Vector3f max_bound, Vector3f bvhQuantization) {
-		Vector3f clampedPoint = new Vector3f(point);
+	public static void bt_quantize_clamp(short[] out, Vec3 point, Vec3 min_bound, Vec3 max_bound, Vec3 bvhQuantization) {
+		Vec3 clampedPoint = new Vec3(point);
 		VectorUtil.setMax(clampedPoint, min_bound);
 		VectorUtil.setMin(clampedPoint, max_bound);
 
-		Vector3f v = new Vector3f();
+		Vec3 v = new Vec3();
 		v.subHere(clampedPoint, min_bound);
 		VectorUtil.mul(v, v, bvhQuantization);
 
@@ -64,7 +64,7 @@ class Quantization {
 		out[2] = (short) (v.z + 0.5f);
 	}
 
-	public static Vector3f bt_unquantize(short[] vecIn, Vector3f offset, Vector3f bvhQuantization, Vector3f out) {
+	public static Vec3 bt_unquantize(short[] vecIn, Vec3 offset, Vec3 bvhQuantization, Vec3 out) {
 		out.set((float)(vecIn[0] & 0xFFFF) / (bvhQuantization.x),
 		        (float)(vecIn[1] & 0xFFFF) / (bvhQuantization.y),
 		        (float)(vecIn[2] & 0xFFFF) / (bvhQuantization.z));

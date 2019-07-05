@@ -33,7 +33,7 @@ import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.extras.gimpact.BoxCollision.BoxBoxTransformCache;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -182,7 +182,7 @@ class GImpactBvh {
 	/**
 	 * Returns the indices of the primitives in the primitive_manager field.
 	 */
-	public boolean rayQuery(Vector3f ray_dir, Vector3f ray_origin, IntArrayList collided_results) {
+	public boolean rayQuery(Vec3 ray_dir, Vec3 ray_origin, IntArrayList collided_results) {
 		int curIndex = 0;
 		int numNodes = getNodeCount();
 

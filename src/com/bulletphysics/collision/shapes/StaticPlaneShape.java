@@ -29,7 +29,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * StaticPlaneShape simulates an infinite non-moving (static) collision plane.
@@ -38,19 +38,19 @@ import javax.vecmath.Vector3f;
  */
 public class StaticPlaneShape extends ConcaveShape {
 
-	protected final Vector3f localAabbMin = new Vector3f();
-	protected final Vector3f localAabbMax = new Vector3f();
+	protected final Vec3 localAabbMin = new Vec3();
+	protected final Vec3 localAabbMax = new Vec3();
 	
-	protected final Vector3f planeNormal = new Vector3f();
+	protected final Vec3 planeNormal = new Vec3();
 	protected float planeConstant;
-	protected final Vector3f localScaling = new Vector3f(0f, 0f, 0f);
+	protected final Vec3 localScaling = new Vec3(0f, 0f, 0f);
 
-	public StaticPlaneShape(Vector3f planeNormal, float planeConstant) {
+	public StaticPlaneShape(Vec3 planeNormal, float planeConstant) {
 		this.planeNormal.normalizeHere(planeNormal);
 		this.planeConstant = planeConstant;
 	}
 
-	public Vector3f getPlaneNormal(Vector3f out) {
+	public Vec3 getPlaneNormal(Vec3 out) {
 		out.set(planeNormal);
 		return out;
 	}
@@ -60,34 +60,34 @@ public class StaticPlaneShape extends ConcaveShape {
 	}
 	
 	@Override
-	public void processAllTriangles(TriangleCallback callback, Vector3f aabbMin, Vector3f aabbMax) {
-		Vector3f tmp = new Vector3f();
-		Vector3f tmp1 = new Vector3f();
-		Vector3f tmp2 = new Vector3f();
+	public void processAllTriangles(TriangleCallback callback, Vec3 aabbMin, Vec3 aabbMax) {
+		Vec3 tmp = new Vec3();
+		Vec3 tmp1 = new Vec3();
+		Vec3 tmp2 = new Vec3();
 
-		Vector3f halfExtents = new Vector3f();
+		Vec3 halfExtents = new Vec3();
 		halfExtents.subHere(aabbMax, aabbMin);
 		halfExtents.mult(0.5f);
 
 		float radius = halfExtents.length();
-		Vector3f center = new Vector3f();
+		Vec3 center = new Vec3();
 		center.addHere(aabbMax, aabbMin);
 		center.mult(0.5f);
 
 		// this is where the triangles are generated, given AABB and plane equation (normal/constant)
 
-		Vector3f tangentDir0 = new Vector3f(), tangentDir1 = new Vector3f();
+		Vec3 tangentDir0 = new Vec3(), tangentDir1 = new Vec3();
 
 		// tangentDir0/tangentDir1 can be precalculated
 		TransformUtil.planeSpace1(planeNormal, tangentDir0, tangentDir1);
 
-		Vector3f supVertex0 = new Vector3f(), supVertex1 = new Vector3f();
+		Vec3 supVertex0 = new Vec3(), supVertex1 = new Vec3();
 
-		Vector3f projectedCenter = new Vector3f();
+		Vec3 projectedCenter = new Vec3();
 		tmp.scale(planeNormal.dot(center) - planeConstant, planeNormal);
 		projectedCenter.subHere(center, tmp);
 
-		Vector3f[] triangle = new Vector3f[] { new Vector3f(), new Vector3f(), new Vector3f() };
+		Vec3[] triangle = new Vec3[] { new Vec3(), new Vec3(), new Vec3() };
 
 		tmp1.scale(radius, tangentDir0);
 		tmp2.scale(radius, tangentDir1);
@@ -123,7 +123,7 @@ public class StaticPlaneShape extends ConcaveShape {
 	}
 
 	@Override
-	public void getAabb(Transform t, Vector3f aabbMin, Vector3f aabbMax) {
+	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		aabbMin.set(-1e30f, -1e30f, -1e30f);
 		aabbMax.set(1e30f, 1e30f, 1e30f);
 	}
@@ -134,18 +134,18 @@ public class StaticPlaneShape extends ConcaveShape {
 	}
 
 	@Override
-	public void setLocalScaling(Vector3f scaling) {
+	public void setLocalScaling(Vec3 scaling) {
 		localScaling.set(scaling);
 	}
 
 	@Override
-	public Vector3f getLocalScaling(Vector3f out) {
+	public Vec3 getLocalScaling(Vec3 out) {
 		out.set(localScaling);
 		return out;
 	}
 
 	@Override
-	public void calculateLocalInertia(float mass, Vector3f inertia) {
+	public void calculateLocalInertia(float mass, Vec3 inertia) {
 		//moving concave objects not supported
 		inertia.set(0f, 0f, 0f);
 	}

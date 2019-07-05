@@ -54,7 +54,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -78,8 +78,8 @@ public class VehicleDemo extends DemoApplication {
 	private static final int rightIndex = 0;
 	private static final int upIndex = 1;
 	private static final int forwardIndex = 2;
-	private static final Vector3f wheelDirectionCS0 = new Vector3f(0,-1,0);
-	private static final Vector3f wheelAxleCS = new Vector3f(-1,0,0);
+	private static final Vec3 wheelDirectionCS0 = new Vec3(0,-1,0);
+	private static final Vec3 wheelAxleCS = new Vec3(-1,0,0);
 	//#endif
 	
 	private static final int maxProxies = 32766;
@@ -148,19 +148,19 @@ public class VehicleDemo extends DemoApplication {
 		//m_forwardAxis = 1;
 		//#endif
 
-		CollisionShape groundShape = new BoxShape(new Vector3f(50, 3, 50));
+		CollisionShape groundShape = new BoxShape(new Vec3(50, 3, 50));
 		collisionShapes.add(groundShape);
 		collisionConfiguration = new DefaultCollisionConfiguration();
 		dispatcher = new CollisionDispatcher(collisionConfiguration);
-		Vector3f worldMin = new Vector3f(-1000, -1000, -1000);
-		Vector3f worldMax = new Vector3f(1000, 1000, 1000);
+		Vec3 worldMin = new Vec3(-1000, -1000, -1000);
+		Vec3 worldMax = new Vec3(1000, 1000, 1000);
 		//overlappingPairCache = new AxisSweep3(worldMin, worldMax);
 		//overlappingPairCache = new SimpleBroadphase();
 		overlappingPairCache = new DbvtBroadphase();
 		constraintSolver = new SequentialImpulseConstraintSolver();
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher, overlappingPairCache, constraintSolver, collisionConfiguration);
 		//#ifdef FORCE_ZAXIS_UP
-		//dynamicsWorld.setGravity(new Vector3f(0, 0, -10));
+		//dynamicsWorld.setGravity(new Vec3(0, 0, -10));
 		//#endif 
 
 		//m_dynamicsWorld->setGravity(btVector3(0,0,0));
@@ -186,7 +186,7 @@ public class VehicleDemo extends DemoApplication {
 		vertices = ByteBuffer.allocateDirect(totalVerts * vertStride).order(ByteOrder.nativeOrder());
 		ByteBuffer gIndices = ByteBuffer.allocateDirect(totalTriangles * 3 * 4).order(ByteOrder.nativeOrder());
 
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		for (int i = 0; i < NUM_VERTS_X; i++) {
 			for (int j = 0; j < NUM_VERTS_Y; j++) {
 				float wl = 0.2f;
@@ -303,7 +303,7 @@ public class VehicleDemo extends DemoApplication {
 		// //localTrans effectively shifts the center of mass with respect to the chassis
 		//localTrans.setOrigin(btVector3(0,0,1));
 		//#else
-		CollisionShape chassisShape = new BoxShape(new Vector3f(1.0f, 0.5f, 2.0f));
+		CollisionShape chassisShape = new BoxShape(new Vec3(1.0f, 0.5f, 2.0f));
 		collisionShapes.add(chassisShape);
 
 		CompoundShape compound = new CompoundShape();
@@ -343,7 +343,7 @@ public class VehicleDemo extends DemoApplication {
 			//#ifdef FORCE_ZAXIS_UP
 			//btVector3 connectionPointCS0(CUBE_HALF_EXTENTS-(0.3*wheelWidth),2*CUBE_HALF_EXTENTS-wheelRadius, connectionHeight);
 			//#else
-			Vector3f connectionPointCS0 = new Vector3f(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2f * CUBE_HALF_EXTENTS - wheelRadius);
+			Vec3 connectionPointCS0 = new Vec3(CUBE_HALF_EXTENTS - (0.3f * wheelWidth), connectionHeight, 2f * CUBE_HALF_EXTENTS - wheelRadius);
 			//#endif
 
 			vehicle.addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, suspensionRestLength, wheelRadius, tuning, isFrontWheel);
@@ -386,8 +386,8 @@ public class VehicleDemo extends DemoApplication {
 	public void renderme() {
 		updateCamera();
 
-		CylinderShapeX wheelShape = new CylinderShapeX(new Vector3f(wheelWidth, wheelRadius, wheelRadius));
-		Vector3f wheelColor = new Vector3f(1, 0, 0);
+		CylinderShapeX wheelShape = new CylinderShapeX(new Vec3(wheelWidth, wheelRadius, wheelRadius));
+		Vec3 wheelColor = new Vec3(1, 0, 0);
 
 		for (int i = 0; i < vehicle.getNumWheels(); i++) {
 			// synchronize the wheels with the (interpolated) chassis worldtransform
@@ -481,8 +481,8 @@ public class VehicleDemo extends DemoApplication {
 		Transform tr = new Transform();
 		tr.setIdentity();
 		carChassis.setCenterOfMassTransform(tr);
-		carChassis.setLinearVelocity(new Vector3f(0, 0, 0));
-		carChassis.setAngularVelocity(new Vector3f(0, 0, 0));
+		carChassis.setLinearVelocity(new Vec3(0, 0, 0));
+		carChassis.setAngularVelocity(new Vec3(0, 0, 0));
 		dynamicsWorld.getBroadphase().getOverlappingPairCache().cleanProxyFromPairs(carChassis.getBroadphaseHandle(), getDynamicsWorld().getDispatcher());
 		if (vehicle != null) {
 			vehicle.resetSuspension();
@@ -573,7 +573,7 @@ public class VehicleDemo extends DemoApplication {
 		cameraPosition.y = (15.0f*cameraPosition.y + cameraTargetPosition.y + cameraHeight) / 16.0f;
 		//#endif
 
-		Vector3f camToObject = new Vector3f();
+		Vec3 camToObject = new Vec3();
 		camToObject.subHere(cameraTargetPosition, cameraPosition);
 
 		// keep distance between min and max distance
@@ -587,7 +587,7 @@ public class VehicleDemo extends DemoApplication {
 		{
 			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
 		}
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		tmp.scale(correctionFactor, camToObject);
 		cameraPosition.sub(tmp);
 

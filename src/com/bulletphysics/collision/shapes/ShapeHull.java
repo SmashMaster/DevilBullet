@@ -31,7 +31,7 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.convexhull.*;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * ShapeHull takes a {@link ConvexShape}, builds the convex hull using {@link HullLibrary}
@@ -41,12 +41,12 @@ import javax.vecmath.Vector3f;
  */
 public class ShapeHull {
 
-	protected ObjectArrayList<Vector3f> vertices = new ObjectArrayList<Vector3f>();
+	protected ObjectArrayList<Vec3> vertices = new ObjectArrayList<Vec3>();
 	protected IntArrayList indices = new IntArrayList();
 	protected int numIndices;
 	protected ConvexShape shape;
 
-	protected ObjectArrayList<Vector3f> unitSpherePoints = new ObjectArrayList<Vector3f>();
+	protected ObjectArrayList<Vec3> unitSpherePoints = new ObjectArrayList<Vec3>();
 
 	public ShapeHull(ConvexShape shape) {
 		this.shape = shape;
@@ -54,14 +54,14 @@ public class ShapeHull {
 		this.indices.clear();
 		this.numIndices = 0;
 
-		MiscUtil.resize(unitSpherePoints, NUM_UNITSPHERE_POINTS+ConvexShape.MAX_PREFERRED_PENETRATION_DIRECTIONS*2, Vector3f.class);
+		MiscUtil.resize(unitSpherePoints, NUM_UNITSPHERE_POINTS+ConvexShape.MAX_PREFERRED_PENETRATION_DIRECTIONS*2, Vec3.class);
 		for (int i=0; i<constUnitSpherePoints.size(); i++) {
 			unitSpherePoints.getQuick(i).set(constUnitSpherePoints.getQuick(i));
 		}
 	}
 
 	public boolean buildHull(float margin) {
-		Vector3f norm = new Vector3f();
+		Vec3 norm = new Vec3();
 
 		int numSampleDirections = NUM_UNITSPHERE_POINTS;
 		{
@@ -75,8 +75,8 @@ public class ShapeHull {
 			}
 		}
 
-		ObjectArrayList<Vector3f> supportPoints = new ObjectArrayList<Vector3f>();
-		MiscUtil.resize(supportPoints, NUM_UNITSPHERE_POINTS + ConvexShape.MAX_PREFERRED_PENETRATION_DIRECTIONS * 2, Vector3f.class);
+		ObjectArrayList<Vec3> supportPoints = new ObjectArrayList<Vec3>();
+		MiscUtil.resize(supportPoints, NUM_UNITSPHERE_POINTS + ConvexShape.MAX_PREFERRED_PENETRATION_DIRECTIONS * 2, Vec3.class);
 
 		for (int i=0; i<numSampleDirections; i++) {
 			shape.localGetSupportingVertex(unitSpherePoints.getQuick(i), supportPoints.getQuick(i));
@@ -100,7 +100,7 @@ public class ShapeHull {
 			return false;
 		}
 
-		MiscUtil.resize(vertices, hr.numOutputVertices, Vector3f.class);
+		MiscUtil.resize(vertices, hr.numOutputVertices, Vec3.class);
 
 		for (int i=0; i<hr.numOutputVertices; i++) {
 			vertices.getQuick(i).set(hr.outputVertices.getQuick(i));
@@ -129,7 +129,7 @@ public class ShapeHull {
 		return numIndices;
 	}
 
-	public ObjectArrayList<Vector3f> getVertexPointer() {
+	public ObjectArrayList<Vec3> getVertexPointer() {
 		return vertices;
 	}
 
@@ -141,51 +141,51 @@ public class ShapeHull {
 	
 	private static int NUM_UNITSPHERE_POINTS = 42;
 	
-	private static ObjectArrayList<Vector3f> constUnitSpherePoints = new ObjectArrayList<Vector3f>();
+	private static ObjectArrayList<Vec3> constUnitSpherePoints = new ObjectArrayList<Vec3>();
 	
 	static {
-		constUnitSpherePoints.add(new Vector3f(0.000000f, -0.000000f, -1.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.723608f, -0.525725f, -0.447219f));
-		constUnitSpherePoints.add(new Vector3f(-0.276388f, -0.850649f, -0.447219f));
-		constUnitSpherePoints.add(new Vector3f(-0.894426f, -0.000000f, -0.447216f));
-		constUnitSpherePoints.add(new Vector3f(-0.276388f, 0.850649f, -0.447220f));
-		constUnitSpherePoints.add(new Vector3f(0.723608f, 0.525725f, -0.447219f));
-		constUnitSpherePoints.add(new Vector3f(0.276388f, -0.850649f, 0.447220f));
-		constUnitSpherePoints.add(new Vector3f(-0.723608f, -0.525725f, 0.447219f));
-		constUnitSpherePoints.add(new Vector3f(-0.723608f, 0.525725f, 0.447219f));
-		constUnitSpherePoints.add(new Vector3f(0.276388f, 0.850649f, 0.447219f));
-		constUnitSpherePoints.add(new Vector3f(0.894426f, 0.000000f, 0.447216f));
-		constUnitSpherePoints.add(new Vector3f(-0.000000f, 0.000000f, 1.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.425323f, -0.309011f, -0.850654f));
-		constUnitSpherePoints.add(new Vector3f(-0.162456f, -0.499995f, -0.850654f));
-		constUnitSpherePoints.add(new Vector3f(0.262869f, -0.809012f, -0.525738f));
-		constUnitSpherePoints.add(new Vector3f(0.425323f, 0.309011f, -0.850654f));
-		constUnitSpherePoints.add(new Vector3f(0.850648f, -0.000000f, -0.525736f));
-		constUnitSpherePoints.add(new Vector3f(-0.525730f, -0.000000f, -0.850652f));
-		constUnitSpherePoints.add(new Vector3f(-0.688190f, -0.499997f, -0.525736f));
-		constUnitSpherePoints.add(new Vector3f(-0.162456f, 0.499995f, -0.850654f));
-		constUnitSpherePoints.add(new Vector3f(-0.688190f, 0.499997f, -0.525736f));
-		constUnitSpherePoints.add(new Vector3f(0.262869f, 0.809012f, -0.525738f));
-		constUnitSpherePoints.add(new Vector3f(0.951058f, 0.309013f, 0.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.951058f, -0.309013f, 0.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.587786f, -0.809017f, 0.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.000000f, -1.000000f, 0.000000f));
-		constUnitSpherePoints.add(new Vector3f(-0.587786f, -0.809017f, 0.000000f));
-		constUnitSpherePoints.add(new Vector3f(-0.951058f, -0.309013f, -0.000000f));
-		constUnitSpherePoints.add(new Vector3f(-0.951058f, 0.309013f, -0.000000f));
-		constUnitSpherePoints.add(new Vector3f(-0.587786f, 0.809017f, -0.000000f));
-		constUnitSpherePoints.add(new Vector3f(-0.000000f, 1.000000f, -0.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.587786f, 0.809017f, -0.000000f));
-		constUnitSpherePoints.add(new Vector3f(0.688190f, -0.499997f, 0.525736f));
-		constUnitSpherePoints.add(new Vector3f(-0.262869f, -0.809012f, 0.525738f));
-		constUnitSpherePoints.add(new Vector3f(-0.850648f, 0.000000f, 0.525736f));
-		constUnitSpherePoints.add(new Vector3f(-0.262869f, 0.809012f, 0.525738f));
-		constUnitSpherePoints.add(new Vector3f(0.688190f, 0.499997f, 0.525736f));
-		constUnitSpherePoints.add(new Vector3f(0.525730f, 0.000000f, 0.850652f));
-		constUnitSpherePoints.add(new Vector3f(0.162456f, -0.499995f, 0.850654f));
-		constUnitSpherePoints.add(new Vector3f(-0.425323f, -0.309011f, 0.850654f));
-		constUnitSpherePoints.add(new Vector3f(-0.425323f, 0.309011f, 0.850654f));
-		constUnitSpherePoints.add(new Vector3f(0.162456f, 0.499995f, 0.850654f));
+		constUnitSpherePoints.add(new Vec3(0.000000f, -0.000000f, -1.000000f));
+		constUnitSpherePoints.add(new Vec3(0.723608f, -0.525725f, -0.447219f));
+		constUnitSpherePoints.add(new Vec3(-0.276388f, -0.850649f, -0.447219f));
+		constUnitSpherePoints.add(new Vec3(-0.894426f, -0.000000f, -0.447216f));
+		constUnitSpherePoints.add(new Vec3(-0.276388f, 0.850649f, -0.447220f));
+		constUnitSpherePoints.add(new Vec3(0.723608f, 0.525725f, -0.447219f));
+		constUnitSpherePoints.add(new Vec3(0.276388f, -0.850649f, 0.447220f));
+		constUnitSpherePoints.add(new Vec3(-0.723608f, -0.525725f, 0.447219f));
+		constUnitSpherePoints.add(new Vec3(-0.723608f, 0.525725f, 0.447219f));
+		constUnitSpherePoints.add(new Vec3(0.276388f, 0.850649f, 0.447219f));
+		constUnitSpherePoints.add(new Vec3(0.894426f, 0.000000f, 0.447216f));
+		constUnitSpherePoints.add(new Vec3(-0.000000f, 0.000000f, 1.000000f));
+		constUnitSpherePoints.add(new Vec3(0.425323f, -0.309011f, -0.850654f));
+		constUnitSpherePoints.add(new Vec3(-0.162456f, -0.499995f, -0.850654f));
+		constUnitSpherePoints.add(new Vec3(0.262869f, -0.809012f, -0.525738f));
+		constUnitSpherePoints.add(new Vec3(0.425323f, 0.309011f, -0.850654f));
+		constUnitSpherePoints.add(new Vec3(0.850648f, -0.000000f, -0.525736f));
+		constUnitSpherePoints.add(new Vec3(-0.525730f, -0.000000f, -0.850652f));
+		constUnitSpherePoints.add(new Vec3(-0.688190f, -0.499997f, -0.525736f));
+		constUnitSpherePoints.add(new Vec3(-0.162456f, 0.499995f, -0.850654f));
+		constUnitSpherePoints.add(new Vec3(-0.688190f, 0.499997f, -0.525736f));
+		constUnitSpherePoints.add(new Vec3(0.262869f, 0.809012f, -0.525738f));
+		constUnitSpherePoints.add(new Vec3(0.951058f, 0.309013f, 0.000000f));
+		constUnitSpherePoints.add(new Vec3(0.951058f, -0.309013f, 0.000000f));
+		constUnitSpherePoints.add(new Vec3(0.587786f, -0.809017f, 0.000000f));
+		constUnitSpherePoints.add(new Vec3(0.000000f, -1.000000f, 0.000000f));
+		constUnitSpherePoints.add(new Vec3(-0.587786f, -0.809017f, 0.000000f));
+		constUnitSpherePoints.add(new Vec3(-0.951058f, -0.309013f, -0.000000f));
+		constUnitSpherePoints.add(new Vec3(-0.951058f, 0.309013f, -0.000000f));
+		constUnitSpherePoints.add(new Vec3(-0.587786f, 0.809017f, -0.000000f));
+		constUnitSpherePoints.add(new Vec3(-0.000000f, 1.000000f, -0.000000f));
+		constUnitSpherePoints.add(new Vec3(0.587786f, 0.809017f, -0.000000f));
+		constUnitSpherePoints.add(new Vec3(0.688190f, -0.499997f, 0.525736f));
+		constUnitSpherePoints.add(new Vec3(-0.262869f, -0.809012f, 0.525738f));
+		constUnitSpherePoints.add(new Vec3(-0.850648f, 0.000000f, 0.525736f));
+		constUnitSpherePoints.add(new Vec3(-0.262869f, 0.809012f, 0.525738f));
+		constUnitSpherePoints.add(new Vec3(0.688190f, 0.499997f, 0.525736f));
+		constUnitSpherePoints.add(new Vec3(0.525730f, 0.000000f, 0.850652f));
+		constUnitSpherePoints.add(new Vec3(0.162456f, -0.499995f, 0.850654f));
+		constUnitSpherePoints.add(new Vec3(-0.425323f, -0.309011f, 0.850654f));
+		constUnitSpherePoints.add(new Vec3(-0.425323f, 0.309011f, 0.850654f));
+		constUnitSpherePoints.add(new Vec3(0.162456f, 0.499995f, 0.850654f));
 	}
 	
 }

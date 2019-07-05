@@ -28,7 +28,7 @@ package com.bulletphysics.dynamics;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * RigidBodyConstructionInfo provides information to create a rigid body.<p>
@@ -57,7 +57,7 @@ public class RigidBodyConstructionInfo {
 	public final Transform startWorldTransform = new Transform();
 
 	public CollisionShape collisionShape;
-	public final Vector3f localInertia = new Vector3f();
+	public final Vec3 localInertia = new Vec3();
 	public float linearDamping = 0f;
 	public float angularDamping = 0f;
 
@@ -81,10 +81,10 @@ public class RigidBodyConstructionInfo {
 	public float additionalAngularDampingFactor = 0.01f;
 
 	public RigidBodyConstructionInfo(float mass, MotionState motionState, CollisionShape collisionShape) {
-		this(mass, motionState, collisionShape, new Vector3f(0f, 0f, 0f));
+		this(mass, motionState, collisionShape, new Vec3(0f, 0f, 0f));
 	}
 	
-	public RigidBodyConstructionInfo(float mass, MotionState motionState, CollisionShape collisionShape, Vector3f localInertia) {
+	public RigidBodyConstructionInfo(float mass, MotionState motionState, CollisionShape collisionShape, Vec3 localInertia) {
 		this.mass = mass;
 		this.motionState = motionState;
 		this.collisionShape = collisionShape;

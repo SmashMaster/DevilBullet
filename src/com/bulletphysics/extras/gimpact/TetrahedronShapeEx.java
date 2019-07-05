@@ -30,7 +30,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.collision.shapes.BU_Simplex1to4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Helper class for tetrahedrons.
@@ -42,11 +42,11 @@ class TetrahedronShapeEx extends BU_Simplex1to4 {
 	public TetrahedronShapeEx() {
 		numVertices = 4;
 		for (int i = 0; i < numVertices; i++) {
-			vertices[i] = new Vector3f();
+			vertices[i] = new Vec3();
 		}
 	}
 
-	public void setVertices(Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3) {
+	public void setVertices(Vec3 v0, Vec3 v1, Vec3 v2, Vec3 v3) {
 		vertices[0].set(v0);
 		vertices[1].set(v1);
 		vertices[2].set(v2);

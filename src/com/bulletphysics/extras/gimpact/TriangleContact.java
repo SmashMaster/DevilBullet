@@ -33,7 +33,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -48,11 +48,11 @@ public class TriangleContact {
     public float penetration_depth;
     public int point_count;
     public final Vec4 separating_normal = new Vec4();
-    public Vector3f[] points = new Vector3f[MAX_TRI_CLIPPING];
+    public Vec3[] points = new Vec3[MAX_TRI_CLIPPING];
 
 	public TriangleContact() {
 		for (int i=0; i<points.length; i++) {
-			points[i] = new Vector3f();
+			points[i] = new Vec3();
 		}
 	}
 
@@ -77,7 +77,7 @@ public class TriangleContact {
 	/**
 	 * Classify points that are closer.
 	 */
-	public void merge_points(Vec4 plane, float margin, ObjectArrayList<Vector3f> points, int point_count) {
+	public void merge_points(Vec4 plane, float margin, ObjectArrayList<Vec3> points, int point_count) {
 		this.point_count = 0;
 		penetration_depth = -1000.0f;
 

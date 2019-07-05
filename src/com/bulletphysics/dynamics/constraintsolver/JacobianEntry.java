@@ -27,8 +27,8 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 //notes:
 // Another memory optimization would be to store m_1MinvJt in the remaining 3 w components
@@ -46,11 +46,11 @@ public class JacobianEntry {
 	
 	//protected final BulletStack stack = BulletStack.get();
 	
-	public final Vector3f linearJointAxis = new Vector3f();
-	public final Vector3f aJ = new Vector3f();
-	public final Vector3f bJ = new Vector3f();
-	public final Vector3f m_0MinvJt = new Vector3f();
-	public final Vector3f m_1MinvJt = new Vector3f();
+	public final Vec3 linearJointAxis = new Vec3();
+	public final Vec3 aJ = new Vec3();
+	public final Vec3 bJ = new Vec3();
+	public final Vec3 m_0MinvJt = new Vec3();
+	public final Vec3 m_1MinvJt = new Vec3();
 	// Optimization: can be stored in the w/last component of one of the vectors
 	public float Adiag;
 
@@ -60,13 +60,13 @@ public class JacobianEntry {
 	/**
 	 * Constraint between two different rigidbodies.
 	 */
-	public void init(Matrix3f world2A,
-			Matrix3f world2B,
-			Vector3f rel_pos1, Vector3f rel_pos2,
-			Vector3f jointAxis,
-			Vector3f inertiaInvA,
+	public void init(Mat3 world2A,
+			Mat3 world2B,
+			Vec3 rel_pos1, Vec3 rel_pos2,
+			Vec3 jointAxis,
+			Vec3 inertiaInvA,
 			float massInvA,
-			Vector3f inertiaInvB,
+			Vec3 inertiaInvB,
 			float massInvB)
 	{
 		linearJointAxis.set(jointAxis);
@@ -89,11 +89,11 @@ public class JacobianEntry {
 	/**
 	 * Angular constraint between two different rigidbodies.
 	 */
-	public void init(Vector3f jointAxis,
-		Matrix3f world2A,
-		Matrix3f world2B,
-		Vector3f inertiaInvA,
-		Vector3f inertiaInvB)
+	public void init(Vec3 jointAxis,
+		Mat3 world2A,
+		Mat3 world2B,
+		Vec3 inertiaInvA,
+		Vec3 inertiaInvB)
 	{
 		linearJointAxis.set(0f, 0f, 0f);
 
@@ -114,10 +114,10 @@ public class JacobianEntry {
 	/**
 	 * Angular constraint between two different rigidbodies.
 	 */
-	public void init(Vector3f axisInA,
-		Vector3f axisInB,
-		Vector3f inertiaInvA,
-		Vector3f inertiaInvB)
+	public void init(Vec3 axisInA,
+		Vec3 axisInB,
+		Vec3 inertiaInvA,
+		Vec3 inertiaInvB)
 	{
 		linearJointAxis.set(0f, 0f, 0f);
 		aJ.set(axisInA);
@@ -136,10 +136,10 @@ public class JacobianEntry {
 	 * Constraint on one rigidbody.
 	 */
 	public void init(
-		Matrix3f world2A,
-		Vector3f rel_pos1, Vector3f rel_pos2,
-		Vector3f jointAxis,
-		Vector3f inertiaInvA, 
+		Mat3 world2A,
+		Vec3 rel_pos1, Vec3 rel_pos2,
+		Vec3 jointAxis,
+		Vec3 inertiaInvA, 
 		float massInvA)
 	{
 		linearJointAxis.set(jointAxis);
@@ -177,35 +177,35 @@ public class JacobianEntry {
 	public float getNonDiagonal(JacobianEntry jacB, float massInvA, float massInvB) {
 		JacobianEntry jacA = this;
 
-		Vector3f lin = new Vector3f();
+		Vec3 lin = new Vec3();
 		VectorUtil.mul(lin, jacA.linearJointAxis, jacB.linearJointAxis);
 
-		Vector3f ang0 = new Vector3f();
+		Vec3 ang0 = new Vec3();
 		VectorUtil.mul(ang0, jacA.m_0MinvJt, jacB.aJ);
 
-		Vector3f ang1 = new Vector3f();
+		Vec3 ang1 = new Vec3();
 		VectorUtil.mul(ang1, jacA.m_1MinvJt, jacB.bJ);
 
-		Vector3f lin0 = new Vector3f();
+		Vec3 lin0 = new Vec3();
 		lin0.scale(massInvA, lin);
 
-		Vector3f lin1 = new Vector3f();
+		Vec3 lin1 = new Vec3();
 		lin1.scale(massInvB, lin);
 
-		Vector3f sum = new Vector3f();
+		Vec3 sum = new Vec3();
 		VectorUtil.add(sum, ang0, ang1, lin0, lin1);
 
 		return sum.x + sum.y + sum.z;
 	}
 
-	public float getRelativeVelocity(Vector3f linvelA, Vector3f angvelA, Vector3f linvelB, Vector3f angvelB) {
-		Vector3f linrel = new Vector3f();
+	public float getRelativeVelocity(Vec3 linvelA, Vec3 angvelA, Vec3 linvelB, Vec3 angvelB) {
+		Vec3 linrel = new Vec3();
 		linrel.subHere(linvelA, linvelB);
 
-		Vector3f angvela = new Vector3f();
+		Vec3 angvela = new Vec3();
 		VectorUtil.mul(angvela, angvelA, aJ);
 
-		Vector3f angvelb = new Vector3f();
+		Vec3 angvelb = new Vec3();
 		VectorUtil.mul(angvelb, angvelB, bJ);
 
 		VectorUtil.mul(linrel, linrel, linearJointAxis);

@@ -34,7 +34,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import java.util.Collections;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -153,11 +153,11 @@ public class Dbvt {
 		insertleaf(this, root, leaf);
 	}
 
-	public boolean update(Node leaf, DbvtAabbMm volume, Vector3f velocity, float margin) {
+	public boolean update(Node leaf, DbvtAabbMm volume, Vec3 velocity, float margin) {
 		if (leaf.volume.Contain(volume)) {
 			return false;
 		}
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		tmp.set(margin, margin, margin);
 		volume.Expand(tmp);
 		volume.SignedExpand(velocity);
@@ -165,7 +165,7 @@ public class Dbvt {
 		return true;
 	}
 
-	public boolean update(Node leaf, DbvtAabbMm volume, Vector3f velocity) {
+	public boolean update(Node leaf, DbvtAabbMm volume, Vec3 velocity) {
 		if (leaf.volume.Contain(volume)) {
 			return false;
 		}
@@ -178,7 +178,7 @@ public class Dbvt {
 		if (leaf.volume.Contain(volume)) {
 			return false;
 		}
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 		tmp.set(margin, margin, margin);
 		volume.Expand(tmp);
 		update(leaf, volume);
@@ -354,12 +354,12 @@ public class Dbvt {
 		}
 	}
 
-	public static void collideRAY(Node root, Vector3f origin, Vector3f direction, ICollide policy) {
+	public static void collideRAY(Node root, Vec3 origin, Vec3 direction, ICollide policy) {
 		//DBVT_CHECKTYPE
 		if (root != null) {
-			Vector3f normal = new Vector3f();
+			Vec3 normal = new Vec3();
 			normal.normalizeHere(direction);
-			Vector3f invdir = new Vector3f();
+			Vec3 invdir = new Vec3();
 			invdir.set(1f / normal.x, 1f / normal.y, 1f / normal.z);
 			int[] signs = new int[] { direction.x<0 ? 1:0, direction.y<0 ? 1:0, direction.z<0 ? 1:0 };
 			ObjectArrayList<Node> stack = new ObjectArrayList<Node>(SIMPLE_STACKSIZE);
@@ -380,7 +380,7 @@ public class Dbvt {
 		}
 	}
 
-	public static void collideKDOP(Node root, Vector3f[] normals, float[] offsets, int count, ICollide policy) {
+	public static void collideKDOP(Node root, Vec3[] normals, float[] offsets, int count, ICollide policy) {
 		//DBVT_CHECKTYPE
 		if (root != null) {
 			int inside = (1 << count) - 1;
@@ -425,11 +425,11 @@ public class Dbvt {
 		}
 	}
 
-	public static void collideOCL(Node root, Vector3f[] normals, float[] offsets, Vector3f sortaxis, int count, ICollide policy) {
+	public static void collideOCL(Node root, Vec3[] normals, float[] offsets, Vec3 sortaxis, int count, ICollide policy) {
 		collideOCL(root, normals, offsets, sortaxis, count, policy, true);
 	}
 
-	public static void collideOCL(Node root, Vector3f[] normals, float[] offsets, Vector3f sortaxis, int count, ICollide policy, boolean fullsort) {
+	public static void collideOCL(Node root, Vec3[] normals, float[] offsets, Vec3 sortaxis, int count, ICollide policy, boolean fullsort) {
 		//DBVT_CHECKTYPE
 		if (root != null) {
 			int srtsgns = (sortaxis.x >= 0 ? 1 : 0) +
@@ -582,7 +582,7 @@ public class Dbvt {
 	
 	// volume+edge lengths
 	private static float size(DbvtAabbMm a) {
-		Vector3f edges = a.Lengths(new Vector3f());
+		Vec3 edges = a.Lengths(new Vec3());
 		return (edges.x * edges.y * edges.z +
 		        edges.x + edges.y + edges.z);
 	}
@@ -715,8 +715,8 @@ public class Dbvt {
 		}
 	}
 	
-	private static void split(ObjectArrayList<Node> leaves, ObjectArrayList<Node> left, ObjectArrayList<Node> right, Vector3f org, Vector3f axis) {
-		Vector3f tmp = new Vector3f();
+	private static void split(ObjectArrayList<Node> leaves, ObjectArrayList<Node> left, ObjectArrayList<Node> right, Vec3 org, Vec3 axis) {
+		Vec3 tmp = new Vec3();
 		MiscUtil.resize(left, 0, Node.class);
 		MiscUtil.resize(right, 0, Node.class);
 		for (int i=0, ni=leaves.size(); i<ni; i++) {
@@ -767,13 +767,13 @@ public class Dbvt {
 		}
 	}
 
-	private static Vector3f[] axis = new Vector3f[] { new Vector3f(1, 0, 0), new Vector3f(0, 1, 0), new Vector3f(0, 0, 1) };
+	private static Vec3[] axis = new Vec3[] { new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1) };
 	
 	private static Node topdown(Dbvt pdbvt, ObjectArrayList<Node> leaves, int bu_treshold) {
 		if (leaves.size() > 1) {
 			if (leaves.size() > bu_treshold) {
 				DbvtAabbMm vol = bounds(leaves);
-				Vector3f org = vol.Center(new Vector3f());
+				Vec3 org = vol.Center(new Vec3());
 				ObjectArrayList[] sets = new ObjectArrayList[2];
 				for (int i=0; i<sets.length; i++) {
 					sets[i] = new ObjectArrayList();
@@ -782,7 +782,7 @@ public class Dbvt {
 				int bestmidp = leaves.size();
 				int[][] splitcount = new int[/*3*/][/*2*/]{{0, 0}, {0, 0}, {0, 0}};
 
-				Vector3f x = new Vector3f();
+				Vec3 x = new Vec3();
 
 				for (int i=0; i<leaves.size(); i++) {
 					leaves.getQuick(i).volume.Center(x);

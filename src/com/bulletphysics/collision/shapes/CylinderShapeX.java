@@ -26,7 +26,7 @@
 package com.bulletphysics.collision.shapes;
 
 
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Cylinder shape around the X axis.
@@ -35,27 +35,27 @@ import javax.vecmath.Vector3f;
  */
 public class CylinderShapeX extends CylinderShape {
 
-	public CylinderShapeX(Vector3f halfExtents) {
+	public CylinderShapeX(Vec3 halfExtents) {
 		super(halfExtents, false);
 		upAxis = 0;
 		recalcLocalAabb();
 	}
 
 	@Override
-	public Vector3f localGetSupportingVertexWithoutMargin(Vector3f vec, Vector3f out) {
-		return cylinderLocalSupportX(getHalfExtentsWithoutMargin(new Vector3f()), vec, out);
+	public Vec3 localGetSupportingVertexWithoutMargin(Vec3 vec, Vec3 out) {
+		return cylinderLocalSupportX(getHalfExtentsWithoutMargin(new Vec3()), vec, out);
 	}
 
 	@Override
-	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vector3f[] vectors, Vector3f[] supportVerticesOut, int numVectors) {
+	public void batchedUnitVectorGetSupportingVertexWithoutMargin(Vec3[] vectors, Vec3[] supportVerticesOut, int numVectors) {
 		for (int i = 0; i < numVectors; i++) {
-			cylinderLocalSupportX(getHalfExtentsWithoutMargin(new Vector3f()), vectors[i], supportVerticesOut[i]);
+			cylinderLocalSupportX(getHalfExtentsWithoutMargin(new Vec3()), vectors[i], supportVerticesOut[i]);
 		}
 	}
 
 	@Override
 	public float getRadius() {
-		return getHalfExtentsWithMargin(new Vector3f()).y;
+		return getHalfExtentsWithMargin(new Vec3()).y;
 	}
 
 	@Override

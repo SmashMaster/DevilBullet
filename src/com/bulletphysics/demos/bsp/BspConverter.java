@@ -30,7 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  *
@@ -42,13 +42,13 @@ public abstract class BspConverter {
 		BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 		String s;
 		
-		ObjectArrayList<Vector3f> vertices = new ObjectArrayList<Vector3f>();
+		ObjectArrayList<Vec3> vertices = new ObjectArrayList<Vec3>();
 		while ((s = r.readLine()) != null) {
 			int count = Integer.parseInt(s);
 			vertices.clear();
 			for (int i=0; i<count; i++) {
 				String[] c = r.readLine().split(" ");
-				vertices.add(new Vector3f(
+				vertices.add(new Vec3(
 					Float.parseFloat(c[0]),
 					Float.parseFloat(c[1]),
 					Float.parseFloat(c[2])
@@ -59,6 +59,6 @@ public abstract class BspConverter {
 		r.close();
 	}
 	
-	public abstract void addConvexVerticesCollider(ObjectArrayList<Vector3f> vertices);
+	public abstract void addConvexVerticesCollider(ObjectArrayList<Vec3> vertices);
 	
 }

@@ -26,8 +26,8 @@
 package com.bulletphysics.linearmath;
 
 
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
@@ -36,12 +36,12 @@ import javax.vecmath.Vector3f;
  */
 public class AabbUtil2 {
 
-	public static void aabbExpand(Vector3f aabbMin, Vector3f aabbMax, Vector3f expansionMin, Vector3f expansionMax) {
+	public static void aabbExpand(Vec3 aabbMin, Vec3 aabbMax, Vec3 expansionMin, Vec3 expansionMax) {
 		aabbMin.add(expansionMin);
 		aabbMax.add(expansionMax);
 	}
 
-	public static int outcode(Vector3f p, Vector3f halfExtent) {
+	public static int outcode(Vec3 p, Vec3 halfExtent) {
 		return (p.x < -halfExtent.x ? 0x01 : 0x0) |
 				(p.x > halfExtent.x ? 0x08 : 0x0) |
 				(p.y < -halfExtent.y ? 0x02 : 0x0) |
@@ -50,13 +50,13 @@ public class AabbUtil2 {
 				(p.z > halfExtent.z ? 0x20 : 0x0);
 	}
 	
-	public static boolean rayAabb(Vector3f rayFrom, Vector3f rayTo, Vector3f aabbMin, Vector3f aabbMax, float[] param, Vector3f normal) {
-		Vector3f aabbHalfExtent = new Vector3f();
-		Vector3f aabbCenter = new Vector3f();
-		Vector3f source = new Vector3f();
-		Vector3f target = new Vector3f();
-		Vector3f r = new Vector3f();
-		Vector3f hitNormal = new Vector3f();
+	public static boolean rayAabb(Vec3 rayFrom, Vec3 rayTo, Vec3 aabbMin, Vec3 aabbMax, float[] param, Vec3 normal) {
+		Vec3 aabbHalfExtent = new Vec3();
+		Vec3 aabbCenter = new Vec3();
+		Vec3 source = new Vec3();
+		Vec3 target = new Vec3();
+		Vec3 r = new Vec3();
+		Vec3 hitNormal = new Vec3();
 
 		aabbHalfExtent.subHere(aabbMax, aabbMin);
 		aabbHalfExtent.mult(0.5f);
@@ -109,7 +109,7 @@ public class AabbUtil2 {
 	/**
 	 * Conservative test for overlap between two AABBs.
 	 */
-	public static boolean testAabbAgainstAabb2(Vector3f aabbMin1, Vector3f aabbMax1, Vector3f aabbMin2, Vector3f aabbMax2) {
+	public static boolean testAabbAgainstAabb2(Vec3 aabbMin1, Vec3 aabbMax1, Vec3 aabbMin2, Vec3 aabbMax2) {
 		boolean overlap = true;
 		overlap = (aabbMin1.x > aabbMax2.x || aabbMax1.x < aabbMin2.x) ? false : overlap;
 		overlap = (aabbMin1.z > aabbMax2.z || aabbMax1.z < aabbMin2.z) ? false : overlap;
@@ -120,10 +120,10 @@ public class AabbUtil2 {
 	/**
 	 * Conservative test for overlap between triangle and AABB.
 	 */
-	public static boolean testTriangleAgainstAabb2(Vector3f[] vertices, Vector3f aabbMin, Vector3f aabbMax) {
-		Vector3f p1 = vertices[0];
-		Vector3f p2 = vertices[1];
-		Vector3f p3 = vertices[2];
+	public static boolean testTriangleAgainstAabb2(Vec3[] vertices, Vec3 aabbMin, Vec3 aabbMax) {
+		Vec3 p1 = vertices[0];
+		Vec3 p2 = vertices[1];
+		Vec3 p3 = vertices[2];
 
 		if (Math.min(Math.min(p1.x, p2.x), p3.x) > aabbMax.x) return false;
 		if (Math.max(Math.max(p1.x, p2.x), p3.x) < aabbMin.x) return false;
@@ -137,19 +137,19 @@ public class AabbUtil2 {
 		return true;
 	}
 
-	public static void transformAabb(Vector3f halfExtents, float margin, Transform t, Vector3f aabbMinOut, Vector3f aabbMaxOut) {
-		Vector3f halfExtentsWithMargin = new Vector3f();
+	public static void transformAabb(Vec3 halfExtents, float margin, Transform t, Vec3 aabbMinOut, Vec3 aabbMaxOut) {
+		Vec3 halfExtentsWithMargin = new Vec3();
 		halfExtentsWithMargin.x = halfExtents.x + margin;
 		halfExtentsWithMargin.y = halfExtents.y + margin;
 		halfExtentsWithMargin.z = halfExtents.z + margin;
 
-		Matrix3f abs_b = new Matrix3f(t.basis);
+		Mat3 abs_b = new Mat3(t.basis);
 		MatrixUtil.absolute(abs_b);
 
-		Vector3f tmp = new Vector3f();
+		Vec3 tmp = new Vec3();
 
-		Vector3f center = new Vector3f(t.origin);
-		Vector3f extent = new Vector3f();
+		Vec3 center = new Vec3(t.origin);
+		Vec3 extent = new Vec3();
 		abs_b.getRow(0, tmp);
 		extent.x = tmp.dot(halfExtentsWithMargin);
 		abs_b.getRow(1, tmp);
@@ -161,12 +161,12 @@ public class AabbUtil2 {
 		aabbMaxOut.addHere(center, extent);
 	}
 
-	public static void transformAabb(Vector3f localAabbMin, Vector3f localAabbMax, float margin, Transform trans, Vector3f aabbMinOut, Vector3f aabbMaxOut) {
+	public static void transformAabb(Vec3 localAabbMin, Vec3 localAabbMax, float margin, Transform trans, Vec3 aabbMinOut, Vec3 aabbMaxOut) {
 		assert (localAabbMin.x <= localAabbMax.x);
 		assert (localAabbMin.y <= localAabbMax.y);
 		assert (localAabbMin.z <= localAabbMax.z);
 
-		Vector3f localHalfExtents = new Vector3f();
+		Vec3 localHalfExtents = new Vec3();
 		localHalfExtents.subHere(localAabbMax, localAabbMin);
 		localHalfExtents.mult(0.5f);
 
@@ -174,18 +174,18 @@ public class AabbUtil2 {
 		localHalfExtents.y += margin;
 		localHalfExtents.z += margin;
 
-		Vector3f localCenter = new Vector3f();
+		Vec3 localCenter = new Vec3();
 		localCenter.addHere(localAabbMax, localAabbMin);
 		localCenter.mult(0.5f);
 
-		Matrix3f abs_b = new Matrix3f(trans.basis);
+		Mat3 abs_b = new Mat3(trans.basis);
 		MatrixUtil.absolute(abs_b);
 
-		Vector3f center = new Vector3f(localCenter);
+		Vec3 center = new Vec3(localCenter);
 		trans.transform(center);
 
-		Vector3f extent = new Vector3f();
-		Vector3f tmp = new Vector3f();
+		Vec3 extent = new Vec3();
+		Vec3 tmp = new Vec3();
 
 		abs_b.getRow(0, tmp);
 		extent.x = tmp.dot(localHalfExtents);

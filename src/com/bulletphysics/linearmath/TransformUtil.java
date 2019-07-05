@@ -27,8 +27,8 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Mat3;
+import javax.vecmath.Vec3;
 
 /**
  * Utility functions for transforms.
@@ -44,7 +44,7 @@ public class TransformUtil {
 		return 1f / (float)Math.sqrt(x);  /* reciprocal square root */
 	}
 
-	public static void planeSpace1(Vector3f n, Vector3f p, Vector3f q) {
+	public static void planeSpace1(Vec3 n, Vec3 p, Vec3 q) {
 		if (Math.abs(n.z) > SIMDSQRT12) {
 			// choose p in y-z plane
 			float a = n.y * n.y + n.z * n.z;
@@ -63,7 +63,7 @@ public class TransformUtil {
 		}
 	}
 	
-	public static void integrateTransform(Transform curTrans, Vector3f linvel, Vector3f angvel, float timeStep, Transform predictedTransform) {
+	public static void integrateTransform(Transform curTrans, Vec3 linvel, Vec3 angvel, float timeStep, Transform predictedTransform) {
 		predictedTransform.origin.scaleAddHere(timeStep, linvel, curTrans.origin);
 //	//#define QUATERNION_DERIVATIVE
 //	#ifdef QUATERNION_DERIVATIVE
@@ -74,7 +74,7 @@ public class TransformUtil {
 		// Exponential map
 		// google for "Practical Parameterization of Rotations Using the Exponential Map", F. Sebastian Grassia
 		
-		Vector3f axis = new Vector3f();
+		Vec3 axis = new Vec3();
 		float fAngle = angvel.length();
 
 		// limit the angular motion
@@ -100,28 +100,28 @@ public class TransformUtil {
 		predictedTransform.setRotation(predictedOrn);
 	}
 
-	public static void calculateVelocity(Transform transform0, Transform transform1, float timeStep, Vector3f linVel, Vector3f angVel) {
+	public static void calculateVelocity(Transform transform0, Transform transform1, float timeStep, Vec3 linVel, Vec3 angVel) {
 		linVel.subHere(transform1.origin, transform0.origin);
 		linVel.mult(1f / timeStep);
 
-		Vector3f axis = new Vector3f();
+		Vec3 axis = new Vec3();
 		float[] angle = new float[1];
 		calculateDiffAxisAngle(transform0, transform1, axis, angle);
 		angVel.scale(angle[0] / timeStep, axis);
 	}
 	
-	public static void calculateDiffAxisAngle(Transform transform0, Transform transform1, Vector3f axis, float[] angle) {
+	public static void calculateDiffAxisAngle(Transform transform0, Transform transform1, Vec3 axis, float[] angle) {
 // #ifdef USE_QUATERNION_DIFF
 //		btQuaternion orn0 = transform0.getRotation();
 //		btQuaternion orn1a = transform1.getRotation();
 //		btQuaternion orn1 = orn0.farthest(orn1a);
 //		btQuaternion dorn = orn1 * orn0.inverse();
 // #else
-		Matrix3f tmp = new Matrix3f();
+		Mat3 tmp = new Mat3();
 		tmp.set(transform0.basis);
 		MatrixUtil.invert(tmp);
 
-		Matrix3f dmat = new Matrix3f();
+		Mat3 dmat = new Mat3();
 		dmat.multHere(transform1.basis, tmp);
 
 		Quat dorn = new Quat();

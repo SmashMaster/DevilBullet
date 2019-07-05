@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Vec3;
 
 /**
  * Utility functions for quaternions.
@@ -41,7 +41,7 @@ public class QuaternionUtil {
 		return s;
 	}
 	
-	public static void setRotation(Quat q, Vector3f axis, float angle) {
+	public static void setRotation(Quat q, Vec3 axis, float angle) {
 		float d = axis.length();
 		assert (d != 0f);
 		float s = (float)Math.sin(angle * 0.5f) / d;
@@ -49,8 +49,8 @@ public class QuaternionUtil {
 	}
 	
 	// Game Programming Gems 2.10. make sure v0,v1 are normalized
-	public static Quat shortestArcQuat(Vector3f v0, Vector3f v1, Quat out) {
-		Vector3f c = new Vector3f();
+	public static Quat shortestArcQuat(Vec3 v0, Vec3 v1, Quat out) {
+		Vec3 c = new Vec3();
 		c.crossHere(v0, v1);
 		float d = v0.dot(v1);
 
@@ -67,7 +67,7 @@ public class QuaternionUtil {
 		return out;
 	}
 	
-	public static void mul(Quat q, Vector3f w) {
+	public static void mul(Quat q, Vec3 w) {
 		float rx = q.w * w.x + q.y * w.z - q.z * w.y;
 		float ry = q.w * w.y + q.z * w.x - q.x * w.z;
 		float rz = q.w * w.z + q.x * w.y - q.y * w.x;
@@ -75,7 +75,7 @@ public class QuaternionUtil {
 		q.set(rw, rx, ry, rz);
 	}
 	
-	public static Vector3f quatRotate(Quat rotation, Vector3f v, Vector3f out) {
+	public static Vec3 quatRotate(Quat rotation, Vec3 v, Vec3 out) {
 		Quat q = new Quat(rotation);
 		QuaternionUtil.mul(q, v);
 
