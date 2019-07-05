@@ -39,41 +39,41 @@ import javax.vecmath.Vector3f;
 public class MatrixUtil {
 	
 	public static void scale(Matrix3f dest, Matrix3f mat, Vector3f s) {
-		dest.m00 = mat.m00 * s.x;   dest.m01 = mat.m01 * s.y;   dest.m02 = mat.m02 * s.z;
-		dest.m10 = mat.m10 * s.x;   dest.m11 = mat.m11 * s.y;   dest.m12 = mat.m12 * s.z;
-		dest.m20 = mat.m20 * s.x;   dest.m21 = mat.m21 * s.y;   dest.m22 = mat.m22 * s.z;
+		dest.a = mat.a * s.x;   dest.b = mat.b * s.y;   dest.c = mat.c * s.z;
+		dest.d = mat.d * s.x;   dest.e = mat.e * s.y;   dest.f = mat.f * s.z;
+		dest.g = mat.g * s.x;   dest.h = mat.h * s.y;   dest.i = mat.i * s.z;
 	}
 	
 	public static void absolute(Matrix3f mat) {
-		mat.m00 = Math.abs(mat.m00);
-		mat.m01 = Math.abs(mat.m01);
-		mat.m02 = Math.abs(mat.m02);
-		mat.m10 = Math.abs(mat.m10);
-		mat.m11 = Math.abs(mat.m11);
-		mat.m12 = Math.abs(mat.m12);
-		mat.m20 = Math.abs(mat.m20);
-		mat.m21 = Math.abs(mat.m21);
-		mat.m22 = Math.abs(mat.m22);
+		mat.a = Math.abs(mat.a);
+		mat.b = Math.abs(mat.b);
+		mat.c = Math.abs(mat.c);
+		mat.d = Math.abs(mat.d);
+		mat.e = Math.abs(mat.e);
+		mat.f = Math.abs(mat.f);
+		mat.g = Math.abs(mat.g);
+		mat.h = Math.abs(mat.h);
+		mat.i = Math.abs(mat.i);
 	}
 	
 	public static void setFromOpenGLSubMatrix(Matrix3f mat, float[] m) {
-		mat.m00 = m[0]; mat.m01 = m[4]; mat.m02 = m[8];
-		mat.m10 = m[1]; mat.m11 = m[5]; mat.m12 = m[9];
-		mat.m20 = m[2]; mat.m21 = m[6]; mat.m22 = m[10];
+		mat.a = m[0]; mat.b = m[4]; mat.c = m[8];
+		mat.d = m[1]; mat.e = m[5]; mat.f = m[9];
+		mat.g = m[2]; mat.h = m[6]; mat.i = m[10];
 	}
 
 	public static void getOpenGLSubMatrix(Matrix3f mat, float[] m) {
-		m[0] = mat.m00;
-		m[1] = mat.m10;
-		m[2] = mat.m20;
+		m[0] = mat.a;
+		m[1] = mat.d;
+		m[2] = mat.g;
 		m[3] = 0f;
-		m[4] = mat.m01;
-		m[5] = mat.m11;
-		m[6] = mat.m21;
+		m[4] = mat.b;
+		m[5] = mat.e;
+		m[6] = mat.h;
 		m[7] = 0f;
-		m[8] = mat.m02;
-		m[9] = mat.m12;
-		m[10] = mat.m22;
+		m[8] = mat.c;
+		m[9] = mat.f;
+		m[10] = mat.i;
 		m[11] = 0f;
 	}
 	
@@ -99,15 +99,15 @@ public class MatrixUtil {
 	}
 	
 	private static float tdotx(Matrix3f mat, Vector3f vec) {
-		return mat.m00 * vec.x + mat.m10 * vec.y + mat.m20 * vec.z;
+		return mat.a * vec.x + mat.d * vec.y + mat.g * vec.z;
 	}
 
 	private static float tdoty(Matrix3f mat, Vector3f vec) {
-		return mat.m01 * vec.x + mat.m11 * vec.y + mat.m21 * vec.z;
+		return mat.b * vec.x + mat.e * vec.y + mat.h * vec.z;
 	}
 
 	private static float tdotz(Matrix3f mat, Vector3f vec) {
-		return mat.m02 * vec.x + mat.m12 * vec.y + mat.m22 * vec.z;
+		return mat.c * vec.x + mat.f * vec.y + mat.i * vec.z;
 	}
 	
 	public static void transposeTransform(Vector3f dest, Vector3f vec, Matrix3f mat) {
@@ -127,21 +127,21 @@ public class MatrixUtil {
 		float wx = q.w * xs, wy = q.w * ys, wz = q.w * zs;
 		float xx = q.x * xs, xy = q.x * ys, xz = q.x * zs;
 		float yy = q.y * ys, yz = q.y * zs, zz = q.z * zs;
-		dest.m00 = 1f - (yy + zz);
-		dest.m01 = xy - wz;
-		dest.m02 = xz + wy;
-		dest.m10 = xy + wz;
-		dest.m11 = 1f - (xx + zz);
-		dest.m12 = yz - wx;
-		dest.m20 = xz - wy;
-		dest.m21 = yz + wx;
-		dest.m22 = 1f - (xx + yy);
+		dest.a = 1f - (yy + zz);
+		dest.b = xy - wz;
+		dest.c = xz + wy;
+		dest.d = xy + wz;
+		dest.e = 1f - (xx + zz);
+		dest.f = yz - wx;
+		dest.g = xz - wy;
+		dest.h = yz + wx;
+		dest.i = 1f - (xx + yy);
 	}
 	
 	public static void getRotation(Matrix3f mat, Quat dest) {
 		ArrayPool<float[]> floatArrays = ArrayPool.get(float.class);
 		
-		float trace = mat.m00 + mat.m11 + mat.m22;
+		float trace = mat.a + mat.e + mat.i;
 		float[] temp = floatArrays.getFixed(4);
 
 		if (trace > 0f) {
@@ -149,12 +149,12 @@ public class MatrixUtil {
 			temp[3] = (s * 0.5f);
 			s = 0.5f / s;
 
-			temp[0] = ((mat.m21 - mat.m12) * s);
-			temp[1] = ((mat.m02 - mat.m20) * s);
-			temp[2] = ((mat.m10 - mat.m01) * s);
+			temp[0] = ((mat.h - mat.f) * s);
+			temp[1] = ((mat.c - mat.g) * s);
+			temp[2] = ((mat.d - mat.b) * s);
 		}
 		else {
-			int i = mat.m00 < mat.m11 ? (mat.m11 < mat.m22 ? 2 : 1) : (mat.m00 < mat.m22 ? 2 : 0);
+			int i = mat.a < mat.e ? (mat.e < mat.i ? 2 : 1) : (mat.a < mat.i ? 2 : 0);
 			int j = (i + 1) % 3;
 			int k = (i + 2) % 3;
 
@@ -180,7 +180,7 @@ public class MatrixUtil {
 		float co_y = cofac(mat, 1, 2, 2, 0);
 		float co_z = cofac(mat, 1, 0, 2, 1);
 		
-		float det = mat.m00*co_x + mat.m01*co_y + mat.m02*co_z;
+		float det = mat.a*co_x + mat.b*co_y + mat.c*co_z;
 		assert (det != 0f);
 		
 		float s = 1f / det;
@@ -194,15 +194,15 @@ public class MatrixUtil {
 		float m21 = cofac(mat, 0, 1, 2, 0) * s;
 		float m22 = cofac(mat, 0, 0, 1, 1) * s;
 		
-		mat.m00 = m00;
-		mat.m01 = m01;
-		mat.m02 = m02;
-		mat.m10 = m10;
-		mat.m11 = m11;
-		mat.m12 = m12;
-		mat.m20 = m20;
-		mat.m21 = m21;
-		mat.m22 = m22;
+		mat.a = m00;
+		mat.b = m01;
+		mat.c = m02;
+		mat.d = m10;
+		mat.e = m11;
+		mat.f = m12;
+		mat.g = m20;
+		mat.h = m21;
+		mat.i = m22;
 	}
 
 	/**
@@ -223,14 +223,14 @@ public class MatrixUtil {
 			int p = 0;
 			int q = 1;
 			int r = 2;
-			float max = Math.abs(mat.m01);
-			float v = Math.abs(mat.m02);
+			float max = Math.abs(mat.b);
+			float v = Math.abs(mat.c);
 			if (v > max) {
 				q = 2;
 				r = 1;
 				max = v;
 			}
-			v = Math.abs(mat.m12);
+			v = Math.abs(mat.f);
 			if (v > max) {
 				p = 1;
 				q = 2;
@@ -238,7 +238,7 @@ public class MatrixUtil {
 				max = v;
 			}
 
-			float t = threshold * (Math.abs(mat.m00) + Math.abs(mat.m11) + Math.abs(mat.m22));
+			float t = threshold * (Math.abs(mat.a) + Math.abs(mat.e) + Math.abs(mat.i));
 			if (max <= t) {
 				if (max <= BulletGlobals.SIMD_EPSILON * t) {
 					return;

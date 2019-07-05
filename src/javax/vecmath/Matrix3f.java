@@ -42,47 +42,47 @@ public class Matrix3f implements java.io.Serializable {
   /** 
     * The first matrix element in the first row.
     */
-    public	float	m00;
+    public	float	a;
 
   /** 
     * The second matrix element in the first row.
     */
-    public	float	m01;
+    public	float	b;
 
   /** 
     * The third matrix element in the first row.
     */
-    public	float	m02;
+    public	float	c;
 
   /** 
     * The first matrix element in the second row.
     */
-    public	float	m10;
+    public	float	d;
 
   /** 
     * The second matrix element in the second row.
     */
-    public	float	m11;
+    public	float	e;
 
   /** 
     * The third matrix element in the second row.
     */
-    public	float	m12;
+    public	float	f;
 
   /** 
     * The first matrix element in the third row.
     */
-    public	float	m20;
+    public	float	g;
 
   /** 
     * The second matrix element in the third row.
     */
-    public	float	m21;
+    public	float	h;
 
   /** 
     * The third matrix element in the third row.
     */
-    public	float	m22;
+    public	float	i;
   
    /**
      *  Constructs a new matrix with the same values as the
@@ -91,17 +91,17 @@ public class Matrix3f implements java.io.Serializable {
      */  
    public Matrix3f(Matrix3f m1)
    {
-        this.m00 = m1.m00;
-        this.m01 = m1.m01;
-        this.m02 = m1.m02;
+        this.a = m1.a;
+        this.b = m1.b;
+        this.c = m1.c;
  
-        this.m10 = m1.m10;
-        this.m11 = m1.m11;
-        this.m12 = m1.m12;
+        this.d = m1.d;
+        this.e = m1.e;
+        this.f = m1.f;
  
-        this.m20 = m1.m20;
-        this.m21 = m1.m21;
-        this.m22 = m1.m22;
+        this.g = m1.g;
+        this.h = m1.h;
+        this.i = m1.i;
 
    }
 
@@ -118,9 +118,9 @@ public class Matrix3f implements java.io.Serializable {
      */
     public String toString() {
       return
-	this.m00 + ", " + this.m01 + ", " + this.m02 + "\n" +
-	this.m10 + ", " + this.m11 + ", " + this.m12 + "\n" +
-	this.m20 + ", " + this.m21 + ", " + this.m22 + "\n";
+	this.a + ", " + this.b + ", " + this.c + "\n" +
+	this.d + ", " + this.e + ", " + this.f + "\n" +
+	this.g + ", " + this.h + ", " + this.i + "\n";
     }
 
     /**
@@ -128,17 +128,17 @@ public class Matrix3f implements java.io.Serializable {
      */
     public final void setIdentity()
     {
-	this.m00 = (float) 1.0;
-	this.m01 = (float) 0.0;
-	this.m02 = (float) 0.0;
+	this.a = (float) 1.0;
+	this.b = (float) 0.0;
+	this.c = (float) 0.0;
 
-	this.m10 = (float) 0.0;
-	this.m11 = (float) 1.0;
-	this.m12 = (float) 0.0;
+	this.d = (float) 0.0;
+	this.e = (float) 1.0;
+	this.f = (float) 0.0;
 
-	this.m20 = (float) 0.0;
-	this.m21 = (float) 0.0;
-	this.m22 = (float) 1.0;
+	this.g = (float) 0.0;
+	this.h = (float) 0.0;
+	this.i = (float) 1.0;
     }
 
     /**
@@ -155,13 +155,13 @@ public class Matrix3f implements java.io.Serializable {
 	    switch(column)
 	      {
 	      case 0:
-		this.m00 = value;
+		this.a = value;
 		break;
 	      case 1:
-		this.m01 = value;
+		this.b = value;
 		break;
 	      case 2:
-		this.m02 = value;
+		this.c = value;
 		break;
 	      default:
 		throw new ArrayIndexOutOfBoundsException();
@@ -172,13 +172,13 @@ public class Matrix3f implements java.io.Serializable {
 	    switch(column) 
 	      {
 	      case 0:
-		this.m10 = value;
+		this.d = value;
 		break;
 	      case 1:
-		this.m11 = value;
+		this.e = value;
 		break;
 	      case 2:
-		this.m12 = value;
+		this.f = value;
 		break;
 	      default:
 		throw new ArrayIndexOutOfBoundsException();
@@ -189,13 +189,13 @@ public class Matrix3f implements java.io.Serializable {
 	    switch(column) 
 	      {
 	      case 0:
-		this.m20 = value;
+		this.g = value;
 		break;
 	      case 1:
-		this.m21 = value;
+		this.h = value;
 		break;
 	      case 2:
-		this.m22 = value;
+		this.i = value;
 		break;
 	      default:
 
@@ -215,17 +215,17 @@ public class Matrix3f implements java.io.Serializable {
      */
     public final void getRow(int row, Vector3f v) {
          if( row == 0 ) {
-           v.x = m00;
-           v.y = m01;
-           v.z = m02;
+           v.x = a;
+           v.y = b;
+           v.z = c;
         } else if(row == 1) {
-           v.x = m10;
-           v.y = m11;
-           v.z = m12;
+           v.x = d;
+           v.y = e;
+           v.z = f;
         } else if(row == 2) {
-           v.x = m20;
-           v.y = m21;
-           v.z = m22;
+           v.x = g;
+           v.y = h;
+           v.z = i;
         } else {
           throw new ArrayIndexOutOfBoundsException();
         }
@@ -240,17 +240,17 @@ public class Matrix3f implements java.io.Serializable {
      */  
     public final void getColumn(int column, Vector3f v) {
         if( column == 0 ) {
-           v.x = m00;
-           v.y = m10;
-           v.z = m20;
+           v.x = a;
+           v.y = d;
+           v.z = g;
         } else if(column == 1) {
-           v.x = m01;
-           v.y = m11;
-           v.z = m21;
+           v.x = b;
+           v.y = e;
+           v.z = h;
         }else if(column == 2){
-           v.x = m02;
-           v.y = m12;
-           v.z = m22;
+           v.x = c;
+           v.y = f;
+           v.z = i;
         } else {
            throw new ArrayIndexOutOfBoundsException();
         }
@@ -272,11 +272,11 @@ public class Matrix3f implements java.io.Serializable {
 	    switch(column)
 	      {
 	      case 0:
-		return(this.m00);
+		return(this.a);
 	      case 1:
-		return(this.m01);
+		return(this.b);
 	      case 2:
-		return(this.m02);
+		return(this.c);
 	      default:
                 break;
 	      }
@@ -285,11 +285,11 @@ public class Matrix3f implements java.io.Serializable {
 	    switch(column) 
 	      {
 	      case 0:
-		return(this.m10);
+		return(this.d);
 	      case 1:
-		return(this.m11);
+		return(this.e);
 	      case 2:
-		return(this.m12);
+		return(this.f);
 	      default:
                 break;
 	      }
@@ -299,11 +299,11 @@ public class Matrix3f implements java.io.Serializable {
 	    switch(column) 
 	      {
 	      case 0:
-		return(this.m20);
+		return(this.g);
 	      case 1:
-		return(this.m21);
+		return(this.h);
 	      case 2:
-		return(this.m22);
+		return(this.i);
 	      default:
                 break;
 	      }
@@ -326,21 +326,21 @@ public class Matrix3f implements java.io.Serializable {
     {
 	switch (row) {
 	case 0:
-	    this.m00 = x;
-	    this.m01 = y;
-	    this.m02 = z;
+	    this.a = x;
+	    this.b = y;
+	    this.c = z;
 	    break;
 
 	case 1:
-	    this.m10 = x;
-	    this.m11 = y;
-	    this.m12 = z;
+	    this.d = x;
+	    this.e = y;
+	    this.f = z;
 	    break;
 
 	case 2:
-	    this.m20 = x;
-	    this.m21 = y;
-	    this.m22 = z;
+	    this.g = x;
+	    this.h = y;
+	    this.i = z;
 	    break;
 
 	default:
@@ -357,21 +357,21 @@ public class Matrix3f implements java.io.Serializable {
     {
 	switch (row) {
 	case 0:
-	    this.m00 = v.x;
-	    this.m01 = v.y;
-	    this.m02 = v.z;
+	    this.a = v.x;
+	    this.b = v.y;
+	    this.c = v.z;
 	    break;
 
 	case 1:
-	    this.m10 = v.x;
-	    this.m11 = v.y;
-	    this.m12 = v.z;
+	    this.d = v.x;
+	    this.e = v.y;
+	    this.f = v.z;
 	    break;
 
 	case 2:
-	    this.m20 = v.x;
-	    this.m21 = v.y;
-	    this.m22 = v.z;
+	    this.g = v.x;
+	    this.h = v.y;
+	    this.i = v.z;
 	    break;
 
 	default:
@@ -386,17 +386,17 @@ public class Matrix3f implements java.io.Serializable {
      */
     public final void add(Matrix3f m1)
     {  
-        this.m00 += m1.m00;
-        this.m01 += m1.m01;
-        this.m02 += m1.m02;
+        this.a += m1.a;
+        this.b += m1.b;
+        this.c += m1.c;
  
-        this.m10 += m1.m10;
-        this.m11 += m1.m11;
-        this.m12 += m1.m12;
+        this.d += m1.d;
+        this.e += m1.e;
+        this.f += m1.f;
  
-        this.m20 += m1.m20;
-        this.m21 += m1.m21;
-        this.m22 += m1.m22;
+        this.g += m1.g;
+        this.h += m1.h;
+        this.i += m1.i;
     }  
     
     /**
@@ -406,17 +406,17 @@ public class Matrix3f implements java.io.Serializable {
     {
 	float temp;
 
-	temp = this.m10;
-	this.m10 = this.m01;
-	this.m01 = temp;
+	temp = this.d;
+	this.d = this.b;
+	this.b = temp;
 
-	temp = this.m20;
-	this.m20 = this.m02;
-	this.m02 = temp;
+	temp = this.g;
+	this.g = this.c;
+	this.c = temp;
 
-	temp = this.m21;
-	this.m21 = this.m12;
-	this.m12 = temp;
+	temp = this.h;
+	this.h = this.f;
+	this.f = temp;
     }
 
     /**
@@ -426,17 +426,17 @@ public class Matrix3f implements java.io.Serializable {
     public final void transpose(Matrix3f m1)
     {
 	if (this != m1) {
-	    this.m00 = m1.m00;
-	    this.m01 = m1.m10;
-	    this.m02 = m1.m20;
+	    this.a = m1.a;
+	    this.b = m1.d;
+	    this.c = m1.g;
 
-	    this.m10 = m1.m01;
-	    this.m11 = m1.m11;
-	    this.m12 = m1.m21;
+	    this.d = m1.b;
+	    this.e = m1.e;
+	    this.f = m1.h;
 
-	    this.m20 = m1.m02;
-	    this.m21 = m1.m12;
-	    this.m22 = m1.m22;
+	    this.g = m1.c;
+	    this.h = m1.f;
+	    this.i = m1.i;
 	} else
 	    this.transpose();
     }
@@ -448,17 +448,17 @@ public class Matrix3f implements java.io.Serializable {
      */
     public final void set(Quat q1)
     {
-	this.m00 = 1.0f - 2.0f*q1.y*q1.y - 2.0f*q1.z*q1.z;
-	this.m10 = 2.0f*(q1.x*q1.y + q1.w*q1.z);
-	this.m20 = 2.0f*(q1.x*q1.z - q1.w*q1.y);
+	this.a = 1.0f - 2.0f*q1.y*q1.y - 2.0f*q1.z*q1.z;
+	this.d = 2.0f*(q1.x*q1.y + q1.w*q1.z);
+	this.g = 2.0f*(q1.x*q1.z - q1.w*q1.y);
 
-	this.m01 = 2.0f*(q1.x*q1.y - q1.w*q1.z);
-	this.m11 = 1.0f - 2.0f*q1.x*q1.x - 2.0f*q1.z*q1.z;
-	this.m21 = 2.0f*(q1.y*q1.z + q1.w*q1.x);
+	this.b = 2.0f*(q1.x*q1.y - q1.w*q1.z);
+	this.e = 1.0f - 2.0f*q1.x*q1.x - 2.0f*q1.z*q1.z;
+	this.h = 2.0f*(q1.y*q1.z + q1.w*q1.x);
 
-	this.m02 = 2.0f*(q1.x*q1.z + q1.w*q1.y);
-	this.m12 = 2.0f*(q1.y*q1.z - q1.w*q1.x);
-	this.m22 = 1.0f - 2.0f*q1.x*q1.x - 2.0f*q1.y*q1.y;
+	this.c = 2.0f*(q1.x*q1.z + q1.w*q1.y);
+	this.f = 2.0f*(q1.y*q1.z - q1.w*q1.x);
+	this.i = 1.0f - 2.0f*q1.x*q1.x - 2.0f*q1.y*q1.y;
     }
 
     /**
@@ -468,17 +468,17 @@ public class Matrix3f implements java.io.Serializable {
      */  
     public final void set(Matrix3f m1) {
 
-        this.m00 = m1.m00;
-        this.m01 = m1.m01;
-        this.m02 = m1.m02;
+        this.a = m1.a;
+        this.b = m1.b;
+        this.c = m1.c;
 
-        this.m10 = m1.m10;
-        this.m11 = m1.m11;
-        this.m12 = m1.m12;
+        this.d = m1.d;
+        this.e = m1.e;
+        this.f = m1.f;
 
-        this.m20 = m1.m20;
-        this.m21 = m1.m21;
-        this.m22 = m1.m22;
+        this.g = m1.g;
+        this.h = m1.h;
+        this.i = m1.i;
 
     }
 
@@ -510,17 +510,17 @@ public class Matrix3f implements java.io.Serializable {
 	// for floating-point 3x3 matrices.
 
 	// Copy source matrix to t1tmp 
-        temp[0] = (double)m1.m00;
-        temp[1] = (double)m1.m01;
-        temp[2] = (double)m1.m02;
+        temp[0] = (double)m1.a;
+        temp[1] = (double)m1.b;
+        temp[2] = (double)m1.c;
  
-        temp[3] = (double)m1.m10;
-        temp[4] = (double)m1.m11;
-        temp[5] = (double)m1.m12;
+        temp[3] = (double)m1.d;
+        temp[4] = (double)m1.e;
+        temp[5] = (double)m1.f;
  
-        temp[6] = (double)m1.m20;
-        temp[7] = (double)m1.m21;
-        temp[8] = (double)m1.m22;
+        temp[6] = (double)m1.g;
+        temp[7] = (double)m1.h;
+        temp[8] = (double)m1.i;
  
 
 	// Calculate LU decomposition: Is the matrix singular? 
@@ -534,17 +534,17 @@ public class Matrix3f implements java.io.Serializable {
         result[0] = 1.0; result[4] = 1.0; result[8] = 1.0;
 	luBacksubstitution(temp, row_perm, result);
 
-        this.m00 = (float)result[0];
-        this.m01 = (float)result[1];
-        this.m02 = (float)result[2];
+        this.a = (float)result[0];
+        this.b = (float)result[1];
+        this.c = (float)result[2];
 
-        this.m10 = (float)result[3];
-        this.m11 = (float)result[4];
-        this.m12 = (float)result[5];
+        this.d = (float)result[3];
+        this.e = (float)result[4];
+        this.f = (float)result[5];
  
-        this.m20 = (float)result[6];
-        this.m21 = (float)result[7];
-        this.m22 = (float)result[8];
+        this.g = (float)result[6];
+        this.h = (float)result[7];
+        this.i = (float)result[8];
 
     }
 
@@ -784,17 +784,17 @@ public class Matrix3f implements java.io.Serializable {
 	sinAngle = (float) Math.sin((double) angle);
 	cosAngle = (float) Math.cos((double) angle);
 
-	this.m00 = (float) 1.0;
-	this.m01 = (float) 0.0;
-	this.m02 = (float) 0.0;
+	this.a = (float) 1.0;
+	this.b = (float) 0.0;
+	this.c = (float) 0.0;
 
-	this.m10 = (float) 0.0;
-	this.m11 = cosAngle;
-	this.m12 = -sinAngle;
+	this.d = (float) 0.0;
+	this.e = cosAngle;
+	this.f = -sinAngle;
 
-	this.m20 = (float) 0.0;
-	this.m21 = sinAngle;
-	this.m22 = cosAngle;
+	this.g = (float) 0.0;
+	this.h = sinAngle;
+	this.i = cosAngle;
     }
 
    /**
@@ -808,21 +808,21 @@ public class Matrix3f implements java.io.Serializable {
                       m10, m11, m12,
                       m20, m21, m22;
 
-            m00 = this.m00*m1.m00 + this.m01*m1.m10 + this.m02*m1.m20;
-            m01 = this.m00*m1.m01 + this.m01*m1.m11 + this.m02*m1.m21;
-            m02 = this.m00*m1.m02 + this.m01*m1.m12 + this.m02*m1.m22;
+            m00 = this.a*m1.a + this.b*m1.d + this.c*m1.g;
+            m01 = this.a*m1.b + this.b*m1.e + this.c*m1.h;
+            m02 = this.a*m1.c + this.b*m1.f + this.c*m1.i;
  
-            m10 = this.m10*m1.m00 + this.m11*m1.m10 + this.m12*m1.m20;
-            m11 = this.m10*m1.m01 + this.m11*m1.m11 + this.m12*m1.m21;
-            m12 = this.m10*m1.m02 + this.m11*m1.m12 + this.m12*m1.m22;
+            m10 = this.d*m1.a + this.e*m1.d + this.f*m1.g;
+            m11 = this.d*m1.b + this.e*m1.e + this.f*m1.h;
+            m12 = this.d*m1.c + this.e*m1.f + this.f*m1.i;
  
-            m20 = this.m20*m1.m00 + this.m21*m1.m10 + this.m22*m1.m20;
-            m21 = this.m20*m1.m01 + this.m21*m1.m11 + this.m22*m1.m21;
-            m22 = this.m20*m1.m02 + this.m21*m1.m12 + this.m22*m1.m22;
+            m20 = this.g*m1.a + this.h*m1.d + this.i*m1.g;
+            m21 = this.g*m1.b + this.h*m1.e + this.i*m1.h;
+            m22 = this.g*m1.c + this.h*m1.f + this.i*m1.i;
  
-            this.m00 = m00; this.m01 = m01; this.m02 = m02;
-            this.m10 = m10; this.m11 = m11; this.m12 = m12;
-            this.m20 = m20; this.m21 = m21; this.m22 = m22;
+            this.a = m00; this.b = m01; this.c = m02;
+            this.d = m10; this.e = m11; this.f = m12;
+            this.g = m20; this.h = m21; this.i = m22;
     }
 
     /**
@@ -834,37 +834,37 @@ public class Matrix3f implements java.io.Serializable {
     public final void mul(Matrix3f m1, Matrix3f m2)
     {
 	if (this != m1 && this != m2) {
-            this.m00 = m1.m00*m2.m00 + m1.m01*m2.m10 + m1.m02*m2.m20;
-            this.m01 = m1.m00*m2.m01 + m1.m01*m2.m11 + m1.m02*m2.m21;
-            this.m02 = m1.m00*m2.m02 + m1.m01*m2.m12 + m1.m02*m2.m22;
+            this.a = m1.a*m2.a + m1.b*m2.d + m1.c*m2.g;
+            this.b = m1.a*m2.b + m1.b*m2.e + m1.c*m2.h;
+            this.c = m1.a*m2.c + m1.b*m2.f + m1.c*m2.i;
 
-            this.m10 = m1.m10*m2.m00 + m1.m11*m2.m10 + m1.m12*m2.m20;
-            this.m11 = m1.m10*m2.m01 + m1.m11*m2.m11 + m1.m12*m2.m21;
-            this.m12 = m1.m10*m2.m02 + m1.m11*m2.m12 + m1.m12*m2.m22;
+            this.d = m1.d*m2.a + m1.e*m2.d + m1.f*m2.g;
+            this.e = m1.d*m2.b + m1.e*m2.e + m1.f*m2.h;
+            this.f = m1.d*m2.c + m1.e*m2.f + m1.f*m2.i;
 
-            this.m20 = m1.m20*m2.m00 + m1.m21*m2.m10 + m1.m22*m2.m20;
-            this.m21 = m1.m20*m2.m01 + m1.m21*m2.m11 + m1.m22*m2.m21;
-            this.m22 = m1.m20*m2.m02 + m1.m21*m2.m12 + m1.m22*m2.m22;
+            this.g = m1.g*m2.a + m1.h*m2.d + m1.i*m2.g;
+            this.h = m1.g*m2.b + m1.h*m2.e + m1.i*m2.h;
+            this.i = m1.g*m2.c + m1.h*m2.f + m1.i*m2.i;
 	} else {
 	    float	m00, m01, m02,
 			m10, m11, m12,
 			m20, m21, m22;
 
-            m00 = m1.m00*m2.m00 + m1.m01*m2.m10 + m1.m02*m2.m20; 
-            m01 = m1.m00*m2.m01 + m1.m01*m2.m11 + m1.m02*m2.m21; 
-            m02 = m1.m00*m2.m02 + m1.m01*m2.m12 + m1.m02*m2.m22; 
+            m00 = m1.a*m2.a + m1.b*m2.d + m1.c*m2.g; 
+            m01 = m1.a*m2.b + m1.b*m2.e + m1.c*m2.h; 
+            m02 = m1.a*m2.c + m1.b*m2.f + m1.c*m2.i; 
  
-            m10 = m1.m10*m2.m00 + m1.m11*m2.m10 + m1.m12*m2.m20; 
-            m11 = m1.m10*m2.m01 + m1.m11*m2.m11 + m1.m12*m2.m21; 
-            m12 = m1.m10*m2.m02 + m1.m11*m2.m12 + m1.m12*m2.m22; 
+            m10 = m1.d*m2.a + m1.e*m2.d + m1.f*m2.g; 
+            m11 = m1.d*m2.b + m1.e*m2.e + m1.f*m2.h; 
+            m12 = m1.d*m2.c + m1.e*m2.f + m1.f*m2.i; 
  
-            m20 = m1.m20*m2.m00 + m1.m21*m2.m10 + m1.m22*m2.m20; 
-            m21 = m1.m20*m2.m01 + m1.m21*m2.m11 + m1.m22*m2.m21; 
-            m22 = m1.m20*m2.m02 + m1.m21*m2.m12 + m1.m22*m2.m22; 
+            m20 = m1.g*m2.a + m1.h*m2.d + m1.i*m2.g; 
+            m21 = m1.g*m2.b + m1.h*m2.e + m1.i*m2.h; 
+            m22 = m1.g*m2.c + m1.h*m2.f + m1.i*m2.i; 
 
-            this.m00 = m00; this.m01 = m01; this.m02 = m02;
-            this.m10 = m10; this.m11 = m11; this.m12 = m12;
-            this.m20 = m20; this.m21 = m21; this.m22 = m22;
+            this.a = m00; this.b = m01; this.c = m02;
+            this.d = m10; this.e = m11; this.f = m12;
+            this.g = m20; this.h = m21; this.i = m22;
 	}
     }
 
@@ -878,9 +878,9 @@ public class Matrix3f implements java.io.Serializable {
     {
       try {
 
-        return(this.m00 == m1.m00 && this.m01 == m1.m01 && this.m02 == m1.m02
-            && this.m10 == m1.m10 && this.m11 == m1.m11 && this.m12 == m1.m12
-            && this.m20 == m1.m20 && this.m21 == m1.m21 && this.m22 == m1.m22);
+        return(this.a == m1.a && this.b == m1.b && this.c == m1.c
+            && this.d == m1.d && this.e == m1.e && this.f == m1.f
+            && this.g == m1.g && this.h == m1.h && this.i == m1.i);
       }  
       catch (NullPointerException e2) { return false; }
 
@@ -898,9 +898,9 @@ public class Matrix3f implements java.io.Serializable {
       try { 
 
            Matrix3f m2 = (Matrix3f) o1;
-           return(this.m00 == m2.m00 && this.m01 == m2.m01 && this.m02 == m2.m02
-             && this.m10 == m2.m10 && this.m11 == m2.m11 && this.m12 == m2.m12
-             && this.m20 == m2.m20 && this.m21 == m2.m21 && this.m22 == m2.m22);
+           return(this.a == m2.a && this.b == m2.b && this.c == m2.c
+             && this.d == m2.d && this.e == m2.e && this.f == m2.f
+             && this.g == m2.g && this.h == m2.h && this.i == m2.i);
         }
         catch (ClassCastException   e1) { return false; } 
         catch (NullPointerException e2) { return false; }
@@ -911,17 +911,17 @@ public class Matrix3f implements java.io.Serializable {
     */
    public final void setZero()
    {
-        m00 = 0.0f;
-        m01 = 0.0f;
-        m02 = 0.0f;
+        a = 0.0f;
+        b = 0.0f;
+        c = 0.0f;
  
-        m10 = 0.0f;
-        m11 = 0.0f;
-        m12 = 0.0f;
+        d = 0.0f;
+        e = 0.0f;
+        f = 0.0f;
  
-        m20 = 0.0f;
-        m21 = 0.0f;
-        m22 = 0.0f;
+        g = 0.0f;
+        h = 0.0f;
+        i = 0.0f;
 
    }
 
@@ -932,9 +932,9 @@ public class Matrix3f implements java.io.Serializable {
     */
     public final void transform(Vector3f t) {
      float x,y,z;
-     x = m00* t.x + m01*t.y + m02*t.z; 
-     y = m10* t.x + m11*t.y + m12*t.z; 
-     z = m20* t.x + m21*t.y + m22*t.z; 
+     x = a* t.x + b*t.y + c*t.z; 
+     y = d* t.x + e*t.y + f*t.z; 
+     z = g* t.x + h*t.y + i*t.z; 
      t.set(x,y,z);
     }
 
@@ -946,9 +946,9 @@ public class Matrix3f implements java.io.Serializable {
     */
     public final void transform(Vector3f t, Vector3f result) { 
      float x,y,z;
-     x = m00* t.x + m01*t.y + m02*t.z; 
-     y = m10* t.x + m11*t.y + m12*t.z;
-     result.z = m20* t.x + m21*t.y + m22*t.z; 
+     x = a* t.x + b*t.y + c*t.z; 
+     y = d* t.x + e*t.y + f*t.z;
+     result.z = g* t.x + h*t.y + i*t.z; 
      result.x = x;
      result.y = y;
     }

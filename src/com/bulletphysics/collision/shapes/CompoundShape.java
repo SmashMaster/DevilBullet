@@ -284,15 +284,15 @@ public class CompoundShape extends CollisionShape {
 			Matrix3f j = new Matrix3f();
 			j.transpose(t.basis);
 
-			j.m00 *= i.x;
-			j.m01 *= i.x;
-			j.m02 *= i.x;
-			j.m10 *= i.y;
-			j.m11 *= i.y;
-			j.m12 *= i.y;
-			j.m20 *= i.z;
-			j.m21 *= i.z;
-			j.m22 *= i.z;
+			j.a *= i.x;
+			j.b *= i.x;
+			j.c *= i.x;
+			j.d *= i.y;
+			j.e *= i.y;
+			j.f *= i.y;
+			j.g *= i.z;
+			j.h *= i.z;
+			j.i *= i.z;
 
 			j.mul(t.basis, j);
 
@@ -304,31 +304,31 @@ public class CompoundShape extends CollisionShape {
 			j.setRow(0, o2, 0, 0);
 			j.setRow(1, 0, o2, 0);
 			j.setRow(2, 0, 0, o2);
-			j.m00 += o.x * -o.x;
-			j.m01 += o.y * -o.x;
-			j.m02 += o.z * -o.x;
-			j.m10 += o.x * -o.y;
-			j.m11 += o.y * -o.y;
-			j.m12 += o.z * -o.y;
-			j.m20 += o.x * -o.z;
-			j.m21 += o.y * -o.z;
-			j.m22 += o.z * -o.z;
+			j.a += o.x * -o.x;
+			j.b += o.y * -o.x;
+			j.c += o.z * -o.x;
+			j.d += o.x * -o.y;
+			j.e += o.y * -o.y;
+			j.f += o.z * -o.y;
+			j.g += o.x * -o.z;
+			j.h += o.y * -o.z;
+			j.i += o.z * -o.z;
 
 			// add inertia tensor of pointmass
-			tensor.m00 += masses[k] * j.m00;
-			tensor.m01 += masses[k] * j.m01;
-			tensor.m02 += masses[k] * j.m02;
-			tensor.m10 += masses[k] * j.m10;
-			tensor.m11 += masses[k] * j.m11;
-			tensor.m12 += masses[k] * j.m12;
-			tensor.m20 += masses[k] * j.m20;
-			tensor.m21 += masses[k] * j.m21;
-			tensor.m22 += masses[k] * j.m22;
+			tensor.a += masses[k] * j.a;
+			tensor.b += masses[k] * j.b;
+			tensor.c += masses[k] * j.c;
+			tensor.d += masses[k] * j.d;
+			tensor.e += masses[k] * j.e;
+			tensor.f += masses[k] * j.f;
+			tensor.g += masses[k] * j.g;
+			tensor.h += masses[k] * j.h;
+			tensor.i += masses[k] * j.i;
 		}
 
 		MatrixUtil.diagonalize(tensor, principal.basis, 0.00001f, 20);
 
-		inertia.set(tensor.m00, tensor.m11, tensor.m22);
+		inertia.set(tensor.a, tensor.e, tensor.i);
 	}
 
 }
