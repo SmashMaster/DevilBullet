@@ -33,7 +33,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length
@@ -158,7 +158,7 @@ public class BoxShape extends PolyhedralConvexShape {
 	@Override
 	public void getPlane(Vector3f planeNormal, Vector3f planeSupport, int i) {
 		// this plane might not be aligned...
-		Vector4f plane = new Vector4f();
+		Vec4 plane = new Vec4();
 		getPlaneEquation(plane, i);
 		planeNormal.set(plane.x, plane.y, plane.z);
 		Vector3f tmp = new Vector3f();
@@ -190,7 +190,7 @@ public class BoxShape extends PolyhedralConvexShape {
 				halfExtents.z * (1 - ((i & 4) >> 2)) - halfExtents.z * ((i & 4) >> 2));
 	}
 	
-	public void getPlaneEquation(Vector4f plane, int i) {
+	public void getPlaneEquation(Vec4 plane, int i) {
 		Vector3f halfExtents = getHalfExtentsWithoutMargin(new Vector3f());
 
 		switch (i) {

@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 
 /**
@@ -150,7 +150,7 @@ public class PersistentManifold {
 			res3 = cross.lengthSquared();
 		}
 
-		Vector4f maxvec = new Vector4f();
+		Vec4 maxvec = new Vec4();
 		maxvec.set(res0, res1, res2, res3);
 		int biggestarea = VectorUtil.closestAxis4(maxvec);
 		return biggestarea;

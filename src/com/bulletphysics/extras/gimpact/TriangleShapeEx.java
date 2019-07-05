@@ -33,7 +33,7 @@ import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  *
@@ -71,7 +71,7 @@ public class TriangleShapeEx extends TriangleShape {
 		t.transform(vertices1[2]);
 	}
 
-	public void buildTriPlane(Vector4f plane) {
+	public void buildTriPlane(Vec4 plane) {
 		Vector3f tmp1 = new Vector3f();
 		Vector3f tmp2 = new Vector3f();
 
@@ -87,9 +87,9 @@ public class TriangleShapeEx extends TriangleShape {
 	public boolean overlap_test_conservative(TriangleShapeEx other) {
 		float total_margin = getMargin() + other.getMargin();
 
-		Vector4f plane0 = new Vector4f();
+		Vec4 plane0 = new Vec4();
 		buildTriPlane(plane0);
-		Vector4f plane1 = new Vector4f();
+		Vec4 plane1 = new Vec4();
 		other.buildTriPlane(plane1);
 
 		// classify points on other triangle

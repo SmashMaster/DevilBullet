@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane
@@ -37,10 +37,10 @@ import javax.vecmath.Vector4f;
  */
 public class GeometryUtil {
 
-	public static boolean isPointInsidePlanes(ObjectArrayList<Vector4f> planeEquations, Vector3f point, float margin) {
+	public static boolean isPointInsidePlanes(ObjectArrayList<Vec4> planeEquations, Vector3f point, float margin) {
 		int numbrushes = planeEquations.size();
 		for (int i = 0; i < numbrushes; i++) {
-			Vector4f N1 = planeEquations.getQuick(i);
+			Vec4 N1 = planeEquations.getQuick(i);
 			float dist = VectorUtil.dot3(N1, point) + N1.w - margin;
 			if (dist > 0f) {
 				return false;
@@ -49,7 +49,7 @@ public class GeometryUtil {
 		return true;
 	}
 	
-	public static boolean areVerticesBehindPlane(Vector4f planeNormal, ObjectArrayList<Vector3f> vertices, float margin) {
+	public static boolean areVerticesBehindPlane(Vec4 planeNormal, ObjectArrayList<Vector3f> vertices, float margin) {
 		int numvertices = vertices.size();
 		for (int i = 0; i < numvertices; i++) {
 			Vector3f N1 = vertices.getQuick(i);
@@ -61,10 +61,10 @@ public class GeometryUtil {
 		return true;
 	}
 	
-	private static boolean notExist(Vector4f planeEquation, ObjectArrayList<Vector4f> planeEquations) {
+	private static boolean notExist(Vec4 planeEquation, ObjectArrayList<Vec4> planeEquations) {
 		int numbrushes = planeEquations.size();
 		for (int i = 0; i < numbrushes; i++) {
-			Vector4f N1 = planeEquations.getQuick(i);
+			Vec4 N1 = planeEquations.getQuick(i);
 			if (VectorUtil.dot3(planeEquation, N1) > 0.999f) {
 				return false;
 			}
@@ -72,8 +72,8 @@ public class GeometryUtil {
 		return true;
 	}
 
-	public static void getPlaneEquationsFromVertices(ObjectArrayList<Vector3f> vertices, ObjectArrayList<Vector4f> planeEquationsOut) {
-		Vector4f planeEquation = new Vector4f();
+	public static void getPlaneEquationsFromVertices(ObjectArrayList<Vector3f> vertices, ObjectArrayList<Vec4> planeEquationsOut) {
+		Vec4 planeEquation = new Vec4();
 		Vector3f edge0 = new Vector3f(), edge1 = new Vector3f();
 		Vector3f tmp = new Vector3f();
 
@@ -104,7 +104,7 @@ public class GeometryUtil {
 
 								// check if inside, and replace supportingVertexOut if needed
 								if (areVerticesBehindPlane(planeEquation, vertices, 0.01f)) {
-									planeEquationsOut.add(new Vector4f(planeEquation));
+									planeEquationsOut.add(new Vec4(planeEquation));
 								}
 							}
 						}
@@ -115,7 +115,7 @@ public class GeometryUtil {
 		}
 	}
 	
-	public static void getVerticesFromPlaneEquations(ObjectArrayList<Vector4f> planeEquations, ObjectArrayList<Vector3f> verticesOut) {
+	public static void getVerticesFromPlaneEquations(ObjectArrayList<Vec4> planeEquations, ObjectArrayList<Vector3f> verticesOut) {
 		Vector3f n2n3 = new Vector3f();
 		Vector3f n3n1 = new Vector3f();
 		Vector3f n1n2 = new Vector3f();
@@ -124,13 +124,13 @@ public class GeometryUtil {
 		int numbrushes = planeEquations.size();
 		// brute force:
 		for (int i = 0; i < numbrushes; i++) {
-			Vector4f N1 = planeEquations.getQuick(i);
+			Vec4 N1 = planeEquations.getQuick(i);
 
 			for (int j = i + 1; j < numbrushes; j++) {
-				Vector4f N2 = planeEquations.getQuick(j);
+				Vec4 N2 = planeEquations.getQuick(j);
 
 				for (int k = j + 1; k < numbrushes; k++) {
-					Vector4f N3 = planeEquations.getQuick(k);
+					Vec4 N3 = planeEquations.getQuick(k);
 
 					VectorUtil.cross3(n2n3, N2, N3);
 					VectorUtil.cross3(n3n1, N3, N1);

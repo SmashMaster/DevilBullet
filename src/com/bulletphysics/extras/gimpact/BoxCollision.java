@@ -34,7 +34,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Matrix3f;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  *
@@ -433,7 +433,7 @@ class BoxCollision {
 			vmax[0] = _fOrigin + _fMaximumExtent;
 		}
 
-		public PlaneIntersectionType plane_classify(Vector4f plane) {
+		public PlaneIntersectionType plane_classify(Vec4 plane) {
 			Vector3f tmp = new Vector3f();
 
 			float[] _fmin = new float[1], _fmax = new float[1];
@@ -523,7 +523,7 @@ class BoxCollision {
 		/**
 		 * Simple test for planes.
 		 */
-		public boolean collide_plane(Vector4f plane) {
+		public boolean collide_plane(Vec4 plane) {
 			PlaneIntersectionType classify = plane_classify(plane);
 			return (classify == PlaneIntersectionType.COLLIDE_PLANE);
 		}
@@ -531,7 +531,7 @@ class BoxCollision {
 		/**
 		 * Test for a triangle, with edges.
 		 */
-		public boolean collide_triangle_exact(Vector3f p1, Vector3f p2, Vector3f p3, Vector4f triangle_plane) {
+		public boolean collide_triangle_exact(Vector3f p1, Vector3f p2, Vector3f p3, Vec4 triangle_plane) {
 			if (!collide_plane(triangle_plane)) {
 				return false;
 			}

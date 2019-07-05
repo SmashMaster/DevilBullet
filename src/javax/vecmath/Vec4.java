@@ -36,7 +36,7 @@ package javax.vecmath;
  * coordinates.
  *
  */
-public class Vector4f implements java.io.Serializable {
+public class Vec4 implements java.io.Serializable {
   /**
    * The x coordinate.
    */
@@ -65,7 +65,7 @@ public class Vector4f implements java.io.Serializable {
    * @param z the z coordinate
    * @param w the w coordinate
    */
-  public Vector4f(float x, float y, float z, float w)
+  public Vec4(float x, float y, float z, float w)
   {
     this.x = x;
     this.y = y;
@@ -77,7 +77,7 @@ public class Vector4f implements java.io.Serializable {
    * Constructs and initializes a Tuple4f from the specified Tuple4f.
    * @param t1 the Tuple4f containing the initialization x y z w data
    */
-  public Vector4f(Vector4f t1)
+  public Vec4(Vec4 t1)
   {
     this.x = t1.x;
     this.y = t1.y;
@@ -88,7 +88,7 @@ public class Vector4f implements java.io.Serializable {
   /**
    * Constructs and initializes a Tuple4f to (0,0,0,0).
    */
-  public Vector4f()
+  public Vec4()
   {
     this.x = 0.0f;
     this.y = 0.0f;
@@ -116,7 +116,7 @@ public class Vector4f implements java.io.Serializable {
      * Sets the value of this tuple to the value of tuple t1.
      * @param t1 the tuple to be copied
      */
-    public final void set(Vector4f t1)
+    public final void set(Vec4 t1)
     {
 	this.x = t1.x;
 	this.y = t1.y;

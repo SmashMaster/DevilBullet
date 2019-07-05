@@ -33,7 +33,7 @@ import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  *
@@ -41,13 +41,13 @@ import javax.vecmath.Vector4f;
  */
 class PlaneShape {
 
-	public static void get_plane_equation(StaticPlaneShape shape, Vector4f equation) {
+	public static void get_plane_equation(StaticPlaneShape shape, Vec4 equation) {
 		Vector3f tmp = new Vector3f();
 		equation.set(shape.getPlaneNormal(tmp));
 		equation.w = shape.getPlaneConstant();
 	}
 	
-	public static void get_plane_equation_transformed(StaticPlaneShape shape, Transform trans, Vector4f equation) {
+	public static void get_plane_equation_transformed(StaticPlaneShape shape, Transform trans, Vec4 equation) {
 		get_plane_equation(shape, equation);
 
 		Vector3f tmp = new Vector3f();

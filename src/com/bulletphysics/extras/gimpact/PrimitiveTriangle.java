@@ -32,7 +32,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  *
@@ -53,7 +53,7 @@ public class PrimitiveTriangle {
 	}
 	
 	public final Vector3f[] vertices = new Vector3f[3];
-	public final Vector4f plane = new Vector4f();
+	public final Vec4 plane = new Vec4();
 	public float margin = 0.01f;
 
 	public PrimitiveTriangle() {
@@ -111,7 +111,7 @@ public class PrimitiveTriangle {
 	 * Calcs the plane which is paralele to the edge and perpendicular to the triangle plane.
 	 * This triangle must have its plane calculated.
 	 */
-	public void get_edge_plane(int edge_index, Vector4f plane) {
+	public void get_edge_plane(int edge_index, Vec4 plane) {
 		Vector3f e0 = vertices[edge_index];
 		Vector3f e1 = vertices[(edge_index + 1) % 3];
 
@@ -137,7 +137,7 @@ public class PrimitiveTriangle {
 		// edge 0
 		ObjectArrayList<Vector3f> temp_points = tmpVecList1;
 
-		Vector4f edgeplane = new Vector4f();
+		Vec4 edgeplane = new Vec4();
 
 		get_edge_plane(0, edgeplane);
 

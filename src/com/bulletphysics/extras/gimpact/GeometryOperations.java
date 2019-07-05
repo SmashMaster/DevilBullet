@@ -32,7 +32,7 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  *
@@ -50,7 +50,7 @@ class GeometryOperations {
 	/**
 	 * Calc a plane from a triangle edge an a normal.
 	 */
-	public static void edge_plane(Vector3f e1, Vector3f e2, Vector3f normal, Vector4f plane) {
+	public static void edge_plane(Vector3f e1, Vector3f e2, Vector3f normal, Vec4 plane) {
 		Vector3f planenormal = new Vector3f();
 		planenormal.sub(e2, e1);
 		planenormal.cross(planenormal, normal);
@@ -84,7 +84,7 @@ class GeometryOperations {
 	 * 
 	 * @return -0 if the ray never intersects, -1 if the ray collides in front, -2 if the ray collides in back
 	 */
-	public static int line_plane_collision(Vector4f plane, Vector3f vDir, Vector3f vPoint, Vector3f pout, float[] tparam, float tmin, float tmax) {
+	public static int line_plane_collision(Vec4 plane, Vector3f vDir, Vector3f vPoint, Vector3f pout, float[] tparam, float tmin, float tmax) {
 		float _dotdir = VectorUtil.dot3(vDir, plane);
 
 		if (Math.abs(_dotdir) < PLANEDIREPSILON) {
@@ -122,7 +122,7 @@ class GeometryOperations {
 		N.cross(AD, BD);
 		float[] tp = new float[] { N.lengthSquared() };
 
-		Vector4f _M = new Vector4f();//plane
+		Vec4 _M = new Vec4();//plane
 
 		if (tp[0] < BulletGlobals.SIMD_EPSILON)//ARE PARALELE
 		{

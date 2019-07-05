@@ -34,7 +34,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  *
@@ -42,7 +42,7 @@ import javax.vecmath.Vector4f;
  */
 class ClipPolygon {
 	
-	public static float distance_point_plane(Vector4f plane, Vector3f point) {
+	public static float distance_point_plane(Vec4 plane, Vector3f point) {
 		return VectorUtil.dot3(point, plane) - plane.w;
 	}
 
@@ -76,7 +76,7 @@ class ClipPolygon {
 	 * 
 	 * @return The count of the clipped counts
 	 */
-	public static int plane_clip_polygon(Vector4f plane, ObjectArrayList<Vector3f> polygon_points, int polygon_point_count, ObjectArrayList<Vector3f> clipped) {
+	public static int plane_clip_polygon(Vec4 plane, ObjectArrayList<Vector3f> polygon_points, int polygon_point_count, ObjectArrayList<Vector3f> clipped) {
 		ArrayPool<int[]> intArrays = ArrayPool.get(int.class);
 
 		int[] clipped_count = intArrays.getFixed(1);
@@ -124,7 +124,7 @@ class ClipPolygon {
 	 * @param clipped must be an array of 16 points.
 	 * @return the count of the clipped counts
 	 */
-	public static int plane_clip_triangle(Vector4f plane, Vector3f point0, Vector3f point1, Vector3f point2, ObjectArrayList<Vector3f> clipped) {
+	public static int plane_clip_triangle(Vec4 plane, Vector3f point0, Vector3f point1, Vector3f point2, ObjectArrayList<Vector3f> clipped) {
 		ArrayPool<int[]> intArrays = ArrayPool.get(int.class);
 
 		int[] clipped_count = intArrays.getFixed(1);

@@ -49,7 +49,7 @@ import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  * Collision Algorithm for GImpact Shapes.<p>
@@ -586,7 +586,7 @@ public class GImpactCollisionAlgorithm extends CollisionAlgorithm {
 		Transform orgtrans1 = body1.getWorldTransform(new Transform());
 
 		StaticPlaneShape planeshape = shape1;
-		Vector4f plane = new Vector4f();
+		Vec4 plane = new Vec4();
 		PlaneShape.get_plane_equation_transformed(planeshape, orgtrans1, plane);
 
 		// test box against plane

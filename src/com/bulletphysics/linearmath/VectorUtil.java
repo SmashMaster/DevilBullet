@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath;
 
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.Vec4;
 
 /**
  * Utility functions for vectors.
@@ -54,7 +54,7 @@ public class VectorUtil {
 		return maxIndex;
 	}
 	
-	public static int maxAxis4(Vector4f v) {
+	public static int maxAxis4(Vec4 v) {
 		int maxIndex = -1;
 		float maxVal = -1e30f;
 		if (v.x > maxVal) {
@@ -77,8 +77,8 @@ public class VectorUtil {
 		return maxIndex;
 	}
 
-	public static int closestAxis4(Vector4f vec) {
-		Vector4f tmp = new Vector4f(vec);
+	public static int closestAxis4(Vec4 vec) {
+		Vec4 tmp = new Vec4(vec);
 		tmp.absolute();
 		return maxAxis4(tmp);
 	}
@@ -161,30 +161,30 @@ public class VectorUtil {
 		a.z = Math.max(a.z, b.z);
 	}
 	
-	public static float dot3(Vector4f v0, Vector3f v1) {
+	public static float dot3(Vec4 v0, Vector3f v1) {
 		return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 	}
 
-	public static float dot3(Vector4f v0, Vector4f v1) {
+	public static float dot3(Vec4 v0, Vec4 v1) {
 		return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 	}
 
-	public static float dot3(Vector3f v0, Vector4f v1) {
+	public static float dot3(Vector3f v0, Vec4 v1) {
 		return (v0.x*v1.x + v0.y*v1.y + v0.z*v1.z);
 	}
 
-	public static float lengthSquared3(Vector4f v) {
+	public static float lengthSquared3(Vec4 v) {
 		return (v.x*v.x + v.y*v.y + v.z*v.z);
 	}
 
-	public static void normalize3(Vector4f v) {
+	public static void normalize3(Vec4 v) {
 		float norm = (float)(1.0/Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z));
 		v.x *= norm;
 		v.y *= norm;
 		v.z *= norm;
 	}
 
-	public static void cross3(Vector3f dest, Vector4f v1, Vector4f v2) {
+	public static void cross3(Vector3f dest, Vec4 v1, Vec4 v2) {
         float x,y;
         x = v1.y*v2.z - v1.z*v2.y;
         y = v2.x*v1.z - v2.z*v1.x;
