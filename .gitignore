@@ -1,8 +1,12 @@
 #NetBeans project directories
-nbproject/private/
-build/
-dist/
-test/
+demos/nbproject/private/
+demos/build/
+demos/dist/
+demos/test/
+library/nbproject/private/
+library/build/
+library/dist/
+library/test/
 
 #Java files
 *.class
@@ -12,3 +16,4 @@ test/
 
 #Error logs
 hs_err_pid*
+/Demos/nbproject/private/
