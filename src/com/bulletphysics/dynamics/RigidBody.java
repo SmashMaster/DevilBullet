@@ -39,7 +39,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -444,7 +444,7 @@ public class RigidBody extends CollisionObject {
 		return out;
 	}
 
-	public Quat4f getOrientation(Quat4f out) {
+	public Quat getOrientation(Quat out) {
 		MatrixUtil.getRotation(worldTransform.basis, out);
 		return out;
 	}

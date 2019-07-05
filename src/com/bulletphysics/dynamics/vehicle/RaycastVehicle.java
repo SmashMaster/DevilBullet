@@ -37,7 +37,7 @@ import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -138,12 +138,12 @@ public class RaycastVehicle extends TypedConstraint {
 		// rotate around steering over de wheelAxleWS
 		float steering = wheel.steering;
 
-		Quat4f steeringOrn = new Quat4f();
+		Quat steeringOrn = new Quat();
 		QuaternionUtil.setRotation(steeringOrn, up, steering); //wheel.m_steering);
 		Matrix3f steeringMat = new Matrix3f();
 		MatrixUtil.setRotation(steeringMat, steeringOrn);
 
-		Quat4f rotatingOrn = new Quat4f();
+		Quat rotatingOrn = new Quat();
 		QuaternionUtil.setRotation(rotatingOrn, right, -wheel.rotation);
 		Matrix3f rotatingMat = new Matrix3f();
 		MatrixUtil.setRotation(rotatingMat, rotatingOrn);

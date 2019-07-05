@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -90,12 +90,12 @@ public class TransformUtil {
 			// sync(fAngle) = sin(c*fAngle)/t
 			axis.scale((float) Math.sin(0.5f * fAngle * timeStep) / fAngle, angvel);
 		}
-		Quat4f dorn = new Quat4f();
+		Quat dorn = new Quat();
 		dorn.set(axis.x, axis.y, axis.z, (float) Math.cos(fAngle * timeStep * 0.5f));
-		Quat4f orn0 = curTrans.getRotation(new Quat4f());
+		Quat orn0 = curTrans.getRotation(new Quat());
 
-		Quat4f predictedOrn = new Quat4f();
-		predictedOrn.mul(dorn, orn0);
+		Quat predictedOrn = new Quat();
+		predictedOrn.mulHere(dorn, orn0);
 		predictedOrn.normalize();
 //  #endif
 		predictedTransform.setRotation(predictedOrn);
@@ -125,7 +125,7 @@ public class TransformUtil {
 		Matrix3f dmat = new Matrix3f();
 		dmat.mul(transform1.basis, tmp);
 
-		Quat4f dorn = new Quat4f();
+		Quat dorn = new Quat();
 		MatrixUtil.getRotation(dmat, dorn);
 // #endif
 

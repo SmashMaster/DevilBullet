@@ -56,7 +56,7 @@ import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -592,7 +592,7 @@ public class CollisionWorld {
 			TransformUtil.calculateVelocity(convexFromTrans, convexToTrans, 1f, linVel, angVel);
 			Transform R = new Transform();
 			R.setIdentity();
-			R.setRotation(convexFromTrans.getRotation(new Quat4f()));
+			R.setRotation(convexFromTrans.getRotation(new Quat()));
 			castShape.calculateTemporalAabb(R, linVel, angVel, 1f, castShapeAabbMin, castShapeAabbMax);
 		}
 

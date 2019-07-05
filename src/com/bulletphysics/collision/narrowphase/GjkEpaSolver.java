@@ -35,7 +35,7 @@ import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectStackList;
 import java.util.Arrays;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /*
@@ -421,7 +421,7 @@ public class GjkEpaSolver {
 
 					float m[] = new float[] { b[0].lengthSquared(), b[1].lengthSquared(), b[2].lengthSquared() };
 
-					Quat4f tmpQuat = new Quat4f();
+					Quat tmpQuat = new Quat();
 					tmp.normalize(ab);
 					QuaternionUtil.setRotation(tmpQuat, tmp, cst2Pi / 3f);
 

@@ -28,7 +28,7 @@ package com.bulletphysics.linearmath;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -119,7 +119,7 @@ public class MatrixUtil {
 		dest.z = z;
 	}
 	
-	public static void setRotation(Matrix3f dest, Quat4f q) {
+	public static void setRotation(Matrix3f dest, Quat q) {
 		float d = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
 		assert (d != 0f);
 		float s = 2f / d;
@@ -138,7 +138,7 @@ public class MatrixUtil {
 		dest.m22 = 1f - (xx + yy);
 	}
 	
-	public static void getRotation(Matrix3f mat, Quat4f dest) {
+	public static void getRotation(Matrix3f mat, Quat dest) {
 		ArrayPool<float[]> floatArrays = ArrayPool.get(float.class);
 		
 		float trace = mat.m00 + mat.m11 + mat.m22;

@@ -39,7 +39,7 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -119,7 +119,7 @@ public class TestRig {
 			toBone.normalize();
 			Vector3f axis = new Vector3f();
 			axis.cross(toBone,up);
-			Quat4f q = new Quat4f();
+			Quat q = new Quat();
 			QuaternionUtil.setRotation(q, axis, BulletGlobals.SIMD_HALF_PI);
 			transform.setRotation(q);
 			tmpTrans.mul(offset, transform);

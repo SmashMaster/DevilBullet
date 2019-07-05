@@ -63,7 +63,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 import static com.bulletphysics.demos.opengl.IGL.*;
 
@@ -285,7 +285,7 @@ public class ConcaveDemo extends DemoApplication {
 			Transform localTransform = new Transform();
 			localTransform.setIdentity();
 			((CompoundShape)colShape).addChildShape(localTransform, boxShape);
-			Quat4f orn = new Quat4f();
+			Quat orn = new Quat();
 			QuaternionUtil.setEuler(orn, BulletGlobals.SIMD_HALF_PI, 0f, 0f);
 			localTransform.setRotation(orn);
 			((CompoundShape)colShape).addChildShape(localTransform, cylinderShape);

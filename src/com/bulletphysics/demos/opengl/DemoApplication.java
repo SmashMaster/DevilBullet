@@ -45,7 +45,7 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 import static com.bulletphysics.demos.opengl.IGL.*;
 import org.lwjgl.glfw.GLFW;
@@ -184,7 +184,7 @@ public abstract class DemoApplication {
 		float rele = ele * 0.01745329251994329547f; // rads per deg
 		float razi = azi * 0.01745329251994329547f; // rads per deg
 
-		Quat4f rot = new Quat4f();
+		Quat rot = new Quat();
 		QuaternionUtil.setRotation(rot, cameraUp, razi);
 
 		Vector3f eyePos = new Vector3f();
@@ -198,7 +198,7 @@ public abstract class DemoApplication {
 		}
 		Vector3f right = new Vector3f();
 		right.cross(cameraUp, forward);
-		Quat4f roll = new Quat4f();
+		Quat roll = new Quat();
 		QuaternionUtil.setRotation(roll, right, -rele);
 
 		Matrix3f tmpMat1 = new Matrix3f();
@@ -553,7 +553,7 @@ public abstract class DemoApplication {
 
 			Transform worldTrans = body.getWorldTransform(new Transform());
 			worldTrans.origin.set(camPos);
-			worldTrans.setRotation(new Quat4f(0f, 0f, 0f, 1f));
+			worldTrans.setRotation(new Quat(0f, 0f, 0f, 1f));
 			body.setWorldTransform(worldTrans);
 			
 			body.setLinearVelocity(linVel);

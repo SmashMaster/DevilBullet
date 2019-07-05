@@ -34,7 +34,7 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 import static com.bulletphysics.demos.opengl.IGL.*;
 
@@ -147,9 +147,9 @@ public class ConvexcastBatch {
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {
 			float alpha = dalpha * i;
 			// rotate around by alpha degrees y
-			Quat4f q = new Quat4f(0f, 1f, 0f, alpha);
+			Quat q = new Quat(0f, 1f, 0f, alpha);
 			direction[i].set(1f, 0f, 0f);
-			Quat4f tmpQuat = new Quat4f(q);
+			Quat tmpQuat = new Quat(q);
 			QuaternionUtil.mul(tmpQuat, direction[i]);
 			direction[i].set(tmpQuat.x, tmpQuat.y, tmpQuat.z);
 			//direction[i].set(direction[i]);
@@ -186,8 +186,8 @@ public class ConvexcastBatch {
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {
 			ClosestConvexResultCallback cb = new ClosestConvexResultCallback(source[i], dest[i]);
 
-			Quat4f qFrom = new Quat4f();
-			Quat4f qTo = new Quat4f();
+			Quat qFrom = new Quat();
+			Quat qTo = new Quat();
 			QuaternionUtil.setRotation(qFrom, new Vector3f(1f, 0f, 0f), 0f);
 			QuaternionUtil.setRotation(qTo, new Vector3f(1f, 0f, 0f), 0.7f);
 
@@ -260,8 +260,8 @@ public class ConvexcastBatch {
 		}
 		gl.glEnd();
 		gl.glColor3f(0f, 1f, 1f);
-		Quat4f qFrom = new Quat4f();
-		Quat4f qTo = new Quat4f();
+		Quat qFrom = new Quat();
+		Quat qTo = new Quat();
 		QuaternionUtil.setRotation(qFrom, new Vector3f(1f, 0f, 0f), 0f);
 		QuaternionUtil.setRotation(qTo, new Vector3f(1f, 0f, 0f), 0.7f);
 		for (int i=0; i<NUMRAYS_IN_BAR; i++) {

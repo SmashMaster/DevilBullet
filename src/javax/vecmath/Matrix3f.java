@@ -444,7 +444,7 @@ public class Matrix3f implements java.io.Serializable {
      * (single precision) quaternion argument.
      * @param q1 the quaternion to be converted
      */
-    public final void set(Quat4f q1)
+    public final void set(Quat q1)
     {
 	this.m00 = 1.0f - 2.0f*q1.y*q1.y - 2.0f*q1.z*q1.z;
 	this.m10 = 2.0f*(q1.x*q1.y + q1.w*q1.z);

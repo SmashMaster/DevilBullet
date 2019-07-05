@@ -34,7 +34,7 @@ import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -108,7 +108,7 @@ public class HingeConstraint extends TypedConstraint {
 		rbAFrame.basis.setRow(1, rbAxisA1.y, rbAxisA2.y, axisInA.y);
 		rbAFrame.basis.setRow(2, rbAxisA1.z, rbAxisA2.z, axisInA.z);
 
-		Quat4f rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
+		Quat rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat());
 		Vector3f rbAxisB1 = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
 		Vector3f rbAxisB2 = new Vector3f();
 		rbAxisB2.cross(axisInB, rbAxisB1);
@@ -159,7 +159,7 @@ public class HingeConstraint extends TypedConstraint {
 		axisInB.negate(axisInA);
 		centerOfMassA.basis.transform(axisInB);
 
-		Quat4f rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat4f());
+		Quat rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat());
 		Vector3f rbAxisB1 = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vector3f());
 		Vector3f rbAxisB2 = new Vector3f();
 		rbAxisB2.cross(axisInB, rbAxisB1);

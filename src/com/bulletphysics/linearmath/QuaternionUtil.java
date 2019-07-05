@@ -26,7 +26,7 @@
 package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -36,12 +36,12 @@ import javax.vecmath.Vector3f;
  */
 public class QuaternionUtil {
 
-	public static float getAngle(Quat4f q) {
+	public static float getAngle(Quat q) {
 		float s = 2f * (float) Math.acos(q.w);
 		return s;
 	}
 	
-	public static void setRotation(Quat4f q, Vector3f axis, float angle) {
+	public static void setRotation(Quat q, Vector3f axis, float angle) {
 		float d = axis.length();
 		assert (d != 0f);
 		float s = (float)Math.sin(angle * 0.5f) / d;
@@ -49,7 +49,7 @@ public class QuaternionUtil {
 	}
 	
 	// Game Programming Gems 2.10. make sure v0,v1 are normalized
-	public static Quat4f shortestArcQuat(Vector3f v0, Vector3f v1, Quat4f out) {
+	public static Quat shortestArcQuat(Vector3f v0, Vector3f v1, Quat out) {
 		Vector3f c = new Vector3f();
 		c.cross(v0, v1);
 		float d = v0.dot(v1);
@@ -67,7 +67,7 @@ public class QuaternionUtil {
 		return out;
 	}
 	
-	public static void mul(Quat4f q, Vector3f w) {
+	public static void mul(Quat q, Vector3f w) {
 		float rx = q.w * w.x + q.y * w.z - q.z * w.y;
 		float ry = q.w * w.y + q.z * w.x - q.x * w.z;
 		float rz = q.w * w.z + q.x * w.y - q.y * w.x;
@@ -75,11 +75,11 @@ public class QuaternionUtil {
 		q.set(rx, ry, rz, rw);
 	}
 	
-	public static Vector3f quatRotate(Quat4f rotation, Vector3f v, Vector3f out) {
-		Quat4f q = new Quat4f(rotation);
+	public static Vector3f quatRotate(Quat rotation, Vector3f v, Vector3f out) {
+		Quat q = new Quat(rotation);
 		QuaternionUtil.mul(q, v);
 
-		Quat4f tmp = new Quat4f();
+		Quat tmp = new Quat();
 		inverse(tmp, rotation);
 		q.mul(tmp);
 		
@@ -87,20 +87,20 @@ public class QuaternionUtil {
 		return out;
 	}
 	
-	public static void inverse(Quat4f q) {
+	public static void inverse(Quat q) {
 		q.x = -q.x;
 		q.y = -q.y;
 		q.z = -q.z;
 	}
 	
-	public static void inverse(Quat4f q, Quat4f src) {
+	public static void inverse(Quat q, Quat src) {
 		q.x = -src.x;
 		q.y = -src.y;
 		q.z = -src.z;
 		q.w = src.w;
 	}
 
-	public static void setEuler(Quat4f q, float yaw, float pitch, float roll) {
+	public static void setEuler(Quat q, float yaw, float pitch, float roll) {
 		float halfYaw = yaw * 0.5f;
 		float halfPitch = pitch * 0.5f;
 		float halfRoll = roll * 0.5f;

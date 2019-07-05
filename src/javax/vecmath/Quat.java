@@ -36,7 +36,7 @@ package javax.vecmath;
  * point x,y,z,w coordinates.  The quaternion is always normalized.
  *
  */
-public class Quat4f implements java.io.Serializable {
+public class Quat implements java.io.Serializable {
   /**
    * The x coordinate.
    */
@@ -65,7 +65,7 @@ public class Quat4f implements java.io.Serializable {
    * @param z the z coordinate
    * @param w the w scalar component
    */
-  public Quat4f(float x, float y, float z, float w)
+  public Quat(float x, float y, float z, float w)
   {
       float mag;
       mag = (float)(1.0/Math.sqrt( x*x + y*y + z*z + w*w ));
@@ -80,7 +80,7 @@ public class Quat4f implements java.io.Serializable {
    * Constructs and initializes a Quat4f from the specified Quat4f.
    * @param q1 the Quat4f containing the initialization x y z w data
    */
-  public Quat4f(Quat4f q1)
+  public Quat(Quat q1)
   {
        this.x = q1.x;
         this.y = q1.y;
@@ -91,7 +91,7 @@ public class Quat4f implements java.io.Serializable {
   /**
    * Constructs and initializes a Quat4f to (0.0,0.0,0.0,0.0).
    */
-  public Quat4f()
+  public Quat()
   {
   }
   
@@ -118,7 +118,7 @@ public class Quat4f implements java.io.Serializable {
    * @param q1 the first quaternion
    * @param q2 the second quaternion
    */
-  public final void mul(Quat4f q1, Quat4f q2)
+  public final void mulHere(Quat q1, Quat q2)
   {
     if (this != q1 && this != q2) {
       this.w = q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z;
@@ -144,7 +144,7 @@ public class Quat4f implements java.io.Serializable {
    * itself and q1 (this = this * q1).  
    * @param q1 the other quaternion
    */
-  public final void mul(Quat4f q1)
+  public final void mul(Quat q1)
   {
       float     x, y, w; 
 

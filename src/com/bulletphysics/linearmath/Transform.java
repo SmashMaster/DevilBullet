@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.shapes.UniformScalingShape;
 import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
+import javax.vecmath.Quat;
 import javax.vecmath.Vector3f;
 
 /**
@@ -115,12 +115,12 @@ public class Transform {
 		mat.transform(out);
 	}
 	
-	public Quat4f getRotation(Quat4f out) {
+	public Quat getRotation(Quat out) {
 		MatrixUtil.getRotation(basis, out);
 		return out;
 	}
 	
-	public void setRotation(Quat4f q) {
+	public void setRotation(Quat q) {
 		MatrixUtil.setRotation(basis, q);
 	}
 	
