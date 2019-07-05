@@ -37,10 +37,6 @@ package javax.vecmath;
  *
  */
 public class Matrix3f implements java.io.Serializable, Cloneable {
-
-  // Compatible with 1.1
-  static final long serialVersionUID = 329697160112089834L;
-
   /** 
     * The first matrix element in the first row.
     */
