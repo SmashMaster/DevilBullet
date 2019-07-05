@@ -26,7 +26,7 @@
 package com.bulletphysics.collision.broadphase;
 
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * SimpleBroadphase is just a unit-test for {@link AxisSweep3}, {@link AxisSweep3_32},

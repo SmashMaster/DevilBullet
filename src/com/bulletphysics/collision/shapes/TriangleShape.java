@@ -28,7 +28,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Single triangle shape.
@@ -125,10 +125,10 @@ public class TriangleShape extends PolyhedralConvexShape {
 		Vec3 tmp1 = new Vec3();
 		Vec3 tmp2 = new Vec3();
 
-		tmp1.subHere(vertices1[1], vertices1[0]);
-		tmp2.subHere(vertices1[2], vertices1[0]);
+		VectorUtil.sub(tmp1, vertices1[1], vertices1[0]);
+		VectorUtil.sub(tmp2, vertices1[2], vertices1[0]);
 
-		normal.crossHere(tmp1, tmp2);
+		VectorUtil.cross(normal, tmp1, tmp2);
 		normal.normalize();
 	}
 
@@ -158,9 +158,9 @@ public class TriangleShape extends PolyhedralConvexShape {
 				Vec3 pa = new Vec3(), pb = new Vec3();
 				getEdge(i, pa, pb);
 				Vec3 edge = new Vec3();
-				edge.subHere(pb, pa);
+				VectorUtil.sub(edge, pb, pa);
 				Vec3 edgeNormal = new Vec3();
-				edgeNormal.crossHere(edge, normal);
+				VectorUtil.cross(edgeNormal, edge, normal);
 				edgeNormal.normalize();
 				/*float*/ dist = pt.dot(edgeNormal);
 				float edgeConst = pa.dot(edgeNormal);

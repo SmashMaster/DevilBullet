@@ -29,7 +29,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * StaticPlaneShape simulates an infinite non-moving (static) collision plane.
@@ -46,7 +46,7 @@ public class StaticPlaneShape extends ConcaveShape {
 	protected final Vec3 localScaling = new Vec3(0f, 0f, 0f);
 
 	public StaticPlaneShape(Vec3 planeNormal, float planeConstant) {
-		this.planeNormal.normalizeHere(planeNormal);
+		VectorUtil.normalize(this.planeNormal, planeNormal);
 		this.planeConstant = planeConstant;
 	}
 
@@ -66,12 +66,12 @@ public class StaticPlaneShape extends ConcaveShape {
 		Vec3 tmp2 = new Vec3();
 
 		Vec3 halfExtents = new Vec3();
-		halfExtents.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(halfExtents, aabbMax, aabbMin);
 		halfExtents.mult(0.5f);
 
 		float radius = halfExtents.length();
 		Vec3 center = new Vec3();
-		center.addHere(aabbMax, aabbMin);
+		VectorUtil.add(center, aabbMax, aabbMin);
 		center.mult(0.5f);
 
 		// this is where the triangles are generated, given AABB and plane equation (normal/constant)
@@ -84,39 +84,39 @@ public class StaticPlaneShape extends ConcaveShape {
 		Vec3 supVertex0 = new Vec3(), supVertex1 = new Vec3();
 
 		Vec3 projectedCenter = new Vec3();
-		tmp.scale(planeNormal.dot(center) - planeConstant, planeNormal);
-		projectedCenter.subHere(center, tmp);
+		VectorUtil.scale(tmp, planeNormal.dot(center) - planeConstant, planeNormal);
+		VectorUtil.sub(projectedCenter, center, tmp);
 
 		Vec3[] triangle = new Vec3[] { new Vec3(), new Vec3(), new Vec3() };
 
-		tmp1.scale(radius, tangentDir0);
-		tmp2.scale(radius, tangentDir1);
+		VectorUtil.scale(tmp1, radius, tangentDir0);
+		VectorUtil.scale(tmp2, radius, tangentDir1);
 		VectorUtil.add(triangle[0], projectedCenter, tmp1, tmp2);
 
-		tmp1.scale(radius, tangentDir0);
-		tmp2.scale(radius, tangentDir1);
-		tmp.subHere(tmp1, tmp2);
+		VectorUtil.scale(tmp1, radius, tangentDir0);
+		VectorUtil.scale(tmp2, radius, tangentDir1);
+		VectorUtil.sub(tmp, tmp1, tmp2);
 		VectorUtil.add(triangle[1], projectedCenter, tmp);
 
-		tmp1.scale(radius, tangentDir0);
-		tmp2.scale(radius, tangentDir1);
-		tmp.subHere(tmp1, tmp2);
-		triangle[2].subHere(projectedCenter, tmp);
+		VectorUtil.scale(tmp1, radius, tangentDir0);
+		VectorUtil.scale(tmp2, radius, tangentDir1);
+		VectorUtil.sub(tmp, tmp1, tmp2);
+		VectorUtil.sub(triangle[2], projectedCenter, tmp);
 
 		callback.processTriangle(triangle, 0, 0);
 
-		tmp1.scale(radius, tangentDir0);
-		tmp2.scale(radius, tangentDir1);
-		tmp.subHere(tmp1, tmp2);
-		triangle[0].subHere(projectedCenter, tmp);
+		VectorUtil.scale(tmp1, radius, tangentDir0);
+		VectorUtil.scale(tmp2, radius, tangentDir1);
+		VectorUtil.sub(tmp, tmp1, tmp2);
+		VectorUtil.sub(triangle[0], projectedCenter, tmp);
 
-		tmp1.scale(radius, tangentDir0);
-		tmp2.scale(radius, tangentDir1);
-		tmp.addHere(tmp1, tmp2);
-		triangle[1].subHere(projectedCenter, tmp);
+		VectorUtil.scale(tmp1, radius, tangentDir0);
+		VectorUtil.scale(tmp2, radius, tangentDir1);
+		VectorUtil.sub(tmp, tmp1, tmp2);
+		VectorUtil.sub(triangle[1], projectedCenter, tmp);
 
-		tmp1.scale(radius, tangentDir0);
-		tmp2.scale(radius, tangentDir1);
+		VectorUtil.scale(tmp1, radius, tangentDir0);
+		VectorUtil.scale(tmp2, radius, tangentDir1);
 		VectorUtil.add(triangle[2], projectedCenter, tmp1, tmp2);
 
 		callback.processTriangle(triangle, 0, 1);

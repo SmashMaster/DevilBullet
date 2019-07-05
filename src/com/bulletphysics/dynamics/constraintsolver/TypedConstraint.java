@@ -26,7 +26,7 @@
 package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.dynamics.RigidBody;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * TypedConstraint is the base class for Bullet constraints and vehicles.

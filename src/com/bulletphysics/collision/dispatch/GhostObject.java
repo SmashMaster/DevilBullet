@@ -33,7 +33,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * GhostObject can keep track of all objects that are overlapping. By default, this

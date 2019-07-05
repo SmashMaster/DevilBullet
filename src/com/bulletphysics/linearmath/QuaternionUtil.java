@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.BulletGlobals;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Utility functions for quaternions.
@@ -51,7 +51,7 @@ public class QuaternionUtil {
 	// Game Programming Gems 2.10. make sure v0,v1 are normalized
 	public static Quat shortestArcQuat(Vec3 v0, Vec3 v1, Quat out) {
 		Vec3 c = new Vec3();
-		c.crossHere(v0, v1);
+		VectorUtil.cross(c, v0, v1);
 		float d = v0.dot(v1);
 
 		if (d < -1.0 + BulletGlobals.FLT_EPSILON) {

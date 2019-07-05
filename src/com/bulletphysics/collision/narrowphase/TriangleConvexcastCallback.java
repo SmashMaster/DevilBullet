@@ -30,7 +30,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *

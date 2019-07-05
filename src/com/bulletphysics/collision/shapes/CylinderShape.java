@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * CylinderShape class implements a cylinder shape primitive, centered around
@@ -117,7 +117,7 @@ public class CylinderShape extends BoxShape {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
+			VectorUtil.scaleAdd(supVertex, getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}

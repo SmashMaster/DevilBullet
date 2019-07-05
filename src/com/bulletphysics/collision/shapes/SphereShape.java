@@ -27,7 +27,8 @@ package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * SphereShape implements an implicit sphere, centered around a local origin with radius.
@@ -59,8 +60,8 @@ public class SphereShape extends ConvexInternalShape {
 		Vec3 center = t.origin;
 		Vec3 extent = new Vec3();
 		extent.set(getMargin(), getMargin(), getMargin());
-		aabbMin.subHere(center, extent);
-		aabbMax.addHere(center, extent);
+		VectorUtil.sub(aabbMin, center, extent);
+		VectorUtil.add(aabbMax, center, extent);
 	}
 
 	@Override

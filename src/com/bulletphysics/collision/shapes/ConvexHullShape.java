@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.
@@ -151,7 +151,7 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
+			VectorUtil.scaleAdd(supVertex, getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}

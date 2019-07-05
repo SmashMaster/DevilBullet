@@ -26,11 +26,11 @@
 package com.bulletphysics.demos.bsp;
 
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import javax.vecmath.Vec3;
 
 /**
  *

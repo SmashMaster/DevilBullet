@@ -32,8 +32,8 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  *

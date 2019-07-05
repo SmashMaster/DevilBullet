@@ -28,8 +28,8 @@ package com.bulletphysics.collision.narrowphase;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 
 /**
@@ -108,7 +108,7 @@ public class PersistentManifold {
 			b0.sub(pointCache[2].localPointA);
 
 			Vec3 cross = new Vec3();
-			cross.crossHere(a0, b0);
+			VectorUtil.cross(cross, a0, b0);
 
 			res0 = cross.squareLength();
 		}
@@ -121,7 +121,7 @@ public class PersistentManifold {
 			b1.sub(pointCache[2].localPointA);
 
 			Vec3 cross = new Vec3();
-			cross.crossHere(a1, b1);
+			VectorUtil.cross(cross, a1, b1);
 			res1 = cross.squareLength();
 		}
 
@@ -133,7 +133,7 @@ public class PersistentManifold {
 			b2.sub(pointCache[1].localPointA);
 
 			Vec3 cross = new Vec3();
-			cross.crossHere(a2, b2);
+			VectorUtil.cross(cross, a2, b2);
 
 			res2 = cross.squareLength();
 		}
@@ -146,7 +146,7 @@ public class PersistentManifold {
 			b3.sub(pointCache[1].localPointA);
 
 			Vec3 cross = new Vec3();
-			cross.crossHere(a3, b3);
+			VectorUtil.cross(cross, a3, b3);
 			res3 = cross.squareLength();
 		}
 
@@ -220,7 +220,7 @@ public class PersistentManifold {
 		for (int i = 0; i < size; i++) {
 			ManifoldPoint mp = pointCache[i];
 
-			diffA.subHere(mp.localPointA, newPoint.localPointA);
+			VectorUtil.cross(diffA, mp.localPointA, newPoint.localPointA);
 
 			float distToManiPoint = diffA.dot(diffA);
 			if (distToManiPoint < shortestDist) {
@@ -352,9 +352,9 @@ public class PersistentManifold {
 			}
 			else {
 				// contact also becomes invalid when relative movement orthogonal to normal exceeds margin
-				tmp.scale(manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
-				projectedPoint.subHere(manifoldPoint.positionWorldOnA, tmp);
-				projectedDifference.subHere(manifoldPoint.positionWorldOnB, projectedPoint);
+				VectorUtil.scale(tmp, manifoldPoint.distance1, manifoldPoint.normalWorldOnB);
+				VectorUtil.sub(projectedPoint, manifoldPoint.positionWorldOnA, tmp);
+				VectorUtil.sub(projectedDifference, manifoldPoint.positionWorldOnB, projectedPoint);
 				distance2d = projectedDifference.dot(projectedDifference);
 				if (distance2d > getContactBreakingThreshold() * getContactBreakingThreshold()) {
 					removeContactPoint(i);

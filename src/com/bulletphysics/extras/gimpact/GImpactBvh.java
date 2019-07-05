@@ -33,7 +33,7 @@ import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.extras.gimpact.BoxCollision.BoxBoxTransformCache;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.IntArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *

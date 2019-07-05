@@ -25,8 +25,8 @@
 
 package com.bulletphysics.linearmath;
 
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  * Utility functions for vectors.
@@ -34,6 +34,44 @@ import javax.vecmath.Vec3;
  * @author jezek2
  */
 public class VectorUtil {
+    
+        public static void sub(Vec3 r, Vec3 v1, Vec3 v2) {
+            Vec3.sub(v1, v2, r);
+        }
+        
+        public static void scale(Vec3 r, float s, Vec3 v) {
+            Vec3.mult(v, s, r);
+        }
+        
+        public static void scaleAdd(Vec3 r, float s, Vec3 v1, Vec3 v2) {
+            Vec3.madd(v2, v1, s, r);
+        }
+        
+        public static void negate(Vec3 r, Vec3 v) {
+            Vec3.negate(v, r);
+        }
+        
+        public static void normalize(Vec3 r, Vec3 v) {
+            Vec3.normalize(v, r);
+        }
+        
+        public static void cross(Vec3 r, Vec3 v1, Vec3 v2) {
+            Vec3.cross(v1, v2, r);
+        }
+        
+        public static void absolute(Vec3 r, Vec3 v) {
+            r.x = Math.abs(v.x);
+            r.y = Math.abs(v.y);
+            r.z = Math.abs(v.z);
+        }
+        
+        public static void absolute(Vec3 v) {
+            absolute(v, v);
+        }
+        
+        public static void interpolate(Vec3 r, Vec3 v0, Vec3 v1, float t) {
+            Vec3.lerp(v0, v1, t, r);
+        }
 
 	public static int maxAxis(Vec3 v) {
 		int maxIndex = -1;

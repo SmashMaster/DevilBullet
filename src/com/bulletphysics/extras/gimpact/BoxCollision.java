@@ -34,8 +34,8 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  *
@@ -146,7 +146,7 @@ class BoxCollision {
 		 */
 		public void calc_from_full_invert(Transform trans0, Transform trans1) {
                         Mat3.invert(trans0.basis, R1to0);
-			T1to0.negateHere(trans0.origin);
+			VectorUtil.negate(T1to0, trans0.origin);
 			MatrixUtil.transform(R1to0, T1to0);
 
 			Vec3 tmp = new Vec3();
@@ -266,11 +266,11 @@ class BoxCollision {
 			Vec3 tmp = new Vec3();
 
 			Vec3 center = new Vec3();
-			center.addHere(max, min);
+			VectorUtil.add(center, max, min);
 			center.mult(0.5f);
 
 			Vec3 extends_ = new Vec3();
-			extends_.subHere(max, center);
+			VectorUtil.sub(extends_, max, center);
 
 			// Compute new center
 			trans.transform(center);
@@ -278,19 +278,19 @@ class BoxCollision {
 			Vec3 textends = new Vec3();
 
 			MatrixUtil.getRow(trans.basis, 0, tmp);
-			tmp.absolute();
+			VectorUtil.absolute(tmp);
 			textends.x = extends_.dot(tmp);
 
 			MatrixUtil.getRow(trans.basis, 1, tmp);
-			tmp.absolute();
+			VectorUtil.absolute(tmp);
 			textends.y = extends_.dot(tmp);
 
 			MatrixUtil.getRow(trans.basis, 2, tmp);
-			tmp.absolute();
+			VectorUtil.absolute(tmp);
 			textends.z = extends_.dot(tmp);
 
-			min.subHere(center, textends);
-			max.addHere(center, textends);
+			VectorUtil.sub(min, center, textends);
+			VectorUtil.add(max, center, textends);
 		}
 
 		/**
@@ -300,11 +300,11 @@ class BoxCollision {
 			Vec3 tmp = new Vec3();
 
 			Vec3 center = new Vec3();
-			center.addHere(max, min);
+			VectorUtil.add(center, max, min);
 			center.mult(0.5f);
 
 			Vec3 extends_ = new Vec3();
-			extends_.subHere(max, center);
+			VectorUtil.sub(extends_, max, center);
 
 			// Compute new center
 			trans.transform(center, center);
@@ -312,19 +312,19 @@ class BoxCollision {
 			Vec3 textends = new Vec3();
 
 			MatrixUtil.getRow(trans.R1to0, 0, tmp);
-			tmp.absolute();
+			VectorUtil.absolute(tmp);
 			textends.x = extends_.dot(tmp);
 
 			MatrixUtil.getRow(trans.R1to0, 1, tmp);
-			tmp.absolute();
+			VectorUtil.absolute(tmp);
 			textends.y = extends_.dot(tmp);
 
 			MatrixUtil.getRow(trans.R1to0, 2, tmp);
-			tmp.absolute();
+			VectorUtil.absolute(tmp);
 			textends.z = extends_.dot(tmp);
 
-			min.subHere(center, textends);
-			max.addHere(center, textends);
+			VectorUtil.sub(min, center, textends);
+			VectorUtil.add(max, center, textends);
 		}
 		
 		/**
@@ -357,10 +357,10 @@ class BoxCollision {
 		 * Gets the extend and center.
 		 */
 		public void get_center_extend(Vec3 center, Vec3 extend) {
-			center.addHere(max, min);
+			VectorUtil.add(center, max, min);
 			center.mult(0.5f);
 
-			extend.subHere(max, center);
+			VectorUtil.sub(extend, max, center);
 		}
 		
 		/**
@@ -428,7 +428,7 @@ class BoxCollision {
 			get_center_extend(center, extend);
 
 			float _fOrigin = direction.dot(center);
-			tmp.absoluteHere(direction);
+			VectorUtil.absolute(tmp, direction);
 			float _fMaximumExtent = extend.dot(tmp);
 			vmin[0] = _fOrigin - _fMaximumExtent;
 			vmax[0] = _fOrigin + _fMaximumExtent;
@@ -540,17 +540,17 @@ class BoxCollision {
 			get_center_extend(center, extends_);
 
 			Vec3 v1 = new Vec3();
-			v1.subHere(p1, center);
+			VectorUtil.sub(v1, p1, center);
 			Vec3 v2 = new Vec3();
-			v2.subHere(p2, center);
+			VectorUtil.sub(v2, p2, center);
 			Vec3 v3 = new Vec3();
-			v3.subHere(p3, center);
+			VectorUtil.sub(v3, p3, center);
 
 			// First axis
 			Vec3 diff = new Vec3();
-			diff.subHere(v2, v1);
+			VectorUtil.sub(diff, v2, v1);
 			Vec3 abs_diff = new Vec3();
-			abs_diff.absoluteHere(diff);
+			VectorUtil.absolute(abs_diff, diff);
 
 			// Test With X axis
 			TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v1, v3, extends_);
@@ -559,8 +559,8 @@ class BoxCollision {
 			// Test With Z axis
 			TEST_CROSS_EDGE_BOX_Z_AXIS_MCR(diff, abs_diff, v1, v3, extends_);
 
-			diff.subHere(v3, v2);
-			abs_diff.absoluteHere(diff);
+			VectorUtil.sub(diff, v3, v2);
+			VectorUtil.absolute(abs_diff, diff);
 
 			// Test With X axis
 			TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v2, v1, extends_);
@@ -569,8 +569,8 @@ class BoxCollision {
 			// Test With Z axis
 			TEST_CROSS_EDGE_BOX_Z_AXIS_MCR(diff, abs_diff, v2, v1, extends_);
 
-			diff.subHere(v1, v3);
-			abs_diff.absoluteHere(diff);
+			VectorUtil.sub(diff, v1, v3);
+			VectorUtil.absolute(abs_diff, diff);
 
 			// Test With X axis
 			TEST_CROSS_EDGE_BOX_X_AXIS_MCR(diff, abs_diff, v3, v2, extends_);

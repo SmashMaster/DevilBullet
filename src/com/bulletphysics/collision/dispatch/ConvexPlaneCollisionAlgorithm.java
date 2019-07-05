@@ -33,9 +33,10 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConvexPlaneCollisionAlgorithm provides convex/plane collision detection.
@@ -101,7 +102,7 @@ public class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm {
 		convexInPlaneTrans.mul(convexObj.getWorldTransform(tmpTrans));
 
 		Vec3 tmp = new Vec3();
-		tmp.negateHere(planeNormal);
+		VectorUtil.negate(tmp, planeNormal);
 		MatrixUtil.transform(planeInConvex.basis, tmp);
 
 		Vec3 vtx = convexShape.localGetSupportingVertex(tmp, new Vec3());
@@ -111,8 +112,8 @@ public class ConvexPlaneCollisionAlgorithm extends CollisionAlgorithm {
 		float distance = (planeNormal.dot(vtxInPlane) - planeConstant);
 
 		Vec3 vtxInPlaneProjected = new Vec3();
-		tmp.scale(distance, planeNormal);
-		vtxInPlaneProjected.subHere(vtxInPlane, tmp);
+		VectorUtil.scale(tmp, distance, planeNormal);
+		VectorUtil.sub(vtxInPlaneProjected, vtxInPlane, tmp);
 
 		Vec3 vtxInPlaneWorld = new Vec3(vtxInPlaneProjected);
 		planeObj.getWorldTransform(tmpTrans).transform(vtxInPlaneWorld);

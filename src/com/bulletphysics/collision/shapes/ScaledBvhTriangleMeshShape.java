@@ -30,7 +30,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 // JAVA NOTE: ScaledBvhTriangleMeshShape from 2.73 SP1
 
@@ -95,7 +95,7 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
 		localAabbMax.z = (localScaling.z <= 0f) ? tmpLocalAabbMin.z : tmpLocalAabbMax.z;
 
 		Vec3 localHalfExtents = new Vec3();
-		localHalfExtents.subHere(localAabbMax, localAabbMin);
+		VectorUtil.sub(localHalfExtents, localAabbMax, localAabbMin);
 		localHalfExtents.mult(0.5f);
 
 		float margin = bvhTriMeshShape.getMargin();
@@ -104,7 +104,7 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
 		localHalfExtents.z += margin;
 
 		Vec3 localCenter = new Vec3();
-		localCenter.addHere(localAabbMax, localAabbMin);
+		VectorUtil.add(localCenter, localAabbMax, localAabbMin);
 		localCenter.mult(0.5f);
 
 		Mat3 abs_b = new Mat3(trans.basis);
@@ -122,8 +122,8 @@ public class ScaledBvhTriangleMeshShape extends ConcaveShape {
                 MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
-		aabbMin.subHere(center, extent);
-		aabbMax.addHere(center, extent);
+		VectorUtil.sub(aabbMin, center, extent);
+		VectorUtil.add(aabbMax, center, extent);
 	}
 
 	@Override

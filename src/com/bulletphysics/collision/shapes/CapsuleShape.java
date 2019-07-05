@@ -31,7 +31,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * CapsuleShape represents a capsule around the Y axis, there is also the
@@ -92,8 +92,8 @@ public class CapsuleShape extends ConvexInternalShape {
 			
 			VectorUtil.mul(tmp1, vec, localScaling);
 			tmp1.mult(radius);
-			tmp2.scale(getMargin(), vec);
-			vtx.addHere(pos, tmp1);
+			VectorUtil.scale(tmp2, getMargin(), vec);
+			VectorUtil.add(vtx, pos, tmp1);
 			vtx.sub(tmp2);
 			newDot = vec.dot(vtx);
 			if (newDot > maxDot) {
@@ -107,8 +107,8 @@ public class CapsuleShape extends ConvexInternalShape {
 			
 			VectorUtil.mul(tmp1, vec, localScaling);
 			tmp1.mult(radius);
-			tmp2.scale(getMargin(), vec);
-			vtx.addHere(pos, tmp1);
+			VectorUtil.scale(tmp2, getMargin(), vec);
+			VectorUtil.add(vtx, pos, tmp1);
 			vtx.sub(tmp2);
 			newDot = vec.dot(vtx);
 			if (newDot > maxDot) {
@@ -185,8 +185,8 @@ public class CapsuleShape extends ConvexInternalShape {
 		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(halfExtents);
 
-		aabbMin.subHere(center, extent);
-		aabbMax.addHere(center, extent);
+		VectorUtil.sub(aabbMin, center, extent);
+		VectorUtil.add(aabbMax, center, extent);
 	}
 
 	@Override

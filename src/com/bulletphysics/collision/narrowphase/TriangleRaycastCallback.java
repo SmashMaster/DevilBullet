@@ -27,7 +27,7 @@ package com.bulletphysics.collision.narrowphase;
 
 import com.bulletphysics.collision.shapes.TriangleCallback;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -54,13 +54,13 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 		Vec3 vert2 = triangle[2];
 
 		Vec3 v10 = new Vec3();
-		v10.subHere(vert1, vert0);
+		VectorUtil.sub(v10, vert1, vert0);
 
 		Vec3 v20 = new Vec3();
-		v20.subHere(vert2, vert0);
+		VectorUtil.sub(v20, vert2, vert0);
 
 		Vec3 triangleNormal = new Vec3();
-		triangleNormal.crossHere(v10, v20);
+		VectorUtil.cross(triangleNormal, v10, v20);
 
 		float dist = vert0.dot(triangleNormal);
 		float dist_a = triangleNormal.dot(from);
@@ -86,20 +86,20 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 			VectorUtil.setInterpolate3(point, from, to, distance);
 			{
 				Vec3 v0p = new Vec3();
-				v0p.subHere(vert0, point);
+				VectorUtil.sub(v0p, vert0, point);
 				Vec3 v1p = new Vec3();
-				v1p.subHere(vert1, point);
+				VectorUtil.sub(v1p, vert1, point);
 				Vec3 cp0 = new Vec3();
-				cp0.crossHere(v0p, v1p);
+				VectorUtil.cross(cp0, v0p, v1p);
 
 				if (cp0.dot(triangleNormal) >= edge_tolerance) {
 					Vec3 v2p = new Vec3();
-					v2p.subHere(vert2, point);
+					VectorUtil.sub(v2p, vert2, point);
 					Vec3 cp1 = new Vec3();
-					cp1.crossHere(v1p, v2p);
+					VectorUtil.cross(cp1, v1p, v2p);
 					if (cp1.dot(triangleNormal) >= edge_tolerance) {
 						Vec3 cp2 = new Vec3();
-						cp2.crossHere(v2p, v0p);
+						VectorUtil.cross(cp2, v2p, v0p);
 
 						if (cp2.dot(triangleNormal) >= edge_tolerance) {
 
@@ -108,7 +108,7 @@ public abstract class TriangleRaycastCallback extends TriangleCallback {
 							}
 							else {
 								Vec3 tmp = new Vec3();
-								tmp.negateHere(triangleNormal);
+								VectorUtil.negate(tmp, triangleNormal);
 								hitFraction = reportHit(tmp, distance, partId, triangleIndex);
 							}
 						}

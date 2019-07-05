@@ -33,8 +33,8 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  *
@@ -50,8 +50,8 @@ class ClipPolygon {
 	 * Vector blending. Takes two vectors a, b, blends them together.
 	 */
 	public static void vec_blend(Vec3 vr, Vec3 va, Vec3 vb, float blend_factor) {
-		vr.scale(1f - blend_factor, va);
-		vr.scaleAddHere(blend_factor, vb, vr);
+		VectorUtil.scale(vr, 1f - blend_factor, va);
+		VectorUtil.scaleAdd(vr, blend_factor, vb, vr);
 	}
 
 	/**

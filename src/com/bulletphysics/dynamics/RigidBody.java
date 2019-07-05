@@ -37,10 +37,11 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * RigidBody is the main class for rigid body objects. It is derived from
@@ -220,7 +221,7 @@ public class RigidBody extends CollisionObject {
 	
 	public void setGravity(Vec3 acceleration) {
 		if (inverseMass != 0f) {
-			gravity.scale(1f / inverseMass, acceleration);
+			VectorUtil.scale(gravity, 1f / inverseMass, acceleration);
 		}
 	}
 
@@ -334,10 +335,10 @@ public class RigidBody extends CollisionObject {
 			return;
 		}
 
-		linearVelocity.scaleAddHere(inverseMass * step, totalForce, linearVelocity);
+		VectorUtil.scaleAdd(linearVelocity, inverseMass * step, totalForce, linearVelocity);
 		Vec3 tmp = new Vec3(totalTorque);
 		MatrixUtil.transform(invInertiaTensorWorld, tmp);
-		angularVelocity.scaleAddHere(step, tmp, angularVelocity);
+		VectorUtil.scaleAdd(angularVelocity, step, tmp, angularVelocity);
 
 		// clamp angular velocity. collision calculations will fail on higher angular velocities	
 		float angvel = angularVelocity.length();
@@ -385,13 +386,13 @@ public class RigidBody extends CollisionObject {
 		applyCentralForce(force);
 		
 		Vec3 tmp = new Vec3();
-		tmp.crossHere(rel_pos, force);
+		VectorUtil.cross(tmp, rel_pos, force);
 		tmp.mult(angularFactor);
 		applyTorque(tmp);
 	}
 
 	public void applyCentralImpulse(Vec3 impulse) {
-		linearVelocity.scaleAddHere(inverseMass, impulse, linearVelocity);
+		VectorUtil.scaleAdd(linearVelocity, inverseMass, impulse, linearVelocity);
 	}
 	
 	public void applyTorqueImpulse(Vec3 torque) {
@@ -405,7 +406,7 @@ public class RigidBody extends CollisionObject {
 			applyCentralImpulse(impulse);
 			if (angularFactor != 0f) {
 				Vec3 tmp = new Vec3();
-				tmp.crossHere(rel_pos, impulse);
+				VectorUtil.cross(tmp, rel_pos, impulse);
 				tmp.mult(angularFactor);
 				applyTorqueImpulse(tmp);
 			}
@@ -417,9 +418,9 @@ public class RigidBody extends CollisionObject {
 	 */
 	public void internalApplyImpulse(Vec3 linearComponent, Vec3 angularComponent, float impulseMagnitude) {
 		if (inverseMass != 0f) {
-			linearVelocity.scaleAddHere(impulseMagnitude, linearComponent, linearVelocity);
+			VectorUtil.scaleAdd(linearVelocity, impulseMagnitude, linearComponent, linearVelocity);
 			if (angularFactor != 0f) {
-				angularVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+				VectorUtil.scaleAdd(angularVelocity, impulseMagnitude * angularFactor, angularComponent, angularVelocity);
 			}
 		}
 	}
@@ -477,7 +478,7 @@ public class RigidBody extends CollisionObject {
 	public Vec3 getVelocityInLocalPoint(Vec3 rel_pos, Vec3 out) {
 		// we also calculate lin/ang velocity for kinematic objects
 		Vec3 vec = out;
-		vec.crossHere(angularVelocity, rel_pos);
+		VectorUtil.cross(vec, angularVelocity, rel_pos);
 		vec.add(linearVelocity);
 		return out;
 
@@ -495,16 +496,16 @@ public class RigidBody extends CollisionObject {
 
 	public float computeImpulseDenominator(Vec3 pos, Vec3 normal) {
 		Vec3 r0 = new Vec3();
-		r0.subHere(pos, getCenterOfMassPosition(new Vec3()));
+		VectorUtil.sub(r0, pos, getCenterOfMassPosition(new Vec3()));
 
 		Vec3 c0 = new Vec3();
-		c0.crossHere(r0, normal);
+		VectorUtil.cross(c0, r0, normal);
 
 		Vec3 tmp = new Vec3();
 		MatrixUtil.transposeTransform(tmp, c0, getInvInertiaTensorWorld(new Mat3()));
 
 		Vec3 vec = new Vec3();
-		vec.crossHere(tmp, r0);
+		VectorUtil.cross(vec, tmp, r0);
 
 		return inverseMass + normal.dot(vec);
 	}

@@ -30,9 +30,10 @@ import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Functions for resolving contacts.
@@ -76,10 +77,10 @@ public class ContactConstraint {
 		Vec3 tmp = new Vec3();
 		
 		Vec3 rel_pos1 = new Vec3();
-		rel_pos1.subHere(pos1, body1.getCenterOfMassPosition(tmp));
+		VectorUtil.sub(rel_pos1, pos1, body1.getCenterOfMassPosition(tmp));
 
 		Vec3 rel_pos2 = new Vec3();
-		rel_pos2.subHere(pos2, body2.getCenterOfMassPosition(tmp));
+		VectorUtil.sub(rel_pos2, pos2, body2.getCenterOfMassPosition(tmp));
 
 		//this jacobian entry could be re-used for all iterations
 
@@ -90,7 +91,7 @@ public class ContactConstraint {
 		body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
 		Vec3 vel = new Vec3();
-		vel.subHere(vel1, vel2);
+		VectorUtil.sub(vel, vel1, vel2);
 
 		Mat3 mat1 = body1.getCenterOfMassTransform(new Transform()).basis;
 		mat1.transpose();
@@ -156,15 +157,15 @@ public class ContactConstraint {
 
 		// constant over all iterations
 		Vec3 rel_pos1 = new Vec3();
-		rel_pos1.subHere(pos1_, body1.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos1, pos1_, body1.getCenterOfMassPosition(tmpVec));
 
 		Vec3 rel_pos2 = new Vec3();
-		rel_pos2.subHere(pos2_, body2.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos2, pos2_, body2.getCenterOfMassPosition(tmpVec));
 
 		Vec3 vel1 = body1.getVelocityInLocalPoint(rel_pos1, new Vec3());
 		Vec3 vel2 = body2.getVelocityInLocalPoint(rel_pos2, new Vec3());
 		Vec3 vel = new Vec3();
-		vel.subHere(vel1, vel2);
+		VectorUtil.sub(vel, vel1, vel2);
 
 		float rel_vel;
 		rel_vel = normal.dot(vel);
@@ -197,11 +198,11 @@ public class ContactConstraint {
 		//#ifdef USE_INTERNAL_APPLY_IMPULSE
 		Vec3 tmp = new Vec3();
 		if (body1.getInvMass() != 0f) {
-			tmp.scale(body1.getInvMass(), contactPoint.normalWorldOnB);
+			VectorUtil.scale(tmp, body1.getInvMass(), contactPoint.normalWorldOnB);
 			body1.internalApplyImpulse(tmp, cpd.angularComponentA, normalImpulse);
 		}
 		if (body2.getInvMass() != 0f) {
-			tmp.scale(body2.getInvMass(), contactPoint.normalWorldOnB);
+			VectorUtil.scale(tmp, body2.getInvMass(), contactPoint.normalWorldOnB);
 			body2.internalApplyImpulse(tmp, cpd.angularComponentB, -normalImpulse);
 		}
 		//#else //USE_INTERNAL_APPLY_IMPULSE
@@ -224,10 +225,10 @@ public class ContactConstraint {
 		Vec3 pos2 = contactPoint.getPositionWorldOnB(new Vec3());
 
 		Vec3 rel_pos1 = new Vec3();
-		rel_pos1.subHere(pos1, body1.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos1, pos1, body1.getCenterOfMassPosition(tmpVec));
 
 		Vec3 rel_pos2 = new Vec3();
-		rel_pos2.subHere(pos2, body2.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos2, pos2, body2.getCenterOfMassPosition(tmpVec));
 
 		ConstraintPersistentData cpd = (ConstraintPersistentData) contactPoint.userPersistentData;
 		assert (cpd != null);
@@ -248,7 +249,7 @@ public class ContactConstraint {
 			body2.getVelocityInLocalPoint(rel_pos2, vel2);
 
 			Vec3 vel = new Vec3();
-			vel.subHere(vel1, vel2);
+			VectorUtil.sub(vel, vel1, vel2);
 
 			float j1, j2;
 
@@ -283,17 +284,17 @@ public class ContactConstraint {
 			Vec3 tmp = new Vec3();
 
 			if (body1.getInvMass() != 0f) {
-				tmp.scale(body1.getInvMass(), cpd.frictionWorldTangential0);
+				VectorUtil.scale(tmp, body1.getInvMass(), cpd.frictionWorldTangential0);
 				body1.internalApplyImpulse(tmp, cpd.frictionAngularComponent0A, j1);
 
-				tmp.scale(body1.getInvMass(), cpd.frictionWorldTangential1);
+				VectorUtil.scale(tmp, body1.getInvMass(), cpd.frictionWorldTangential1);
 				body1.internalApplyImpulse(tmp, cpd.frictionAngularComponent1A, j2);
 			}
 			if (body2.getInvMass() != 0f) {
-				tmp.scale(body2.getInvMass(), cpd.frictionWorldTangential0);
+				VectorUtil.scale(tmp, body2.getInvMass(), cpd.frictionWorldTangential0);
 				body2.internalApplyImpulse(tmp, cpd.frictionAngularComponent0B, -j1);
 
-				tmp.scale(body2.getInvMass(), cpd.frictionWorldTangential1);
+				VectorUtil.scale(tmp, body2.getInvMass(), cpd.frictionWorldTangential1);
 				body2.internalApplyImpulse(tmp, cpd.frictionAngularComponent1B, -j2);
 			}
 			//#else //USE_INTERNAL_APPLY_IMPULSE
@@ -321,15 +322,15 @@ public class ContactConstraint {
 		Vec3 normal = contactPoint.normalWorldOnB;
 
 		Vec3 rel_pos1 = new Vec3();
-		rel_pos1.subHere(pos1, body1.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos1, pos1, body1.getCenterOfMassPosition(tmpVec));
 
 		Vec3 rel_pos2 = new Vec3();
-		rel_pos2.subHere(pos2, body2.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos2, pos2, body2.getCenterOfMassPosition(tmpVec));
 
 		Vec3 vel1 = body1.getVelocityInLocalPoint(rel_pos1, new Vec3());
 		Vec3 vel2 = body2.getVelocityInLocalPoint(rel_pos2, new Vec3());
 		Vec3 vel = new Vec3();
-		vel.subHere(vel1, vel2);
+		VectorUtil.sub(vel, vel1, vel2);
 
 		float rel_vel;
 		rel_vel = normal.dot(vel);
@@ -363,11 +364,11 @@ public class ContactConstraint {
 		//#ifdef USE_INTERNAL_APPLY_IMPULSE
 		Vec3 tmp = new Vec3();
 		if (body1.getInvMass() != 0f) {
-			tmp.scale(body1.getInvMass(), contactPoint.normalWorldOnB);
+			VectorUtil.scale(tmp, body1.getInvMass(), contactPoint.normalWorldOnB);
 			body1.internalApplyImpulse(tmp, cpd.angularComponentA, normalImpulse);
 		}
 		if (body2.getInvMass() != 0f) {
-			tmp.scale(body2.getInvMass(), contactPoint.normalWorldOnB);
+			VectorUtil.scale(tmp, body2.getInvMass(), contactPoint.normalWorldOnB);
 			body2.internalApplyImpulse(tmp, cpd.angularComponentB, -normalImpulse);
 		}
 		//#else //USE_INTERNAL_APPLY_IMPULSE
@@ -379,13 +380,13 @@ public class ContactConstraint {
 			//friction
 			body1.getVelocityInLocalPoint(rel_pos1, vel1);
 			body2.getVelocityInLocalPoint(rel_pos2, vel2);
-			vel.subHere(vel1, vel2);
+			VectorUtil.sub(vel, vel1, vel2);
 
 			rel_vel = normal.dot(vel);
 
-			tmp.scale(rel_vel, normal);
+			VectorUtil.scale(tmp, rel_vel, normal);
 			Vec3 lat_vel = new Vec3();
-			lat_vel.subHere(vel, tmp);
+			VectorUtil.sub(lat_vel, vel, tmp);
 			float lat_rel_vel = lat_vel.length();
 
 			float combinedFriction = cpd.friction;
@@ -395,20 +396,20 @@ public class ContactConstraint {
 					lat_vel.mult(1f / lat_rel_vel);
 
 					Vec3 temp1 = new Vec3();
-					temp1.crossHere(rel_pos1, lat_vel);
+					VectorUtil.cross(temp1, rel_pos1, lat_vel);
 					MatrixUtil.transform(body1.getInvInertiaTensorWorld(new Mat3()), temp1);
 
 					Vec3 temp2 = new Vec3();
-					temp2.crossHere(rel_pos2, lat_vel);
+					VectorUtil.cross(temp2, rel_pos2, lat_vel);
 					MatrixUtil.transform(body2.getInvInertiaTensorWorld(new Mat3()), temp2);
 
 					Vec3 java_tmp1 = new Vec3();
-					java_tmp1.crossHere(temp1, rel_pos1);
+					VectorUtil.cross(java_tmp1, temp1, rel_pos1);
 
 					Vec3 java_tmp2 = new Vec3();
-					java_tmp2.crossHere(temp2, rel_pos2);
+					VectorUtil.cross(java_tmp2, temp2, rel_pos2);
 
-					tmp.addHere(java_tmp1, java_tmp2);
+					VectorUtil.add(tmp, java_tmp1, java_tmp2);
 
 					float friction_impulse = lat_rel_vel /
 							(body1.getInvMass() + body2.getInvMass() + lat_vel.dot(tmp));
@@ -417,10 +418,10 @@ public class ContactConstraint {
 					friction_impulse = Math.min(friction_impulse, normal_impulse);
 					friction_impulse = Math.max(friction_impulse, -normal_impulse);
 
-					tmp.scale(-friction_impulse, lat_vel);
+					VectorUtil.scale(tmp, -friction_impulse, lat_vel);
 					body1.applyImpulse(tmp, rel_pos1);
 
-					tmp.scale(friction_impulse, lat_vel);
+					VectorUtil.scale(tmp, friction_impulse, lat_vel);
 					body2.applyImpulse(tmp, rel_pos2);
 				}
 			}

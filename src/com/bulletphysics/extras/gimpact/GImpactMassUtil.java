@@ -29,7 +29,7 @@
 
 package com.bulletphysics.extras.gimpact;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *

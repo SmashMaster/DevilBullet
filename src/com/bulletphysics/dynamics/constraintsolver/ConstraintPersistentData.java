@@ -25,7 +25,7 @@
 
 package com.bulletphysics.dynamics.constraintsolver;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Stores some extra information to each contact point. It is not in the contact

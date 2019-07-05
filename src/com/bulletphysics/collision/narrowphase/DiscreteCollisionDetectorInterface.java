@@ -27,7 +27,7 @@ package com.bulletphysics.collision.narrowphase;
 
 import com.bulletphysics.linearmath.IDebugDraw;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * This interface is made to be used by an iterative approach to do TimeOfImpact calculations.<p>

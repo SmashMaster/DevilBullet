@@ -31,10 +31,11 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.Dbvt.Node;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import java.util.Collections;
-import javax.vecmath.Vec3;
 
 /**
  *
@@ -358,7 +359,7 @@ public class Dbvt {
 		//DBVT_CHECKTYPE
 		if (root != null) {
 			Vec3 normal = new Vec3();
-			normal.normalizeHere(direction);
+			VectorUtil.normalize(normal, direction);
 			Vec3 invdir = new Vec3();
 			invdir.set(1f / normal.x, 1f / normal.y, 1f / normal.z);
 			int[] signs = new int[] { direction.x<0 ? 1:0, direction.y<0 ? 1:0, direction.z<0 ? 1:0 };

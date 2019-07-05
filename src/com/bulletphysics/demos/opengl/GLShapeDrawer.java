@@ -46,7 +46,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -203,25 +203,25 @@ public class GLShapeDrawer {
 						float planeConst = staticPlaneShape.getPlaneConstant();
 						Vec3 planeNormal = staticPlaneShape.getPlaneNormal(vectorsPool.get());
 						Vec3 planeOrigin = vectorsPool.get();
-						planeOrigin.scale(planeConst, planeNormal);
+						VectorUtil.scale(planeOrigin, planeConst, planeNormal);
 						Vec3 vec0 = vectorsPool.get();
 						Vec3 vec1 = vectorsPool.get();
 						TransformUtil.planeSpace1(planeNormal,vec0,vec1);
 						float vecLen = 100f;
 						
 						Vec3 pt0 = vectorsPool.get();
-						pt0.scaleAddHere(vecLen, vec0, planeOrigin);
+						VectorUtil.scaleAdd(pt0, vecLen, vec0, planeOrigin);
 
 						Vec3 pt1 = vectorsPool.get();
-						pt1.scale(vecLen, vec0);
-						pt1.subHere(planeOrigin, pt1);
+						VectorUtil.scale(pt1, vecLen, vec0);
+						VectorUtil.sub(pt1, planeOrigin, pt1);
 
 						Vec3 pt2 = vectorsPool.get();
-						pt2.scaleAddHere(vecLen, vec1, planeOrigin);
+						VectorUtil.scaleAdd(pt2, vecLen, vec1, planeOrigin);
 
 						Vec3 pt3 = vectorsPool.get();
-						pt3.scale(vecLen, vec1);
-						pt3.subHere(planeOrigin, pt3);
+						VectorUtil.scale(pt3, vecLen, vec1);
+						VectorUtil.sub(pt3, planeOrigin, pt3);
 						
 						gl.glBegin(gl.GL_LINES);
 						gl.glVertex3f(pt0.x,pt0.y,pt0.z);
@@ -315,9 +315,9 @@ public class GLShapeDrawer {
 										Vec3 v1 = vtx.getQuick(index1);
 										Vec3 v2 = vtx.getQuick(index2);
 										Vec3 v3 = vtx.getQuick(index3);
-										tmp1.subHere(v3, v1);
-										tmp2.subHere(v2, v1);
-										normal.crossHere(tmp1, tmp2);
+										VectorUtil.sub(tmp1, v3, v1);
+										VectorUtil.sub(tmp2, v2, v1);
+										VectorUtil.cross(normal, tmp1, tmp2);
 										normal.normalize();
 
 										gl.glNormal3f(normal.x,normal.y,normal.z);
@@ -487,9 +487,9 @@ public class GLShapeDrawer {
 		}
 		
 		public void processTriangle(Vec3[] triangle, int partId, int triangleIndex) {
-			diff1.subHere(triangle[1], triangle[0]);
-			diff2.subHere(triangle[2], triangle[0]);
-			normal.crossHere(diff1, diff2);
+			VectorUtil.sub(diff1, triangle[1], triangle[0]);
+			VectorUtil.sub(diff2, triangle[2], triangle[0]);
+			VectorUtil.cross(normal, diff1, diff2);
 
 			normal.normalize();
 

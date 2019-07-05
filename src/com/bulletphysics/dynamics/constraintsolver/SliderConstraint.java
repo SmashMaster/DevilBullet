@@ -39,7 +39,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 // JAVA NOTE: SliderConstraint from 2.71
 
@@ -481,10 +481,10 @@ public class SliderConstraint extends TypedConstraint {
 		realPivotBInW.set(calculatedTransformB.origin);
 		MatrixUtil.getColumn(calculatedTransformA.basis, 0, tmp);
 		sliderAxis.set(tmp); // along X
-		delta.subHere(realPivotBInW, realPivotAInW);
-		projPivotInW.scaleAddHere(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
-		relPosA.subHere(projPivotInW, rbA.getCenterOfMassPosition(tmp));
-		relPosB.subHere(realPivotBInW, rbB.getCenterOfMassPosition(tmp));
+		VectorUtil.sub(delta, realPivotBInW, realPivotAInW);
+		VectorUtil.scaleAdd(projPivotInW, sliderAxis.dot(delta), sliderAxis, realPivotAInW);
+		VectorUtil.sub(relPosA, projPivotInW, rbA.getCenterOfMassPosition(tmp));
+		VectorUtil.sub(relPosB, realPivotBInW, rbB.getCenterOfMassPosition(tmp));
 		Vec3 normalWorld = new Vec3();
 
 		// linear part
@@ -546,7 +546,7 @@ public class SliderConstraint extends TypedConstraint {
 		Vec3 velA = rbA.getVelocityInLocalPoint(relPosA, new Vec3());
 		Vec3 velB = rbB.getVelocityInLocalPoint(relPosB, new Vec3());
 		Vec3 vel = new Vec3();
-		vel.subHere(velA, velB);
+		VectorUtil.sub(vel, velA, velB);
 
 		Vec3 impulse_vector = new Vec3();
 
@@ -561,9 +561,9 @@ public class SliderConstraint extends TypedConstraint {
 			float damping = (i != 0)? dampingOrthoLin : (solveLinLim? dampingLimLin : dampingDirLin);
 			// calcutate and apply impulse
 			float normalImpulse = softness * (restitution * depth / timeStep - damping * rel_vel) * jacLinDiagABInv[i];
-			impulse_vector.scale(normalImpulse, normal);
+			VectorUtil.scale(impulse_vector, normalImpulse, normal);
 			rbA.applyImpulse(impulse_vector, relPosA);
-			tmp.negateHere(impulse_vector);
+			VectorUtil.negate(tmp, impulse_vector);
 			rbB.applyImpulse(tmp, relPosB);
 
 			if (poweredLinMotor && (i == 0)) {
@@ -586,9 +586,9 @@ public class SliderConstraint extends TypedConstraint {
 					}
 					accumulatedLinMotorImpulse = new_acc;
 					// apply clamped impulse
-					impulse_vector.scale(normalImpulse, normal);
+					VectorUtil.scale(impulse_vector, normalImpulse, normal);
 					rbA.applyImpulse(impulse_vector, relPosA);
-					tmp.negateHere(impulse_vector);
+					VectorUtil.negate(tmp, impulse_vector);
 					rbB.applyImpulse(tmp, relPosB);
 				}
 			}
@@ -605,68 +605,68 @@ public class SliderConstraint extends TypedConstraint {
 		Vec3 angVelB = rbB.getAngularVelocity(new Vec3());
 
 		Vec3 angVelAroundAxisA = new Vec3();
-		angVelAroundAxisA.scale(axisA.dot(angVelA), axisA);
+		VectorUtil.scale(angVelAroundAxisA, axisA.dot(angVelA), axisA);
 		Vec3 angVelAroundAxisB = new Vec3();
-		angVelAroundAxisB.scale(axisB.dot(angVelB), axisB);
+		VectorUtil.scale(angVelAroundAxisB, axisB.dot(angVelB), axisB);
 
 		Vec3 angAorthog = new Vec3();
-		angAorthog.subHere(angVelA, angVelAroundAxisA);
+		VectorUtil.sub(angAorthog, angVelA, angVelAroundAxisA);
 		Vec3 angBorthog = new Vec3();
-		angBorthog.subHere(angVelB, angVelAroundAxisB);
+		VectorUtil.sub(angBorthog, angVelB, angVelAroundAxisB);
 		Vec3 velrelOrthog = new Vec3();
-		velrelOrthog.subHere(angAorthog, angBorthog);
+		VectorUtil.sub(velrelOrthog, angAorthog, angBorthog);
 
 		// solve orthogonal angular velocity correction
 		float len = velrelOrthog.length();
 		if (len > 0.00001f) {
 			Vec3 normal = new Vec3();
-			normal.normalizeHere(velrelOrthog);
+			VectorUtil.normalize(normal, velrelOrthog);
 			float denom = rbA.computeAngularImpulseDenominator(normal) + rbB.computeAngularImpulseDenominator(normal);
 			velrelOrthog.mult((1f / denom) * dampingOrthoAng * softnessOrthoAng);
 		}
 
 		// solve angular positional correction
 		Vec3 angularError = new Vec3();
-		angularError.crossHere(axisA, axisB);
+		VectorUtil.cross(angularError, axisA, axisB);
 		angularError.mult(1f / timeStep);
 		float len2 = angularError.length();
 		if (len2 > 0.00001f) {
 			Vec3 normal2 = new Vec3();
-			normal2.normalizeHere(angularError);
+			VectorUtil.normalize(normal2, angularError);
 			float denom2 = rbA.computeAngularImpulseDenominator(normal2) + rbB.computeAngularImpulseDenominator(normal2);
 			angularError.mult((1f / denom2) * restitutionOrthoAng * softnessOrthoAng);
 		}
 
 		// apply impulse
-		tmp.negateHere(velrelOrthog);
+		VectorUtil.negate(tmp, velrelOrthog);
 		tmp.add(angularError);
 		rbA.applyTorqueImpulse(tmp);
-		tmp.subHere(velrelOrthog, angularError);
+		VectorUtil.sub(tmp, velrelOrthog, angularError);
 		rbB.applyTorqueImpulse(tmp);
 		float impulseMag;
 
 		// solve angular limits
 		if (solveAngLim) {
-			tmp.subHere(angVelB, angVelA);
+			VectorUtil.sub(tmp, angVelB, angVelA);
 			impulseMag = tmp.dot(axisA) * dampingLimAng + angDepth * restitutionLimAng / timeStep;
 			impulseMag *= kAngle * softnessLimAng;
 		}
 		else {
-			tmp.subHere(angVelB, angVelA);
+			VectorUtil.sub(tmp, angVelB, angVelA);
 			impulseMag = tmp.dot(axisA) * dampingDirAng + angDepth * restitutionDirAng / timeStep;
 			impulseMag *= kAngle * softnessDirAng;
 		}
 		Vec3 impulse = new Vec3();
-		impulse.scale(impulseMag, axisA);
+		VectorUtil.scale(impulse, impulseMag, axisA);
 		rbA.applyTorqueImpulse(impulse);
-		tmp.negateHere(impulse);
+		VectorUtil.negate(tmp, impulse);
 		rbB.applyTorqueImpulse(tmp);
 
 		// apply angular motor
 		if (poweredAngMotor) {
 			if (accumulatedAngMotorImpulse < maxAngMotorForce) {
 				Vec3 velrel = new Vec3();
-				velrel.subHere(angVelAroundAxisA, angVelAroundAxisB);
+				VectorUtil.sub(velrel, angVelAroundAxisA, angVelAroundAxisB);
 				float projRelVel = velrel.dot(axisA);
 
 				float desiredMotorVel = targetAngMotorVelocity;
@@ -688,9 +688,9 @@ public class SliderConstraint extends TypedConstraint {
 
 				// apply clamped impulse
 				Vec3 motorImp = new Vec3();
-				motorImp.scale(angImpulse, axisA);
+				VectorUtil.scale(motorImp, angImpulse, axisA);
 				rbA.applyTorqueImpulse(motorImp);
-				tmp.negateHere(motorImp);
+				VectorUtil.negate(tmp, motorImp);
 				rbB.applyTorqueImpulse(tmp);
 			}
 		}
@@ -712,8 +712,8 @@ public class SliderConstraint extends TypedConstraint {
 		realPivotAInW.set(calculatedTransformA.origin);
 		realPivotBInW.set(calculatedTransformB.origin);
 		MatrixUtil.getColumn(calculatedTransformA.basis, 0, sliderAxis); // along X
-		delta.subHere(realPivotBInW, realPivotAInW);
-		projPivotInW.scaleAddHere(sliderAxis.dot(delta), sliderAxis, realPivotAInW);
+		VectorUtil.sub(delta, realPivotBInW, realPivotAInW);
+		VectorUtil.scaleAdd(projPivotInW, sliderAxis.dot(delta), sliderAxis, realPivotAInW);
 		Vec3 normalWorld = new Vec3();
 		// linear part
 		for (int i=0; i<3; i++) {
@@ -772,7 +772,7 @@ public class SliderConstraint extends TypedConstraint {
 		Transform tmpTrans = new Transform();
 
 		Vec3 ancorInA = out;
-		ancorInA.scaleAddHere((lowerLinLimit + upperLinLimit) * 0.5f, sliderAxis, realPivotAInW);
+		VectorUtil.scaleAdd(ancorInA, (lowerLinLimit + upperLinLimit) * 0.5f, sliderAxis, realPivotAInW);
 		rbA.getCenterOfMassTransform(tmpTrans);
 		tmpTrans.inverse();
 		tmpTrans.transform(ancorInA);

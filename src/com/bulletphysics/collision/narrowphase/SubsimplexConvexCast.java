@@ -30,7 +30,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * SubsimplexConvexCast implements Gino van den Bergens' paper
@@ -71,8 +71,8 @@ public class SubsimplexConvexCast extends ConvexCast {
 
 		Vec3 linVelA = new Vec3();
 		Vec3 linVelB = new Vec3();
-		linVelA.subHere(toA.origin, fromA.origin);
-		linVelB.subHere(toB.origin, fromB.origin);
+		VectorUtil.sub(linVelA, toA.origin, fromA.origin);
+		VectorUtil.sub(linVelB, toB.origin, fromB.origin);
 		
 		float lambda = 0f;
 		
@@ -81,11 +81,11 @@ public class SubsimplexConvexCast extends ConvexCast {
 
 		// take relative motion
 		Vec3 r = new Vec3();
-		r.subHere(linVelA, linVelB);
+		VectorUtil.sub(r, linVelA, linVelB);
 		
 		Vec3 v = new Vec3();
 
-		tmp.negateHere(r);
+		VectorUtil.negate(tmp, r);
 		MatrixUtil.transposeTransform(tmp, tmp, fromA.basis);
 		Vec3 supVertexA = convexA.localGetSupportingVertex(tmp, new Vec3());
 		fromA.transform(supVertexA);
@@ -94,7 +94,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 		Vec3 supVertexB = convexB.localGetSupportingVertex(tmp, new Vec3());
 		fromB.transform(supVertexB);
 		
-		v.subHere(supVertexA, supVertexB);
+		VectorUtil.sub(v, supVertexA, supVertexB);
 		
 		int maxIter = MAX_ITERATIONS;
 
@@ -115,7 +115,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 		float VdotR;
 
 		while ((dist2 > epsilon) && (maxIter--) != 0) {
-			tmp.negateHere(v);
+			VectorUtil.negate(tmp, v);
 			MatrixUtil.transposeTransform(tmp, tmp, interpolatedTransA.basis);
 			convexA.localGetSupportingVertex(tmp, supVertexA);
 			interpolatedTransA.transform(supVertexA);
@@ -124,7 +124,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 			convexB.localGetSupportingVertex(tmp, supVertexB);
 			interpolatedTransB.transform(supVertexB);
 			
-			w.subHere(supVertexA, supVertexB);
+			VectorUtil.sub(w, supVertexA, supVertexB);
 
 			float VdotW = v.dot(w);
 
@@ -147,7 +147,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 					VectorUtil.setInterpolate3(interpolatedTransB.origin, fromB.origin, toB.origin, lambda);
 					//m_simplexSolver->reset();
 					// check next line
-					w.subHere(supVertexA, supVertexB);
+					VectorUtil.sub(w, supVertexA, supVertexB);
 					lastLambda = lambda;
 					n.set(v);
 					hasResult = true;
@@ -175,7 +175,7 @@ public class SubsimplexConvexCast extends ConvexCast {
 		
 		result.fraction = lambda;
 		if (n.squareLength() >= BulletGlobals.SIMD_EPSILON * BulletGlobals.SIMD_EPSILON) {
-			result.normal.normalizeHere(n);
+			VectorUtil.normalize(result.normal, n);
 		}
 		else {
 			result.normal.set(0f, 0f, 0f);

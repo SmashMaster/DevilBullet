@@ -27,8 +27,9 @@
 
 package com.bulletphysics.collision.broadphase;
 
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -210,7 +211,7 @@ public class DbvtBroadphase extends BroadphaseInterface {
 			// dynamic set:
 			if (DbvtAabbMm.Intersect(proxy.leaf.volume, aabb)) {/* Moving				*/
 				Vec3 delta = new Vec3();
-				delta.addHere(aabbMin, aabbMax);
+				VectorUtil.add(delta, aabbMin, aabbMax);
 				delta.mult(0.5f);
 				delta.sub(proxy.aabb.Center(new Vec3()));
 				//#ifdef DBVT_BP_MARGIN

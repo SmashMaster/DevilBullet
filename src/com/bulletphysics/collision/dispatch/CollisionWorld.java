@@ -58,7 +58,7 @@ import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * CollisionWorld is interface and container for the collision detection.
@@ -219,7 +219,7 @@ public class CollisionWorld {
 		BroadphaseInterface bp = broadphasePairCache;
 
 		// moving objects should be moderately sized, probably something wrong if not
-		tmp.subHere(maxAabb, minAabb); // TODO: optimize
+		VectorUtil.sub(tmp, maxAabb, minAabb); // TODO: optimize
 		if (colObj.isStaticObject() || (tmp.squareLength() < 1e12f)) {
 			bp.setAabb(colObj.getBroadphaseHandle(), minAabb, maxAabb, dispatcher1);
 		}

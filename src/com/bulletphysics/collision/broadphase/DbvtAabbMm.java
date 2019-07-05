@@ -30,7 +30,7 @@ package com.bulletphysics.collision.broadphase;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -66,18 +66,18 @@ public class DbvtAabbMm {
 	}
 
 	public Vec3 Center(Vec3 out) {
-		out.addHere(mi, mx);
+		VectorUtil.add(out, mi, mx);
 		out.mult(0.5f);
 		return out;
 	}
 	
 	public Vec3 Lengths(Vec3 out) {
-		out.subHere(mx, mi);
+		VectorUtil.sub(out, mx, mi);
 		return out;
 	}
 	
 	public Vec3 Extents(Vec3 out) {
-		out.subHere(mx, mi);
+		VectorUtil.sub(out, mx, mi);
 		out.mult(0.5f);
 		return out;
 	}
@@ -92,8 +92,8 @@ public class DbvtAabbMm {
 	
 	public static DbvtAabbMm FromCE(Vec3 c, Vec3 e, DbvtAabbMm out) {
 		DbvtAabbMm box = out;
-		box.mi.subHere(c, e);
-		box.mx.addHere(c, e);
+		VectorUtil.sub(box.mi, c, e);
+		VectorUtil.sub(box.mx, c, e);
 		return box;
 	}
 
@@ -288,8 +288,8 @@ public class DbvtAabbMm {
 		Vec3 d = new Vec3();
 		Vec3 tmp = new Vec3();
 
-		d.addHere(a.mi, a.mx);
-		tmp.addHere(b.mi, b.mx);
+		VectorUtil.add(d, a.mi, a.mx);
+		VectorUtil.add(tmp, b.mi, b.mx);
 		d.sub(tmp);
 		return Math.abs(d.x) + Math.abs(d.y) + Math.abs(d.z);
 	}

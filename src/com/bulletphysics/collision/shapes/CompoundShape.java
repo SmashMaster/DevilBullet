@@ -31,7 +31,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 // JAVA NOTE: CompoundShape from 2.71
 
@@ -129,14 +129,14 @@ public class CompoundShape extends CollisionShape {
 	@Override
 	public void getAabb(Transform trans, Vec3 aabbMin, Vec3 aabbMax) {
 		Vec3 localHalfExtents = new Vec3();
-		localHalfExtents.subHere(localAabbMax, localAabbMin);
+		VectorUtil.sub(localHalfExtents, localAabbMax, localAabbMin);
 		localHalfExtents.mult(0.5f);
 		localHalfExtents.x += getMargin();
 		localHalfExtents.y += getMargin();
 		localHalfExtents.z += getMargin();
 
 		Vec3 localCenter = new Vec3();
-		localCenter.addHere(localAabbMax, localAabbMin);
+		VectorUtil.add(localCenter, localAabbMax, localAabbMin);
 		localCenter.mult(0.5f);
 
 		Mat3 abs_b = new Mat3(trans.basis);
@@ -155,8 +155,8 @@ public class CompoundShape extends CollisionShape {
 		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
-		aabbMin.subHere(center, extent);
-		aabbMax.addHere(center, extent);
+		VectorUtil.sub(aabbMin, center, extent);
+		VectorUtil.add(aabbMax, center, extent);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class CompoundShape extends CollisionShape {
 		getAabb(ident, aabbMin, aabbMax);
 
 		Vec3 halfExtents = new Vec3();
-		halfExtents.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(halfExtents, aabbMax, aabbMin);
 		halfExtents.mult(0.5f);
 
 		float lx = 2f * halfExtents.x;
@@ -263,7 +263,7 @@ public class CompoundShape extends CollisionShape {
 		Vec3 center = new Vec3();
 		center.set(0, 0, 0);
 		for (int k = 0; k < n; k++) {
-			center.scaleAddHere(masses[k], children.getQuick(k).transform.origin, center);
+			VectorUtil.scaleAdd(center, masses[k], children.getQuick(k).transform.origin, center);
 			totalMass += masses[k];
 		}
 		center.mult(1f / totalMass);
@@ -278,7 +278,7 @@ public class CompoundShape extends CollisionShape {
 
 			Transform t = children.getQuick(k).transform;
 			Vec3 o = new Vec3();
-			o.subHere(t.origin, center);
+			VectorUtil.sub(o, t.origin, center);
 
 			// compute inertia tensor in coordinate system of compound shape
 			Mat3 j = Mat3.transpose(t.basis);

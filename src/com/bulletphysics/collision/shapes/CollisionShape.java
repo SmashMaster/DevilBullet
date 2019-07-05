@@ -28,7 +28,8 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * CollisionShape class provides an interface for collision shapes that can be
@@ -54,11 +55,11 @@ public abstract class CollisionShape {
 
 		getAabb(tr, aabbMin, aabbMax);
 
-		tmp.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(tmp, aabbMax, aabbMin);
 		radius[0] = tmp.length() * 0.5f;
 
-		tmp.addHere(aabbMin, aabbMax);
-		center.scale(0.5f, tmp);
+		VectorUtil.sub(tmp, aabbMin, aabbMax);
+		VectorUtil.scale(center, 0.5f, tmp);
 	}
 
 	///getAngularMotionDisc returns the maximus radius needed for Conservative Advancement to handle time-of-impact with rotations.

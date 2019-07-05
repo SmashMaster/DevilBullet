@@ -56,11 +56,12 @@ import com.bulletphysics.dynamics.vehicle.WheelInfo;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import javax.vecmath.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -357,7 +358,7 @@ public class ForkLiftDemo extends DemoApplication {
 		//#endif
 
 		Vec3 camToObject = new Vec3();
-		camToObject.subHere(cameraTargetPosition, cameraPosition);
+		VectorUtil.sub(camToObject, cameraTargetPosition, cameraPosition);
 
 		// keep distance between min and max distance
 		float cameraDistance = camToObject.length();
@@ -371,7 +372,7 @@ public class ForkLiftDemo extends DemoApplication {
 			correctionFactor = 0.15f*(maxCameraDistance-cameraDistance)/cameraDistance;
 		}
 		Vec3 tmp = new Vec3();
-		tmp.scale(correctionFactor, camToObject);
+		VectorUtil.scale(tmp, correctionFactor, camToObject);
 		cameraPosition.sub(tmp);
 
 		// update OpenGL camera settings

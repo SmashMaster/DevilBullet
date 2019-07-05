@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 import com.bulletphysics.collision.dispatch.CollisionWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * IDebugDraw interface class allows hooking up a debug renderer to visually debug

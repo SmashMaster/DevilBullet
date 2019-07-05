@@ -50,8 +50,9 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -296,7 +297,7 @@ public class CharacterDemo extends DemoApplication {
 		cameraTargetPosition.set(characterWorldTrans.origin);
 
 		Vec3 cameraPosition = new Vec3();
-		cameraPosition.scale(2, up);
+		VectorUtil.scale(cameraPosition, 2, up);
 		cameraPosition.add(cameraTargetPosition);
 		backward.mult(12);
 		cameraPosition.add(backward);

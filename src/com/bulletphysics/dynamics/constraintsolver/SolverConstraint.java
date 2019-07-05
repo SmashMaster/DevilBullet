@@ -25,7 +25,7 @@
 
 package com.bulletphysics.dynamics.constraintsolver;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * 1D constraint along a normal axis between bodyA and bodyB. It can be combined

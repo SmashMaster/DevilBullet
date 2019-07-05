@@ -33,7 +33,7 @@ import com.bulletphysics.collision.broadphase.AxisSweep3Internal.Handle;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * AxisSweep3Internal is an internal base class that implements sweep and prune.
@@ -89,7 +89,7 @@ public abstract class AxisSweep3Internal extends BroadphaseInterface {
 		this.worldAabbMax.set(worldAabbMax);
 
 		Vec3 aabbSize = new Vec3();
-		aabbSize.subHere(this.worldAabbMax, this.worldAabbMin);
+		VectorUtil.sub(aabbSize, this.worldAabbMax, this.worldAabbMin);
 
 		int maxInt = this.handleSentinel;
 
@@ -199,7 +199,7 @@ public abstract class AxisSweep3Internal extends BroadphaseInterface {
 		VectorUtil.setMin(clampedPoint, worldAabbMax);
 
 		Vec3 v = new Vec3();
-		v.subHere(clampedPoint, worldAabbMin);
+		VectorUtil.sub(v, clampedPoint, worldAabbMin);
 		VectorUtil.mul(v, v, quantize);
 
 		out[0] = (((int)v.x & bpHandleMask) | isMax) & mask;

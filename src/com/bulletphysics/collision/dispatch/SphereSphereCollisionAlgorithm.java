@@ -32,9 +32,10 @@ import com.bulletphysics.collision.broadphase.DispatcherInfo;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Provides collision detection between two spheres.
@@ -86,7 +87,7 @@ public class SphereSphereCollisionAlgorithm extends CollisionAlgorithm {
 		SphereShape sphere1 = (SphereShape) col1.getCollisionShape();
 
 		Vec3 diff = new Vec3();
-		diff.subHere(col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
+		VectorUtil.sub(diff, col0.getWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
 
 		float len = diff.length();
 		float radius0 = sphere0.getRadius();
@@ -109,20 +110,20 @@ public class SphereSphereCollisionAlgorithm extends CollisionAlgorithm {
 		Vec3 normalOnSurfaceB = new Vec3();
 		normalOnSurfaceB.set(1f, 0f, 0f);
 		if (len > BulletGlobals.FLT_EPSILON) {
-			normalOnSurfaceB.scale(1f / len, diff);
+			VectorUtil.scale(normalOnSurfaceB, 1f / len, diff);
 		}
 
 		Vec3 tmp = new Vec3();
 
 		// point on A (worldspace)
 		Vec3 pos0 = new Vec3();
-		tmp.scale(radius0, normalOnSurfaceB);
-		pos0.subHere(col0.getWorldTransform(tmpTrans1).origin, tmp);
+		VectorUtil.scale(tmp, radius0, normalOnSurfaceB);
+		VectorUtil.sub(pos0, col0.getWorldTransform(tmpTrans1).origin, tmp);
 
 		// point on B (worldspace)
 		Vec3 pos1 = new Vec3();
-		tmp.scale(radius1, normalOnSurfaceB);
-		pos1.addHere(col1.getWorldTransform(tmpTrans2).origin, tmp);
+		VectorUtil.scale(tmp, radius1, normalOnSurfaceB);
+		VectorUtil.add(pos1, col1.getWorldTransform(tmpTrans2).origin, tmp);
 
 		// report a contact. internally this will be kept persistent, and contact reduction is done
 		resultOut.addContactPoint(normalOnSurfaceB, pos1, dist);

@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath;
 
 
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Utility functions for axis aligned bounding boxes (AABB).
@@ -58,21 +58,21 @@ public class AabbUtil2 {
 		Vec3 r = new Vec3();
 		Vec3 hitNormal = new Vec3();
 
-		aabbHalfExtent.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(aabbHalfExtent, aabbMax, aabbMin);
 		aabbHalfExtent.mult(0.5f);
 
-		aabbCenter.addHere(aabbMax, aabbMin);
+		VectorUtil.add(aabbCenter, aabbMax, aabbMin);
 		aabbCenter.mult(0.5f);
 
-		source.subHere(rayFrom, aabbCenter);
-		target.subHere(rayTo, aabbCenter);
+		VectorUtil.sub(source, rayFrom, aabbCenter);
+		VectorUtil.sub(target, rayTo, aabbCenter);
 
 		int sourceOutcode = outcode(source, aabbHalfExtent);
 		int targetOutcode = outcode(target, aabbHalfExtent);
 		if ((sourceOutcode & targetOutcode) == 0x0) {
 			float lambda_enter = 0f;
 			float lambda_exit = param[0];
-			r.subHere(target, source);
+			VectorUtil.sub(r, target, source);
 
 			float normSign = 1f;
 			hitNormal.set(0f, 0f, 0f);
@@ -157,8 +157,8 @@ public class AabbUtil2 {
 		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(halfExtentsWithMargin);
 
-		aabbMinOut.subHere(center, extent);
-		aabbMaxOut.addHere(center, extent);
+		VectorUtil.sub(aabbMinOut, center, extent);
+		VectorUtil.add(aabbMaxOut, center, extent);
 	}
 
 	public static void transformAabb(Vec3 localAabbMin, Vec3 localAabbMax, float margin, Transform trans, Vec3 aabbMinOut, Vec3 aabbMaxOut) {
@@ -167,7 +167,7 @@ public class AabbUtil2 {
 		assert (localAabbMin.z <= localAabbMax.z);
 
 		Vec3 localHalfExtents = new Vec3();
-		localHalfExtents.subHere(localAabbMax, localAabbMin);
+		VectorUtil.sub(localHalfExtents, localAabbMax, localAabbMin);
 		localHalfExtents.mult(0.5f);
 
 		localHalfExtents.x += margin;
@@ -175,7 +175,7 @@ public class AabbUtil2 {
 		localHalfExtents.z += margin;
 
 		Vec3 localCenter = new Vec3();
-		localCenter.addHere(localAabbMax, localAabbMin);
+		VectorUtil.add(localCenter, localAabbMax, localAabbMin);
 		localCenter.mult(0.5f);
 
 		Mat3 abs_b = new Mat3(trans.basis);
@@ -194,8 +194,8 @@ public class AabbUtil2 {
 		MatrixUtil.getRow(abs_b, 2, tmp);
 		extent.z = tmp.dot(localHalfExtents);
 
-		aabbMinOut.subHere(center, extent);
-		aabbMaxOut.addHere(center, extent);
+		VectorUtil.sub(aabbMinOut, center, extent);
+		VectorUtil.add(aabbMaxOut, center, extent);
 	}
 
 }

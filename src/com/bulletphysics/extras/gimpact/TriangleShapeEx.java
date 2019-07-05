@@ -32,8 +32,9 @@ package com.bulletphysics.extras.gimpact;
 import com.bulletphysics.collision.shapes.TriangleShape;
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  *
@@ -76,9 +77,9 @@ public class TriangleShapeEx extends TriangleShape {
 		Vec3 tmp2 = new Vec3();
 
 		Vec3 normal = new Vec3();
-		tmp1.subHere(vertices1[1], vertices1[0]);
-		tmp2.subHere(vertices1[2], vertices1[0]);
-		normal.crossHere(tmp1, tmp2);
+		VectorUtil.sub(tmp1, vertices1[1], vertices1[0]);
+		VectorUtil.sub(tmp2, vertices1[2], vertices1[0]);
+		VectorUtil.cross(normal, tmp1, tmp2);
 		normal.normalize();
 
 		plane.set(normal.x, normal.y, normal.z, vertices1[0].dot(normal));

@@ -26,8 +26,8 @@
 package com.bulletphysics.linearmath;
 
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  * GeometryUtil helper class provides a few methods to convert between plane
@@ -88,11 +88,11 @@ public class GeometryUtil {
 				for (int k = j + 1; k < numvertices; k++) {
 					Vec3 N3 = vertices.getQuick(k);
 
-					edge0.subHere(N2, N1);
-					edge1.subHere(N3, N1);
+					VectorUtil.sub(edge0, N2, N1);
+					VectorUtil.sub(edge1, N3, N1);
 					float normalSign = 1f;
 					for (int ww = 0; ww < 2; ww++) {
-						tmp.crossHere(edge0, edge1);
+						VectorUtil.cross(tmp, edge0, edge1);
 						planeEquation.x = normalSign * tmp.x;
 						planeEquation.y = normalSign * tmp.y;
 						planeEquation.z = normalSign * tmp.z;

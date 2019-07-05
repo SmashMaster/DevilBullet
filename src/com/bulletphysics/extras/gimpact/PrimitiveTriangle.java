@@ -30,9 +30,10 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  *
@@ -71,9 +72,9 @@ public class PrimitiveTriangle {
 		Vec3 tmp2 = new Vec3();
 
 		Vec3 normal = new Vec3();
-		tmp1.subHere(vertices[1], vertices[0]);
-		tmp2.subHere(vertices[2], vertices[0]);
-		normal.crossHere(tmp1, tmp2);
+		VectorUtil.sub(tmp1, vertices[1], vertices[0]);
+		VectorUtil.sub(tmp2, vertices[2], vertices[0]);
+		VectorUtil.cross(normal, tmp1, tmp2);
 		normal.normalize();
 
 		plane.set(normal.x, normal.y, normal.z, vertices[0].dot(normal));

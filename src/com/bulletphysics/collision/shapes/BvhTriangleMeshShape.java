@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * BvhTriangleMeshShape is a static-triangle mesh shape with several optimizations,
@@ -193,7 +193,7 @@ public class BvhTriangleMeshShape extends TriangleMeshShape {
 	@Override
 	public void setLocalScaling(Vec3 scaling) {
 		Vec3 tmp = new Vec3();
-		tmp.subHere(getLocalScaling(new Vec3()), scaling);
+		VectorUtil.sub(tmp, getLocalScaling(new Vec3()), scaling);
 
 		if (tmp.squareLength() > BulletGlobals.SIMD_EPSILON) {
 			super.setLocalScaling(scaling);
@@ -231,7 +231,7 @@ public class BvhTriangleMeshShape extends TriangleMeshShape {
 
 		// update the scaling without rebuilding the bvh
 		Vec3 tmp = new Vec3();
-		tmp.subHere(getLocalScaling(new Vec3()), scaling);
+		VectorUtil.sub(tmp, getLocalScaling(new Vec3()), scaling);
 
 		if (tmp.squareLength() > BulletGlobals.SIMD_EPSILON) {
 			super.setLocalScaling(scaling);

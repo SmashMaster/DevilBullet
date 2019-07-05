@@ -38,11 +38,12 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * SequentialImpulseConstraintSolver uses a Propagation Method and Sequentially applies impulses.
@@ -213,10 +214,10 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 			Vec3 tmp = new Vec3();
 
-			tmp.scale(body1.invMass, contactConstraint.contactNormal);
+			VectorUtil.scale(tmp, body1.invMass, contactConstraint.contactNormal);
 			body1.internalApplyPushImpulse(tmp, contactConstraint.angularComponentA, normalImpulse);
 
-			tmp.scale(body2.invMass, contactConstraint.contactNormal);
+			VectorUtil.scale(tmp, body2.invMass, contactConstraint.contactNormal);
 			body2.internalApplyPushImpulse(tmp, contactConstraint.angularComponentB, -normalImpulse);
 		}
 	}
@@ -267,10 +268,10 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 			Vec3 tmp = new Vec3();
 
-			tmp.scale(body1.invMass, contactConstraint.contactNormal);
+			VectorUtil.scale(tmp, body1.invMass, contactConstraint.contactNormal);
 			body1.internalApplyImpulse(tmp, contactConstraint.angularComponentA, normalImpulse);
 
-			tmp.scale(body2.invMass, contactConstraint.contactNormal);
+			VectorUtil.scale(tmp, body2.invMass, contactConstraint.contactNormal);
 			body2.internalApplyImpulse(tmp, contactConstraint.angularComponentB, -normalImpulse);
 		}
 
@@ -331,10 +332,10 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 			Vec3 tmp = new Vec3();
 			
-			tmp.scale(body1.invMass, contactConstraint.contactNormal);
+			VectorUtil.scale(tmp, body1.invMass, contactConstraint.contactNormal);
 			body1.internalApplyImpulse(tmp, contactConstraint.angularComponentA, j1);
 			
-			tmp.scale(body2.invMass, contactConstraint.contactNormal);
+			VectorUtil.scale(tmp, body2.invMass, contactConstraint.contactNormal);
 			body2.internalApplyImpulse(tmp, contactConstraint.angularComponentB, -j1);
 		}
 		return 0f;
@@ -365,7 +366,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 		Mat3 tmpMat = new Mat3();
 		
 		{
-			ftorqueAxis1.crossHere(rel_pos1, solverConstraint.contactNormal);
+			VectorUtil.cross(ftorqueAxis1, rel_pos1, solverConstraint.contactNormal);
 			solverConstraint.relpos1CrossNormal.set(ftorqueAxis1);
 			if (body0 != null) {
 				solverConstraint.angularComponentA.set(ftorqueAxis1);
@@ -376,7 +377,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 			}
 		}
 		{
-			ftorqueAxis1.crossHere(rel_pos2, solverConstraint.contactNormal);
+			VectorUtil.cross(ftorqueAxis1, rel_pos2, solverConstraint.contactNormal);
 			solverConstraint.relpos2CrossNormal.set(ftorqueAxis1);
 			if (body1 != null) {
 				solverConstraint.angularComponentB.set(ftorqueAxis1);
@@ -395,11 +396,11 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 		float denom0 = 0f;
 		float denom1 = 0f;
 		if (body0 != null) {
-			vec.crossHere(solverConstraint.angularComponentA, rel_pos1);
+			VectorUtil.cross(vec, solverConstraint.angularComponentA, rel_pos1);
 			denom0 = body0.getInvMass() + normalAxis.dot(vec);
 		}
 		if (body1 != null) {
-			vec.crossHere(solverConstraint.angularComponentB, rel_pos2);
+			VectorUtil.cross(vec, solverConstraint.angularComponentB, rel_pos2);
 			denom1 = body1.getInvMass() + normalAxis.dot(vec);
 		}
 		//#endif //COMPUTE_IMPULSE_DENOM
@@ -563,8 +564,8 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 								cp.getPositionWorldOnA(pos1);
 								cp.getPositionWorldOnB(pos2);
 
-								rel_pos1.subHere(pos1, colObj0.getWorldTransform(tmpTrans).origin);
-								rel_pos2.subHere(pos2, colObj1.getWorldTransform(tmpTrans).origin);
+								VectorUtil.sub(rel_pos1, pos1, colObj0.getWorldTransform(tmpTrans).origin);
+								VectorUtil.sub(rel_pos2, pos2, colObj1.getWorldTransform(tmpTrans).origin);
 
 								relaxation = 1f;
 								float rel_vel;
@@ -583,7 +584,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 									
 									solverConstraint.originalContactPoint = cp;
 
-									torqueAxis0.crossHere(rel_pos1, cp.normalWorldOnB);
+									VectorUtil.cross(torqueAxis0, rel_pos1, cp.normalWorldOnB);
 
 									if (rb0 != null) {
 										solverConstraint.angularComponentA.set(torqueAxis0);
@@ -593,7 +594,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 										solverConstraint.angularComponentA.set(0f, 0f, 0f);
 									}
 
-									torqueAxis1.crossHere(rel_pos2, cp.normalWorldOnB);
+									VectorUtil.cross(torqueAxis1, rel_pos2, cp.normalWorldOnB);
 
 									if (rb1 != null) {
 										solverConstraint.angularComponentB.set(torqueAxis1);
@@ -611,11 +612,11 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 										float denom0 = 0f;
 										float denom1 = 0f;
 										if (rb0 != null) {
-											vec.crossHere(solverConstraint.angularComponentA, rel_pos1);
+											VectorUtil.cross(vec, solverConstraint.angularComponentA, rel_pos1);
 											denom0 = rb0.getInvMass() + cp.normalWorldOnB.dot(vec);
 										}
 										if (rb1 != null) {
-											vec.crossHere(solverConstraint.angularComponentB, rel_pos2);
+											VectorUtil.cross(vec, solverConstraint.angularComponentB, rel_pos2);
 											denom1 = rb1.getInvMass() + cp.normalWorldOnB.dot(vec);
 										}
 										//#endif //COMPUTE_IMPULSE_DENOM		
@@ -625,8 +626,8 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 									}
 
 									solverConstraint.contactNormal.set(cp.normalWorldOnB);
-									solverConstraint.relpos1CrossNormal.crossHere(rel_pos1, cp.normalWorldOnB);
-									solverConstraint.relpos2CrossNormal.crossHere(rel_pos2, cp.normalWorldOnB);
+									VectorUtil.cross(solverConstraint.relpos1CrossNormal, rel_pos1, cp.normalWorldOnB);
+									VectorUtil.cross(solverConstraint.relpos2CrossNormal, rel_pos2, cp.normalWorldOnB);
 
 									if (rb0 != null) {
 										rb0.getVelocityInLocalPoint(rel_pos1, vel1);
@@ -642,7 +643,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 										vel2.set(0f, 0f, 0f);
 									}
 
-									vel.subHere(vel1, vel2);
+									VectorUtil.sub(vel, vel1, vel2);
 
 									rel_vel = cp.normalWorldOnB.dot(vel);
 
@@ -667,11 +668,11 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 									if ((infoGlobal.solverMode & SolverMode.SOLVER_USE_WARMSTARTING) != 0) {
 										solverConstraint.appliedImpulse = cp.appliedImpulse * infoGlobal.warmstartingFactor;
 										if (rb0 != null) {
-											tmp.scale(rb0.getInvMass(), solverConstraint.contactNormal);
+											VectorUtil.scale(tmp, rb0.getInvMass(), solverConstraint.contactNormal);
 											tmpSolverBodyPool.getQuick(solverConstraint.solverBodyIdA).internalApplyImpulse(tmp, solverConstraint.angularComponentA, solverConstraint.appliedImpulse);
 										}
 										if (rb1 != null) {
-											tmp.scale(rb1.getInvMass(), solverConstraint.contactNormal);
+											VectorUtil.scale(tmp, rb1.getInvMass(), solverConstraint.contactNormal);
 											tmpSolverBodyPool.getQuick(solverConstraint.solverBodyIdB).internalApplyImpulse(tmp, solverConstraint.angularComponentB, -solverConstraint.appliedImpulse);
 										}
 									}
@@ -683,15 +684,15 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 									solverConstraint.frictionIndex = tmpSolverFrictionConstraintPool.size();
 									if (!cp.lateralFrictionInitialized) {
-										cp.lateralFrictionDir1.scale(rel_vel, cp.normalWorldOnB);
-										cp.lateralFrictionDir1.subHere(vel, cp.lateralFrictionDir1);
+										VectorUtil.scale(cp.lateralFrictionDir1, rel_vel, cp.normalWorldOnB);
+										VectorUtil.sub(cp.lateralFrictionDir1, vel, cp.lateralFrictionDir1);
 
 										float lat_rel_vel = cp.lateralFrictionDir1.squareLength();
 										if (lat_rel_vel > BulletGlobals.FLT_EPSILON)//0.0f)
 										{
 											cp.lateralFrictionDir1.mult(1f / (float) Math.sqrt(lat_rel_vel));
 											addFrictionConstraint(cp.lateralFrictionDir1, solverBodyIdA, solverBodyIdB, frictionIndex, cp, rel_pos1, rel_pos2, colObj0, colObj1, relaxation);
-											cp.lateralFrictionDir2.crossHere(cp.lateralFrictionDir1, cp.normalWorldOnB);
+											VectorUtil.cross(cp.lateralFrictionDir2, cp.lateralFrictionDir1, cp.normalWorldOnB);
 											cp.lateralFrictionDir2.normalize(); //??
 											addFrictionConstraint(cp.lateralFrictionDir2, solverBodyIdA, solverBodyIdB, frictionIndex, cp, rel_pos1, rel_pos2, colObj0, colObj1, relaxation);
 										}
@@ -715,11 +716,11 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 										if ((infoGlobal.solverMode & SolverMode.SOLVER_USE_WARMSTARTING) != 0) {
 											frictionConstraint1.appliedImpulse = cp.appliedImpulseLateral1 * infoGlobal.warmstartingFactor;
 											if (rb0 != null) {
-												tmp.scale(rb0.getInvMass(), frictionConstraint1.contactNormal);
+												VectorUtil.scale(tmp, rb0.getInvMass(), frictionConstraint1.contactNormal);
 												tmpSolverBodyPool.getQuick(solverConstraint.solverBodyIdA).internalApplyImpulse(tmp, frictionConstraint1.angularComponentA, frictionConstraint1.appliedImpulse);
 											}
 											if (rb1 != null) {
-												tmp.scale(rb1.getInvMass(), frictionConstraint1.contactNormal);
+												VectorUtil.scale(tmp, rb1.getInvMass(), frictionConstraint1.contactNormal);
 												tmpSolverBodyPool.getQuick(solverConstraint.solverBodyIdB).internalApplyImpulse(tmp, frictionConstraint1.angularComponentB, -frictionConstraint1.appliedImpulse);
 											}
 										}
@@ -732,11 +733,11 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 										if ((infoGlobal.solverMode & SolverMode.SOLVER_USE_WARMSTARTING) != 0) {
 											frictionConstraint2.appliedImpulse = cp.appliedImpulseLateral2 * infoGlobal.warmstartingFactor;
 											if (rb0 != null) {
-												tmp.scale(rb0.getInvMass(), frictionConstraint2.contactNormal);
+												VectorUtil.scale(tmp, rb0.getInvMass(), frictionConstraint2.contactNormal);
 												tmpSolverBodyPool.getQuick(solverConstraint.solverBodyIdA).internalApplyImpulse(tmp, frictionConstraint2.angularComponentA, frictionConstraint2.appliedImpulse);
 											}
 											if (rb1 != null) {
-												tmp.scale(rb1.getInvMass(), frictionConstraint2.contactNormal);
+												VectorUtil.scale(tmp, rb1.getInvMass(), frictionConstraint2.contactNormal);
 												tmpSolverBodyPool.getQuick(solverConstraint.solverBodyIdB).internalApplyImpulse(tmp, frictionConstraint2.angularComponentB, -frictionConstraint2.appliedImpulse);
 											}
 										}
@@ -1064,8 +1065,8 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 					cp.getPositionWorldOnA(pos1);
 					cp.getPositionWorldOnB(pos2);
 
-					rel_pos1.subHere(pos1, body0.getCenterOfMassPosition(tmpVec));
-					rel_pos2.subHere(pos2, body1.getCenterOfMassPosition(tmpVec));
+					VectorUtil.sub(rel_pos1, pos1, body0.getCenterOfMassPosition(tmpVec));
+					VectorUtil.sub(rel_pos2, pos2, body1.getCenterOfMassPosition(tmpVec));
 
 					// this jacobian entry is re-used for all iterations
 					Mat3 mat1 = body0.getCenterOfMassTransform(new Transform()).basis;
@@ -1123,7 +1124,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 
 					body0.getVelocityInLocalPoint(rel_pos1, vel1);
 					body1.getVelocityInLocalPoint(rel_pos2, vel2);
-					vel.subHere(vel1, vel2);
+					VectorUtil.sub(vel, vel1, vel2);
 
 					float rel_vel;
 					rel_vel = cp.normalWorldOnB.dot(vel);
@@ -1181,40 +1182,40 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 					//	//cpd->m_frictionWorldTangential1*cpd->m_accumulatedTangentImpulse1+
 					//	//#endif //NO_FRICTION_WARMSTART
 					//	cp.normalWorldOnB*cpd.appliedImpulse;
-					totalImpulse.scale(cpd.appliedImpulse, cp.normalWorldOnB);
+					VectorUtil.scale(totalImpulse, cpd.appliedImpulse, cp.normalWorldOnB);
 
 					///
 					{
-						torqueAxis0.crossHere(rel_pos1, cp.normalWorldOnB);
+						VectorUtil.cross(torqueAxis0, rel_pos1, cp.normalWorldOnB);
 
 						cpd.angularComponentA.set(torqueAxis0);
 						MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat3), cpd.angularComponentA);
 
-						torqueAxis1.crossHere(rel_pos2, cp.normalWorldOnB);
+						VectorUtil.cross(torqueAxis1, rel_pos2, cp.normalWorldOnB);
 
 						cpd.angularComponentB.set(torqueAxis1);
 						MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat3), cpd.angularComponentB);
 					}
 					{
-						ftorqueAxis0.crossHere(rel_pos1, cpd.frictionWorldTangential0);
+						VectorUtil.cross(ftorqueAxis0, rel_pos1, cpd.frictionWorldTangential0);
 
 						cpd.frictionAngularComponent0A.set(ftorqueAxis0);
 						MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent0A);
 					}
 					{
-						ftorqueAxis1.crossHere(rel_pos1, cpd.frictionWorldTangential1);
+						VectorUtil.cross(ftorqueAxis1, rel_pos1, cpd.frictionWorldTangential1);
 
 						cpd.frictionAngularComponent1A.set(ftorqueAxis1);
 						MatrixUtil.transform(body0.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent1A);
 					}
 					{
-						ftorqueAxis0.crossHere(rel_pos2, cpd.frictionWorldTangential0);
+						VectorUtil.cross(ftorqueAxis0, rel_pos2, cpd.frictionWorldTangential0);
 
 						cpd.frictionAngularComponent0B.set(ftorqueAxis0);
 						MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent0B);
 					}
 					{
-						ftorqueAxis1.crossHere(rel_pos2, cpd.frictionWorldTangential1);
+						VectorUtil.cross(ftorqueAxis1, rel_pos2, cpd.frictionWorldTangential1);
 
 						cpd.frictionAngularComponent1B.set(ftorqueAxis1);
 						MatrixUtil.transform(body1.getInvInertiaTensorWorld(tmpMat3), cpd.frictionAngularComponent1B);
@@ -1225,7 +1226,7 @@ public class SequentialImpulseConstraintSolver extends ConstraintSolver {
 					// apply previous frames impulse on both bodies
 					body0.applyImpulse(totalImpulse, rel_pos1);
 
-					tmpVec.negateHere(totalImpulse);
+					VectorUtil.negate(tmpVec, totalImpulse);
 					body1.applyImpulse(tmpVec, rel_pos2);
 				}
 

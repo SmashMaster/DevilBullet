@@ -33,7 +33,7 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * HullLibrary class can create a convex hull from a collection of vertices, using
@@ -301,7 +301,7 @@ public class HullLibrary {
 			VectorUtil.setMin(bmin, verts.getQuick(j));
 			VectorUtil.setMax(bmax, verts.getQuick(j));
 		}
-		tmp.subHere(bmax, bmin);
+		VectorUtil.sub(tmp, bmax, bmin);
 		float epsilon = tmp.length() * 0.001f;
 		assert (epsilon != 0f);
 
@@ -340,7 +340,7 @@ public class HullLibrary {
 			assert (t.vmax < 0);
 			triNormal(verts.getQuick(t.getCoord(0)), verts.getQuick(t.getCoord(1)), verts.getQuick(t.getCoord(2)), n);
 			t.vmax = maxdirsterid(verts, verts_count, n, allow);
-			tmp.subHere(verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
+			VectorUtil.sub(tmp, verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
 			t.rise = n.dot(tmp);
 		}
 		Tri te;
@@ -372,9 +372,9 @@ public class HullLibrary {
 					break;
 				}
 				Int3 nt = tris.getQuick(j);
-				tmp1.subHere(verts.getQuick(nt.getCoord(1)), verts.getQuick(nt.getCoord(0)));
-				tmp2.subHere(verts.getQuick(nt.getCoord(2)), verts.getQuick(nt.getCoord(1)));
-				tmp.crossHere(tmp1, tmp2);
+				VectorUtil.sub(tmp1, verts.getQuick(nt.getCoord(1)), verts.getQuick(nt.getCoord(0)));
+				VectorUtil.sub(tmp2, verts.getQuick(nt.getCoord(2)), verts.getQuick(nt.getCoord(1)));
+				VectorUtil.cross(tmp, tmp1, tmp2);
 				if (above(verts, nt, center, 0.01f * epsilon) || tmp.length() < epsilon * epsilon * 0.1f) {
 					Tri nb = tris.getQuick(tris.getQuick(j).n.getCoord(0));
 					assert (nb != null);
@@ -399,7 +399,7 @@ public class HullLibrary {
 					t.vmax = -1; // already done that vertex - algorithm needs to be able to terminate.
 				}
 				else {
-					tmp.subHere(verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
+					VectorUtil.sub(tmp, verts.getQuick(t.vmax), verts.getQuick(t.getCoord(0)));
 					t.rise = n.dot(tmp);
 				}
 			}
@@ -416,17 +416,17 @@ public class HullLibrary {
 		Vec3[] basis = new Vec3[/*3*/] { new Vec3(), new Vec3(), new Vec3() };
 		basis[0].set(0.01f, 0.02f, 1.0f);
 		int p0 = maxdirsterid(verts, verts_count, basis[0], allow);
-		tmp.negateHere(basis[0]);
+		VectorUtil.negate(tmp, basis[0]);
 		int p1 = maxdirsterid(verts, verts_count, tmp, allow);
-		basis[0].subHere(verts.getQuick(p0), verts.getQuick(p1));
+		VectorUtil.sub(basis[0], verts.getQuick(p0), verts.getQuick(p1));
 		if (p0 == p1 || (basis[0].x == 0f && basis[0].y == 0f && basis[0].z == 0f)) {
 			out.set(-1, -1, -1, -1);
 			return out;
 		}
 		tmp.set(1f, 0.02f, 0f);
-		basis[1].crossHere(tmp, basis[0]);
+		VectorUtil.cross(basis[1], tmp, basis[0]);
 		tmp.set(-0.02f, 1f, 0f);
-		basis[2].crossHere(tmp, basis[0]);
+		VectorUtil.cross(basis[2], tmp, basis[0]);
 		if (basis[1].length() > basis[2].length()) {
 			basis[1].normalize();
 		}
@@ -436,19 +436,19 @@ public class HullLibrary {
 		}
 		int p2 = maxdirsterid(verts, verts_count, basis[1], allow);
 		if (p2 == p0 || p2 == p1) {
-			tmp.negateHere(basis[1]);
+			VectorUtil.negate(tmp, basis[1]);
 			p2 = maxdirsterid(verts, verts_count, tmp, allow);
 		}
 		if (p2 == p0 || p2 == p1) {
 			out.set(-1, -1, -1, -1);
 			return out;
 		}
-		basis[1].subHere(verts.getQuick(p2), verts.getQuick(p0));
-		basis[2].crossHere(basis[1], basis[0]);
+		VectorUtil.sub(basis[1], verts.getQuick(p2), verts.getQuick(p0));
+		VectorUtil.cross(basis[2], basis[1], basis[0]);
 		basis[2].normalize();
 		int p3 = maxdirsterid(verts, verts_count, basis[2], allow);
 		if (p3 == p0 || p3 == p1 || p3 == p2) {
-			tmp.negateHere(basis[2]);
+			VectorUtil.negate(tmp, basis[2]);
 			p3 = maxdirsterid(verts, verts_count, tmp, allow);
 		}
 		if (p3 == p0 || p3 == p1 || p3 == p2) {
@@ -457,10 +457,10 @@ public class HullLibrary {
 		}
 		assert (!(p0 == p1 || p0 == p2 || p0 == p3 || p1 == p2 || p1 == p3 || p2 == p3));
 
-		tmp1.subHere(verts.getQuick(p1), verts.getQuick(p0));
-		tmp2.subHere(verts.getQuick(p2), verts.getQuick(p0));
-		tmp2.crossHere(tmp1, tmp2);
-		tmp1.subHere(verts.getQuick(p3), verts.getQuick(p0));
+		VectorUtil.sub(tmp1, verts.getQuick(p1), verts.getQuick(p0));
+		VectorUtil.sub(tmp2, verts.getQuick(p2), verts.getQuick(p0));
+		VectorUtil.cross(tmp2, tmp1, tmp2);
+		VectorUtil.sub(tmp1, verts.getQuick(p3), verts.getQuick(p0));
 		if (tmp1.dot(tmp2) < 0) {
 			int swap_tmp = p2;
 			p2 = p3;
@@ -802,18 +802,18 @@ public class HullLibrary {
 	private static Vec3 orth(Vec3 v, Vec3 out) {
 		Vec3 a = new Vec3();
 		a.set(0f, 0f, 1f);
-		a.crossHere(v, a);
+		VectorUtil.cross(a, v, a);
 
 		Vec3 b = new Vec3();
 		b.set(0f, 1f, 0f);
-		b.crossHere(v, b);
+		VectorUtil.cross(b, v, b);
 
 		if (a.length() > b.length()) {
-			out.normalizeHere(a);
+			VectorUtil.normalize(out, a);
 			return out;
 		}
 		else {
-			out.normalizeHere(b);
+			VectorUtil.normalize(out, b);
 			return out;
 		}
 	}
@@ -846,15 +846,15 @@ public class HullLibrary {
 				return m;
 			}
 			orth(dir, u);
-			v.crossHere(u, dir);
+			VectorUtil.cross(v, u, dir);
 			int ma = -1;
 			for (float x = 0f; x <= 360f; x += 45f) {
 				float s = (float) Math.sin(BulletGlobals.SIMD_RADS_PER_DEG * (x));
 				float c = (float) Math.cos(BulletGlobals.SIMD_RADS_PER_DEG * (x));
 
-				tmp1.scale(s, u);
-				tmp2.scale(c, v);
-				tmp.addHere(tmp1, tmp2);
+				VectorUtil.scale(tmp1, s, u);
+				VectorUtil.scale(tmp2, c, v);
+				VectorUtil.add(tmp, tmp1, tmp2);
 				tmp.mult(0.025f);
 				tmp.add(dir);
 				int mb = maxdirfiltered(p, count, tmp, allow);
@@ -868,9 +868,9 @@ public class HullLibrary {
 						s = (float)Math.sin(BulletGlobals.SIMD_RADS_PER_DEG * (xx));
 						c = (float)Math.cos(BulletGlobals.SIMD_RADS_PER_DEG * (xx));
 
-						tmp1.scale(s, u);
-						tmp2.scale(c, v);
-						tmp.addHere(tmp1, tmp2);
+						VectorUtil.scale(tmp1, s, u);
+						VectorUtil.scale(tmp2, c, v);
+						VectorUtil.add(tmp, tmp1, tmp2);
 						tmp.mult(0.025f);
 						tmp.add(dir);
 
@@ -897,23 +897,23 @@ public class HullLibrary {
 
 		// return the normal of the triangle
 		// inscribed by v0, v1, and v2
-		tmp1.subHere(v1, v0);
-		tmp2.subHere(v2, v1);
+		VectorUtil.sub(tmp1, v1, v0);
+		VectorUtil.sub(tmp2, v2, v1);
 		Vec3 cp = new Vec3();
-		cp.crossHere(tmp1, tmp2);
+		VectorUtil.cross(cp, tmp1, tmp2);
 		float m = cp.length();
 		if (m == 0) {
 			out.set(1f, 0f, 0f);
 			return out;
 		}
-		out.scale(1f / m, cp);
+		VectorUtil.scale(out, 1f / m, cp);
 		return out;
 	}
 	
 	private static boolean above(ObjectArrayList<Vec3> vertices, Int3 t, Vec3 p, float epsilon) {
 		Vec3 n = triNormal(vertices.getQuick(t.getCoord(0)), vertices.getQuick(t.getCoord(1)), vertices.getQuick(t.getCoord(2)), new Vec3());
 		Vec3 tmp = new Vec3();
-		tmp.subHere(p, vertices.getQuick(t.getCoord(0)));
+		VectorUtil.sub(tmp, p, vertices.getQuick(t.getCoord(0)));
 		return (n.dot(tmp) > epsilon); // EPSILON???
 	}
 	

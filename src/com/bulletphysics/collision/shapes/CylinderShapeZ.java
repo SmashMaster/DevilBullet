@@ -26,7 +26,7 @@
 package com.bulletphysics.collision.shapes;
 
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Cylinder shape around the Z axis.

@@ -28,7 +28,8 @@ package com.bulletphysics.demos.opengl;
 import static com.bulletphysics.demos.opengl.IGL.*;
 import com.bulletphysics.linearmath.DebugDrawModes;
 import com.bulletphysics.linearmath.IDebugDraw;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -79,12 +80,12 @@ public class GLDebugDrawer extends IDebugDraw {
 	public void drawContactPoint(Vec3 pointOnB, Vec3 normalOnB, float distance, int lifeTime, Vec3 color) {
 		if ((debugMode & DebugDrawModes.DRAW_CONTACT_POINTS) != 0) {
 			Vec3 to = tmpVec;
-			to.scaleAddHere(distance*100f, normalOnB, pointOnB);
+			VectorUtil.scaleAdd(to, distance*100f, normalOnB, pointOnB);
 			Vec3 from = pointOnB;
 
 			// JAVA NOTE: added
 			if (DEBUG_NORMALS) {
-				to.normalizeHere(normalOnB);
+				VectorUtil.normalize(to, normalOnB);
 				to.mult(10f);
 				to.add(pointOnB);
 				gl.glLineWidth(3f);

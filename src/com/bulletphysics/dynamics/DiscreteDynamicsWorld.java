@@ -57,9 +57,10 @@ import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import java.util.Comparator;
-import javax.vecmath.Vec3;
 
 /**
  * DiscreteDynamicsWorld provides discrete rigid body simulation.
@@ -209,7 +210,7 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
 
 					//m_vehicles[i]->getWheelInfo(v).m_raycastInfo.m_wheelAxleWS
 					//debug wheels (cylinders)
-					tmp.addHere(wheelPosWS, axle);
+					VectorUtil.add(tmp, wheelPosWS, axle);
 					debugDrawer.drawLine(wheelPosWS, tmp, wheelColor);
 					debugDrawer.drawLine(wheelPosWS, vehicles.getQuick(i).getWheelInfo(v).raycastInfo.contactPointWS, wheelColor);
 				}
@@ -689,7 +690,7 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
 					if (body.isActive() && (!body.isStaticOrKinematicObject())) {
 						body.predictIntegratedTransform(timeStep, predictedTrans);
 
-						tmp.subHere(predictedTrans.origin, body.getWorldTransform(tmpTrans).origin);
+						VectorUtil.sub(tmp, predictedTrans.origin, body.getWorldTransform(tmpTrans).origin);
 						float squareMotion = tmp.squareLength();
 
 						if (body.getCcdSquareMotionThreshold() != 0f && body.getCcdSquareMotionThreshold() < squareMotion) {
@@ -779,45 +780,45 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
 		Vec3 tmp2 = new Vec3();
 
 		// XY
-		tmp1.subHere(start, xoffs);
-		tmp2.addHere(start, yoffs);
+		VectorUtil.sub(tmp1, start, xoffs);
+		VectorUtil.add(tmp2, start, yoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.addHere(start, yoffs);
-		tmp2.addHere(start, xoffs);
+		VectorUtil.add(tmp1, start, yoffs);
+		VectorUtil.add(tmp2, start, xoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.addHere(start, xoffs);
-		tmp2.subHere(start, yoffs);
+		VectorUtil.add(tmp1, start, xoffs);
+		VectorUtil.sub(tmp2, start, yoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.subHere(start, yoffs);
-		tmp2.subHere(start, xoffs);
+		VectorUtil.sub(tmp1, start, yoffs);
+		VectorUtil.sub(tmp2, start, xoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
 
 		// XZ
-		tmp1.subHere(start, xoffs);
-		tmp2.addHere(start, zoffs);
+		VectorUtil.sub(tmp1, start, xoffs);
+		VectorUtil.add(tmp2, start, zoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.addHere(start, zoffs);
-		tmp2.addHere(start, xoffs);
+		VectorUtil.add(tmp1, start, zoffs);
+		VectorUtil.add(tmp2, start, xoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.addHere(start, xoffs);
-		tmp2.subHere(start, zoffs);
+		VectorUtil.add(tmp1, start, xoffs);
+		VectorUtil.sub(tmp2, start, zoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.subHere(start, zoffs);
-		tmp2.subHere(start, xoffs);
+		VectorUtil.sub(tmp1, start, zoffs);
+		VectorUtil.sub(tmp2, start, xoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
 
 		// YZ
-		tmp1.subHere(start, yoffs);
-		tmp2.addHere(start, zoffs);
+		VectorUtil.sub(tmp1, start, yoffs);
+		VectorUtil.add(tmp2, start, zoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.addHere(start, zoffs);
-		tmp2.addHere(start, yoffs);
+		VectorUtil.add(tmp1, start, zoffs);
+		VectorUtil.add(tmp2, start, yoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.addHere(start, yoffs);
-		tmp2.subHere(start, zoffs);
+		VectorUtil.add(tmp1, start, yoffs);
+		VectorUtil.sub(tmp2, start, zoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
-		tmp1.subHere(start, zoffs);
-		tmp2.subHere(start, yoffs);
+		VectorUtil.sub(tmp1, start, zoffs);
+		VectorUtil.sub(tmp2, start, yoffs);
 		getDebugDrawer().drawLine(tmp1, tmp2, color);
 	}
 	
@@ -1122,11 +1123,11 @@ public class DiscreteDynamicsWorld extends DynamicsWorld {
 			}
 
 			Vec3 linVelA = new Vec3(), linVelB = new Vec3();
-			linVelA.subHere(convexToWorld, convexFromWorld);
+			VectorUtil.sub(linVelA, convexToWorld, convexFromWorld);
 			linVelB.set(0f, 0f, 0f);//toB.getOrigin()-fromB.getOrigin();
 
 			Vec3 relativeVelocity = new Vec3();
-			relativeVelocity.subHere(linVelA, linVelB);
+			VectorUtil.sub(relativeVelocity, linVelA, linVelB);
 			// don't report time of impact for motion away from the contact normal (or causes minor penetration)
 			if (convexResult.hitNormalLocal.dot(relativeVelocity) >= -allowedPenetration) {
 				return 1f;

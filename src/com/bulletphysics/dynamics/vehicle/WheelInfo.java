@@ -27,7 +27,8 @@ package com.bulletphysics.dynamics.vehicle;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * WheelInfo contains information per wheel about friction and suspension.
@@ -101,7 +102,7 @@ public class WheelInfo {
 			float project = raycastInfo.contactNormalWS.dot(raycastInfo.wheelDirectionWS);
 			Vec3 chassis_velocity_at_contactPoint = new Vec3();
 			Vec3 relpos = new Vec3();
-			relpos.subHere(raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vec3()));
+			VectorUtil.sub(relpos, raycastInfo.contactPointWS, chassis.getCenterOfMassPosition(new Vec3()));
 			chassis.getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
 			float projVel = raycastInfo.contactNormalWS.dot(chassis_velocity_at_contactPoint);
 			if (project >= -0.1f) {
@@ -118,7 +119,7 @@ public class WheelInfo {
 			// Not in contact : position wheel in a nice (rest length) position
 			raycastInfo.suspensionLength = getSuspensionRestLength();
 			suspensionRelativeVelocity = 0f;
-			raycastInfo.contactNormalWS.negateHere(raycastInfo.wheelDirectionWS);
+			VectorUtil.negate(raycastInfo.contactNormalWS, raycastInfo.wheelDirectionWS);
 			clippedInvContactDotSuspension = 1f;
 		}
 	}

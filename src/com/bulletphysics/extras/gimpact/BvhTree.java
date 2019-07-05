@@ -31,7 +31,7 @@ package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.extras.gimpact.BoxCollision.AABB;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -59,7 +59,7 @@ class BvhTree {
 		for (int i=startIndex; i<endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.addHere(tmp1, tmp2);
+			VectorUtil.add(center, tmp1, tmp2);
 			center.mult(0.5f);
 			means.add(center);
 		}
@@ -68,9 +68,9 @@ class BvhTree {
 		for (int i=startIndex; i<endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.addHere(tmp1, tmp2);
+			VectorUtil.add(center, tmp1, tmp2);
 			center.mult(0.5f);
-			diff2.subHere(center, means);
+			VectorUtil.sub(diff2, center, means);
 			VectorUtil.mul(diff2, diff2, diff2);
 			variance.add(diff2);
 		}
@@ -97,7 +97,7 @@ class BvhTree {
 		for (int i = startIndex; i < endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.addHere(tmp1, tmp2);
+			VectorUtil.add(center, tmp1, tmp2);
 			center.mult(0.5f);
 			means.add(center);
 		}
@@ -109,7 +109,7 @@ class BvhTree {
 		for (int i = startIndex; i < endIndex; i++) {
 			primitive_boxes.getBoundMax(i, tmp1);
 			primitive_boxes.getBoundMin(i, tmp2);
-			center.addHere(tmp1, tmp2);
+			VectorUtil.add(center, tmp1, tmp2);
 			center.mult(0.5f);
 
 			if (VectorUtil.getCoord(center, splitAxis) > splitValue) {

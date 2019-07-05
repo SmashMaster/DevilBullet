@@ -30,7 +30,7 @@ import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * GjkConvexCast performs a raycast on a convex object using support mapping.
@@ -68,8 +68,8 @@ public class GjkConvexCast extends ConvexCast {
 		Vec3 linVelA = new Vec3();
 		Vec3 linVelB = new Vec3();
 
-		linVelA.subHere(toA.origin, fromA.origin);
-		linVelB.subHere(toB.origin, fromB.origin);
+		VectorUtil.sub(linVelA, toA.origin, fromA.origin);
+		VectorUtil.sub(linVelB, toB.origin, fromB.origin);
 
 		float radius = 0.001f;
 		float lambda = 0f;
@@ -83,7 +83,7 @@ public class GjkConvexCast extends ConvexCast {
 		boolean hasResult = false;
 		Vec3 c = new Vec3();
 		Vec3 r = new Vec3();
-		r.subHere(linVelA, linVelB);
+		VectorUtil.sub(r, linVelA, linVelB);
 
 		float lastLambda = lambda;
 		//btScalar epsilon = btScalar(0.001);

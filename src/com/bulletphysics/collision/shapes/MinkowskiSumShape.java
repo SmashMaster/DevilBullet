@@ -28,7 +28,8 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * MinkowskiSumShape is only for advanced users. This shape represents implicit
@@ -57,7 +58,7 @@ public class MinkowskiSumShape extends ConvexInternalShape {
 		Vec3 supVertexB = new Vec3();
 
 		// btVector3 supVertexA = m_transA(m_shapeA->localGetSupportingVertexWithoutMargin(-vec*m_transA.getBasis()));
-		tmp.negateHere(vec);
+		VectorUtil.negate(tmp, vec);
 		MatrixUtil.transposeTransform(tmp, tmp, transA.basis);
 		shapeA.localGetSupportingVertexWithoutMargin(tmp, supVertexA);
 		transA.transform(supVertexA);
@@ -68,7 +69,7 @@ public class MinkowskiSumShape extends ConvexInternalShape {
 		transB.transform(supVertexB);
 
 		//return supVertexA - supVertexB;
-		out.subHere(supVertexA, supVertexB);
+		VectorUtil.sub(out, supVertexA, supVertexB);
 		return out;
 	}
 

@@ -30,7 +30,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.collision.shapes.BU_Simplex1to4;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Helper class for tetrahedrons.

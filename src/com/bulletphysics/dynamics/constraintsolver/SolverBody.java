@@ -28,7 +28,8 @@ package com.bulletphysics.dynamics.constraintsolver;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * SolverBody is an internal data structure for the constraint solver. Only necessary
@@ -53,8 +54,8 @@ public class SolverBody {
 	
 	public void getVelocityInLocalPoint(Vec3 rel_pos, Vec3 velocity) {
 		Vec3 tmp = new Vec3();
-		tmp.crossHere(angularVelocity, rel_pos);
-		velocity.addHere(linearVelocity, tmp);
+		VectorUtil.cross(tmp, angularVelocity, rel_pos);
+		VectorUtil.add(velocity, linearVelocity, tmp);
 	}
 
 	/**
@@ -62,15 +63,15 @@ public class SolverBody {
 	 */
 	public void internalApplyImpulse(Vec3 linearComponent, Vec3 angularComponent, float impulseMagnitude) {
 		if (invMass != 0f) {
-			linearVelocity.scaleAddHere(impulseMagnitude, linearComponent, linearVelocity);
-			angularVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, angularVelocity);
+			VectorUtil.scaleAdd(linearVelocity, impulseMagnitude, linearComponent, linearVelocity);
+			VectorUtil.scaleAdd(angularVelocity, impulseMagnitude * angularFactor, angularComponent, angularVelocity);
 		}
 	}
 
 	public void internalApplyPushImpulse(Vec3 linearComponent, Vec3 angularComponent, float impulseMagnitude) {
 		if (invMass != 0f) {
-			pushVelocity.scaleAddHere(impulseMagnitude, linearComponent, pushVelocity);
-			turnVelocity.scaleAddHere(impulseMagnitude * angularFactor, angularComponent, turnVelocity);
+			VectorUtil.scaleAdd(pushVelocity, impulseMagnitude, linearComponent, pushVelocity);
+			VectorUtil.scaleAdd(turnVelocity, impulseMagnitude * angularFactor, angularComponent, turnVelocity);
 		}
 	}
 	

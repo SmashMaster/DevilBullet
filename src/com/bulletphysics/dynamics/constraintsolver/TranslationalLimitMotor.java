@@ -34,7 +34,7 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -90,23 +90,23 @@ public class TranslationalLimitMotor {
 		// find relative velocity
 		Vec3 rel_pos1 = new Vec3();
 		//rel_pos1.sub(pointInA, body1.getCenterOfMassPosition(tmpVec));
-		rel_pos1.subHere(anchorPos, body1.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos1, anchorPos, body1.getCenterOfMassPosition(tmpVec));
 
 		Vec3 rel_pos2 = new Vec3();
 		//rel_pos2.sub(pointInB, body2.getCenterOfMassPosition(tmpVec));
-		rel_pos2.subHere(anchorPos, body2.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(rel_pos2, anchorPos, body2.getCenterOfMassPosition(tmpVec));
 
 		Vec3 vel1 = body1.getVelocityInLocalPoint(rel_pos1, new Vec3());
 		Vec3 vel2 = body2.getVelocityInLocalPoint(rel_pos2, new Vec3());
 		Vec3 vel = new Vec3();
-		vel.subHere(vel1, vel2);
+		VectorUtil.sub(vel, vel1, vel2);
 
 		float rel_vel = axis_normal_on_a.dot(vel);
 
 		// apply displacement correction
 
 		// positional error (zeroth order error)
-		tmp.subHere(pointInA, pointInB);
+		VectorUtil.sub(tmp, pointInA, pointInB);
 		float depth = -(tmp).dot(axis_normal_on_a);
 		float lo = -1e30f;
 		float hi = 1e30f;
@@ -142,10 +142,10 @@ public class TranslationalLimitMotor {
 		normalImpulse = VectorUtil.getCoord(accumulatedImpulse, limit_index) - oldNormalImpulse;
 
 		Vec3 impulse_vector = new Vec3();
-		impulse_vector.scale(normalImpulse, axis_normal_on_a);
+		VectorUtil.scale(impulse_vector, normalImpulse, axis_normal_on_a);
 		body1.applyImpulse(impulse_vector, rel_pos1);
 
-		tmp.negateHere(impulse_vector);
+		VectorUtil.negate(tmp, impulse_vector);
 		body2.applyImpulse(tmp, rel_pos2);
 		return normalImpulse;
 	}

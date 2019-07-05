@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConeShape implements a cone shape primitive, centered around the origin and
@@ -110,7 +110,7 @@ public class ConeShape extends ConvexInternalShape {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
+			VectorUtil.scaleAdd(supVertex, getMargin(), vecnorm, supVertex);
 		}
 		return supVertex;
 	}
@@ -128,7 +128,7 @@ public class ConeShape extends ConvexInternalShape {
 		getAabb(identity, aabbMin, aabbMax);
 
 		Vec3 halfExtents = new Vec3();
-		halfExtents.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(halfExtents, aabbMax, aabbMin);
 		halfExtents.mult(0.5f);
 
 		float margin = getMargin();

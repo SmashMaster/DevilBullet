@@ -28,7 +28,7 @@ package com.bulletphysics.linearmath;
 import com.bulletphysics.collision.shapes.UniformScalingShape;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Transform represents translation and rotation (rigid transform). Scaling and
@@ -108,7 +108,7 @@ public class Transform {
 	}
 	
 	public void invXform(Vec3 inVec, Vec3 out) {
-		out.subHere(inVec, origin);
+		VectorUtil.sub(out, inVec, origin);
 
 		Mat3 mat = new Mat3(basis);
 		mat.transpose();

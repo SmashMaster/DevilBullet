@@ -33,12 +33,13 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ArrayPool;
 import com.bulletphysics.util.FloatArrayList;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Raycast vehicle, very special constraint that turn a rigidbody into a vehicle.
@@ -127,10 +128,10 @@ public class RaycastVehicle extends TypedConstraint {
 		WheelInfo wheel = wheelInfo.getQuick(wheelIndex);
 		updateWheelTransformsWS(wheel, interpolatedTransform);
 		Vec3 up = new Vec3();
-		up.negateHere(wheel.raycastInfo.wheelDirectionWS);
+		VectorUtil.negate(up, wheel.raycastInfo.wheelDirectionWS);
 		Vec3 right = wheel.raycastInfo.wheelAxleWS;
 		Vec3 fwd = new Vec3();
-		fwd.crossHere(up, right);
+		VectorUtil.cross(fwd, up, right);
 		fwd.normalize();
 		// up = right.cross(fwd);
 		// up.normalize();
@@ -157,7 +158,7 @@ public class RaycastVehicle extends TypedConstraint {
                 Mat3.mult(steeringMat, rotatingMat, wheelBasis);
 		wheelBasis.mult(basis2);
 
-		wheel.worldTransform.origin.scaleAddHere(wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);
+		VectorUtil.scaleAdd(wheel.worldTransform.origin, wheel.raycastInfo.suspensionLength, wheel.raycastInfo.wheelDirectionWS, wheel.raycastInfo.hardPointWS);
 	}
 	
 	public void resetSuspension() {
@@ -167,7 +168,7 @@ public class RaycastVehicle extends TypedConstraint {
 			wheel.raycastInfo.suspensionLength = wheel.getSuspensionRestLength();
 			wheel.suspensionRelativeVelocity = 0f;
 
-			wheel.raycastInfo.contactNormalWS.negateHere(wheel.raycastInfo.wheelDirectionWS);
+			VectorUtil.negate(wheel.raycastInfo.contactNormalWS, wheel.raycastInfo.wheelDirectionWS);
 			//wheel_info.setContactFriction(btScalar(0.0));
 			wheel.clippedInvContactDotSuspension = 1f;
 		}
@@ -203,9 +204,9 @@ public class RaycastVehicle extends TypedConstraint {
 		float raylen = wheel.getSuspensionRestLength() + wheel.wheelsRadius;
 
 		Vec3 rayvector = new Vec3();
-		rayvector.scale(raylen, wheel.raycastInfo.wheelDirectionWS);
+		VectorUtil.scale(rayvector, raylen, wheel.raycastInfo.wheelDirectionWS);
 		Vec3 source = wheel.raycastInfo.hardPointWS;
-		wheel.raycastInfo.contactPointWS.addHere(source, rayvector);
+		VectorUtil.add(wheel.raycastInfo.contactPointWS, source, rayvector);
 		Vec3 target = wheel.raycastInfo.contactPointWS;
 
 		float param = 0f;
@@ -246,7 +247,7 @@ public class RaycastVehicle extends TypedConstraint {
 
 			Vec3 chassis_velocity_at_contactPoint = new Vec3();
 			Vec3 relpos = new Vec3();
-			relpos.subHere(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(new Vec3()));
+			VectorUtil.sub(relpos, wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(new Vec3()));
 
 			getRigidBody().getVelocityInLocalPoint(relpos, chassis_velocity_at_contactPoint);
 
@@ -267,7 +268,7 @@ public class RaycastVehicle extends TypedConstraint {
 			// put wheel info as in rest position
 			wheel.raycastInfo.suspensionLength = wheel.getSuspensionRestLength();
 			wheel.suspensionRelativeVelocity = 0f;
-			wheel.raycastInfo.contactNormalWS.negateHere(wheel.raycastInfo.wheelDirectionWS);
+			VectorUtil.negate(wheel.raycastInfo.contactNormalWS, wheel.raycastInfo.wheelDirectionWS);
 			wheel.clippedInvContactDotSuspension = 1f;
 		}
 
@@ -331,9 +332,9 @@ public class RaycastVehicle extends TypedConstraint {
 				suspensionForce = gMaxSuspensionForce;
 			}
 			Vec3 impulse = new Vec3();
-			impulse.scale(suspensionForce * step, wheel.raycastInfo.contactNormalWS);
+			VectorUtil.scale(impulse, suspensionForce * step, wheel.raycastInfo.contactNormalWS);
 			Vec3 relpos = new Vec3();
-			relpos.subHere(wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(tmp));
+			VectorUtil.sub(relpos, wheel.raycastInfo.contactPointWS, getRigidBody().getCenterOfMassPosition(tmp));
 
 			getRigidBody().applyImpulse(impulse, relpos);
 		}
@@ -343,7 +344,7 @@ public class RaycastVehicle extends TypedConstraint {
 		for (i = 0; i < wheelInfo.size(); i++) {
 			WheelInfo wheel = wheelInfo.getQuick(i);
 			Vec3 relpos = new Vec3();
-			relpos.subHere(wheel.raycastInfo.hardPointWS, getRigidBody().getCenterOfMassPosition(tmp));
+			VectorUtil.sub(relpos, wheel.raycastInfo.hardPointWS, getRigidBody().getCenterOfMassPosition(tmp));
 			Vec3 vel = getRigidBody().getVelocityInLocalPoint(relpos, new Vec3());
 
 			if (wheel.raycastInfo.isInContact) {
@@ -356,7 +357,7 @@ public class RaycastVehicle extends TypedConstraint {
 						chassisWorldTransform.basis.getEntry(2, indexForwardAxis));
 
 				float proj = fwd.dot(wheel.raycastInfo.contactNormalWS);
-				tmp.scale(proj, wheel.raycastInfo.contactNormalWS);
+				VectorUtil.scale(tmp, proj, wheel.raycastInfo.contactNormalWS);
 				fwd.sub(tmp);
 
 				float proj2 = fwd.dot(vel);
@@ -454,16 +455,16 @@ public class RaycastVehicle extends TypedConstraint {
 		Vec3 contactPosWorld = contactPoint.frictionPositionWorld;
 
 		Vec3 rel_pos1 = new Vec3();
-		rel_pos1.subHere(contactPosWorld, contactPoint.body0.getCenterOfMassPosition(tmp));
+		VectorUtil.sub(rel_pos1, contactPosWorld, contactPoint.body0.getCenterOfMassPosition(tmp));
 		Vec3 rel_pos2 = new Vec3();
-		rel_pos2.subHere(contactPosWorld, contactPoint.body1.getCenterOfMassPosition(tmp));
+		VectorUtil.sub(rel_pos2, contactPosWorld, contactPoint.body1.getCenterOfMassPosition(tmp));
 
 		float maxImpulse = contactPoint.maxImpulse;
 
 		Vec3 vel1 = contactPoint.body0.getVelocityInLocalPoint(rel_pos1, new Vec3());
 		Vec3 vel2 = contactPoint.body1.getVelocityInLocalPoint(rel_pos2, new Vec3());
 		Vec3 vel = new Vec3();
-		vel.subHere(vel1, vel2);
+		VectorUtil.sub(vel, vel1, vel2);
 
 		float vrel = contactPoint.frictionDirectionWorld.dot(vel);
 
@@ -521,11 +522,11 @@ public class RaycastVehicle extends TypedConstraint {
 
 					Vec3 surfNormalWS = wheel_info.raycastInfo.contactNormalWS;
 					float proj = axle.getQuick(i).dot(surfNormalWS);
-					tmp.scale(proj, surfNormalWS);
+					VectorUtil.scale(tmp, proj, surfNormalWS);
 					axle.getQuick(i).sub(tmp);
 					axle.getQuick(i).normalize();
 
-					forwardWS.getQuick(i).crossHere(surfNormalWS, axle.getQuick(i));
+					VectorUtil.cross(forwardWS.getQuick(i), surfNormalWS, axle.getQuick(i));
 					forwardWS.getQuick(i).normalize();
 
 					float[] floatPtr = floatArrays.getFixed(1);
@@ -612,26 +613,26 @@ public class RaycastVehicle extends TypedConstraint {
 				WheelInfo wheel_info = wheelInfo.getQuick(wheel);
 
 				Vec3 rel_pos = new Vec3();
-				rel_pos.subHere(wheel_info.raycastInfo.contactPointWS, chassisBody.getCenterOfMassPosition(tmp));
+				VectorUtil.sub(rel_pos, wheel_info.raycastInfo.contactPointWS, chassisBody.getCenterOfMassPosition(tmp));
 
 				if (forwardImpulse.get(wheel) != 0f) {
-					tmp.scale(forwardImpulse.get(wheel), forwardWS.getQuick(wheel));
+					VectorUtil.scale(tmp, forwardImpulse.get(wheel), forwardWS.getQuick(wheel));
 					chassisBody.applyImpulse(tmp, rel_pos);
 				}
 				if (sideImpulse.get(wheel) != 0f) {
 					RigidBody groundObject = (RigidBody) wheelInfo.getQuick(wheel).raycastInfo.groundObject;
 
 					Vec3 rel_pos2 = new Vec3();
-					rel_pos2.subHere(wheel_info.raycastInfo.contactPointWS, groundObject.getCenterOfMassPosition(tmp));
+					VectorUtil.sub(rel_pos2, wheel_info.raycastInfo.contactPointWS, groundObject.getCenterOfMassPosition(tmp));
 
 					Vec3 sideImp = new Vec3();
-					sideImp.scale(sideImpulse.get(wheel), axle.getQuick(wheel));
+					VectorUtil.scale(sideImp, sideImpulse.get(wheel), axle.getQuick(wheel));
 
 					rel_pos.z *= wheel_info.rollInfluence;
 					chassisBody.applyImpulse(sideImp, rel_pos);
 
 					// apply friction impulse on the ground
-					tmp.negateHere(sideImp);
+					VectorUtil.negate(tmp, sideImp);
 					groundObject.applyImpulse(tmp, rel_pos2);
 				}
 			}

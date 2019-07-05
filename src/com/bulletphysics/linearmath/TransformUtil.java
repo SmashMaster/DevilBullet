@@ -28,7 +28,7 @@ package com.bulletphysics.linearmath;
 import com.bulletphysics.BulletGlobals;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Utility functions for transforms.
@@ -64,7 +64,7 @@ public class TransformUtil {
 	}
 	
 	public static void integrateTransform(Transform curTrans, Vec3 linvel, Vec3 angvel, float timeStep, Transform predictedTransform) {
-		predictedTransform.origin.scaleAddHere(timeStep, linvel, curTrans.origin);
+		VectorUtil.scaleAdd(predictedTransform.origin, timeStep, linvel, curTrans.origin);
 //	//#define QUATERNION_DERIVATIVE
 //	#ifdef QUATERNION_DERIVATIVE
 //		btQuaternion predictedOrn = curTrans.getRotation();
@@ -84,11 +84,11 @@ public class TransformUtil {
 
 		if (fAngle < 0.001f) {
 			// use Taylor's expansions of sync function
-			axis.scale(0.5f * timeStep - (timeStep * timeStep * timeStep) * (0.020833333333f) * fAngle * fAngle, angvel);
+			VectorUtil.scale(axis, 0.5f * timeStep - (timeStep * timeStep * timeStep) * (0.020833333333f) * fAngle * fAngle, angvel);
 		}
 		else {
 			// sync(fAngle) = sin(c*fAngle)/t
-			axis.scale((float) Math.sin(0.5f * fAngle * timeStep) / fAngle, angvel);
+			VectorUtil.scale(axis, (float) Math.sin(0.5f * fAngle * timeStep) / fAngle, angvel);
 		}
 		Quat dorn = new Quat();
 		dorn.set((float) Math.cos(fAngle * timeStep * 0.5f), axis.x, axis.y, axis.z);
@@ -101,13 +101,13 @@ public class TransformUtil {
 	}
 
 	public static void calculateVelocity(Transform transform0, Transform transform1, float timeStep, Vec3 linVel, Vec3 angVel) {
-		linVel.subHere(transform1.origin, transform0.origin);
+		VectorUtil.sub(linVel, transform1.origin, transform0.origin);
 		linVel.mult(1f / timeStep);
 
 		Vec3 axis = new Vec3();
 		float[] angle = new float[1];
 		calculateDiffAxisAngle(transform0, transform1, axis, angle);
-		angVel.scale(angle[0] / timeStep, axis);
+		VectorUtil.scale(angVel, angle[0] / timeStep, axis);
 	}
 	
 	public static void calculateDiffAxisAngle(Transform transform0, Transform transform1, Vec3 axis, float[] angle) {

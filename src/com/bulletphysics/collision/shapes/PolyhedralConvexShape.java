@@ -28,7 +28,7 @@ package com.bulletphysics.collision.shapes;
 import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * PolyhedralConvexShape is an internal interface class for polyhedral convex shapes.
@@ -141,7 +141,7 @@ public abstract class PolyhedralConvexShape extends ConvexInternalShape {
 		getAabb(ident, aabbMin, aabbMax);
 
 		Vec3 halfExtents = new Vec3();
-		halfExtents.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(halfExtents, aabbMax, aabbMin);
 		halfExtents.mult(0.5f);
 
 		float lx = 2f * (halfExtents.x + margin);

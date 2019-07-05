@@ -47,9 +47,9 @@ import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import javax.vecmath.Vec3;
 
 /**
  * 

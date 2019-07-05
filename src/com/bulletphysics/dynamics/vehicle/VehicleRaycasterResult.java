@@ -25,7 +25,7 @@
 
 package com.bulletphysics.dynamics.vehicle;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Vehicle raycaster result.

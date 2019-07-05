@@ -27,7 +27,8 @@ package com.bulletphysics.collision.shapes;
 
 import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.Transform;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * UniformScalingShape allows to re-use uniform scaled instances of {@link ConvexShape}
@@ -80,15 +81,15 @@ public class UniformScalingShape extends ConvexShape {
 	public void getAabbSlow(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		childConvexShape.getAabbSlow(t, aabbMin, aabbMax);
 		Vec3 aabbCenter = new Vec3();
-		aabbCenter.addHere(aabbMax, aabbMin);
+		VectorUtil.add(aabbCenter, aabbMax, aabbMin);
 		aabbCenter.mult(0.5f);
 
 		Vec3 scaledAabbHalfExtends = new Vec3();
-		scaledAabbHalfExtends.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(scaledAabbHalfExtends, aabbMax, aabbMin);
 		scaledAabbHalfExtends.mult(0.5f * uniformScalingFactor);
 
-		aabbMin.subHere(aabbCenter, scaledAabbHalfExtends);
-		aabbMax.addHere(aabbCenter, scaledAabbHalfExtends);
+		VectorUtil.sub(aabbMin, aabbCenter, scaledAabbHalfExtends);
+		VectorUtil.add(aabbMax, aabbCenter, scaledAabbHalfExtends);
 	}
 
 	@Override
@@ -126,15 +127,15 @@ public class UniformScalingShape extends ConvexShape {
 	public void getAabb(Transform t, Vec3 aabbMin, Vec3 aabbMax) {
 		childConvexShape.getAabb(t, aabbMin, aabbMax);
 		Vec3 aabbCenter = new Vec3();
-		aabbCenter.addHere(aabbMax, aabbMin);
+		VectorUtil.add(aabbCenter, aabbMax, aabbMin);
 		aabbCenter.mult(0.5f);
 
 		Vec3 scaledAabbHalfExtends = new Vec3();
-		scaledAabbHalfExtends.subHere(aabbMax, aabbMin);
+		VectorUtil.sub(scaledAabbHalfExtends, aabbMax, aabbMin);
 		scaledAabbHalfExtends.mult(0.5f * uniformScalingFactor);
 
-		aabbMin.subHere(aabbCenter, scaledAabbHalfExtends);
-		aabbMax.addHere(aabbCenter, scaledAabbHalfExtends);
+		VectorUtil.sub(aabbMin, aabbCenter, scaledAabbHalfExtends);
+		VectorUtil.add(aabbMax, aabbCenter, scaledAabbHalfExtends);
 	}
 
 	@Override

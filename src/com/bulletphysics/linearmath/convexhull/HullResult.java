@@ -27,7 +27,7 @@ package com.bulletphysics.linearmath.convexhull;
 
 import com.bulletphysics.util.IntArrayList;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Contains resulting polygonal representation.<p>

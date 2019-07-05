@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.broadphase;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *

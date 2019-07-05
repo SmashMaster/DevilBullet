@@ -34,9 +34,10 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConeTwistConstraint can be used to simulate ragdoll joints (upper arm, leg etc).
@@ -135,12 +136,12 @@ public class ConeTwistConstraint extends TypedConstraint {
 			rbB.getCenterOfMassTransform(tmpTrans).transform(pivotBInW);
 
 			Vec3 relPos = new Vec3();
-			relPos.subHere(pivotBInW, pivotAInW);
+			VectorUtil.sub(relPos, pivotBInW, pivotAInW);
 
 			// TODO: stack
 			Vec3[] normal/*[3]*/ = new Vec3[]{new Vec3(), new Vec3(), new Vec3()};
 			if (relPos.squareLength() > BulletGlobals.FLT_EPSILON) {
-				normal[0].normalizeHere(relPos);
+				VectorUtil.normalize(normal[0], relPos);
 			}
 			else {
 				normal[0].set(1f, 0f, 0f);
@@ -155,8 +156,8 @@ public class ConeTwistConstraint extends TypedConstraint {
 				Mat3 mat2 = rbB.getCenterOfMassTransform(new Transform()).basis;
 				mat2.transpose();
 
-				tmp1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmp));
-				tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmp));
+				VectorUtil.sub(tmp1, pivotAInW, rbA.getCenterOfMassPosition(tmp));
+				VectorUtil.sub(tmp2, pivotBInW, rbB.getCenterOfMassPosition(tmp));
 
 				jac[i].init(
 						mat1,
@@ -220,10 +221,10 @@ public class ConeTwistConstraint extends TypedConstraint {
 			solveSwingLimit = true;
 
 			// Calculate necessary axis & factors
-			tmp1.scale(b2Axis1.dot(b1Axis2), b1Axis2);
-			tmp2.scale(b2Axis1.dot(b1Axis3), b1Axis3);
-			tmp.addHere(tmp1, tmp2);
-			swingAxis.crossHere(b2Axis1, tmp);
+			VectorUtil.scale(tmp1, b2Axis1.dot(b1Axis2), b1Axis2);
+			VectorUtil.scale(tmp2, b2Axis1.dot(b1Axis3), b1Axis3);
+			VectorUtil.add(tmp, tmp1, tmp2);
+			VectorUtil.cross(swingAxis, b2Axis1, tmp);
 			swingAxis.normalize();
 
 			float swingAxisSign = (b2Axis1.dot(b1Axis1) >= 0.0f) ? 1.0f : -1.0f;
@@ -249,7 +250,7 @@ public class ConeTwistConstraint extends TypedConstraint {
 				twistCorrection = -(twist + twistSpan);
 				solveTwistLimit = true;
 
-				twistAxis.addHere(b2Axis1, b1Axis1);
+				VectorUtil.add(twistAxis, b2Axis1, b1Axis1);
 				twistAxis.mult(0.5f);
 				twistAxis.normalize();
 				twistAxis.mult(-1.0f);
@@ -262,7 +263,7 @@ public class ConeTwistConstraint extends TypedConstraint {
 				twistCorrection = (twist - twistSpan);
 				solveTwistLimit = true;
 
-				twistAxis.addHere(b2Axis1, b1Axis1);
+				VectorUtil.add(twistAxis, b2Axis1, b1Axis1);
 				twistAxis.mult(0.5f);
 				twistAxis.normalize();
 
@@ -291,15 +292,15 @@ public class ConeTwistConstraint extends TypedConstraint {
 		// linear part
 		if (!angularOnly) {
 			Vec3 rel_pos1 = new Vec3();
-			rel_pos1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+			VectorUtil.sub(rel_pos1, pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 
 			Vec3 rel_pos2 = new Vec3();
-			rel_pos2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+			VectorUtil.sub(rel_pos2, pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
 			Vec3 vel1 = rbA.getVelocityInLocalPoint(rel_pos1, new Vec3());
 			Vec3 vel2 = rbB.getVelocityInLocalPoint(rel_pos2, new Vec3());
 			Vec3 vel = new Vec3();
-			vel.subHere(vel1, vel2);
+			VectorUtil.sub(vel, vel1, vel2);
 
 			for (int i = 0; i < 3; i++) {
 				Vec3 normal = jac[i].linearJointAxis;
@@ -308,18 +309,18 @@ public class ConeTwistConstraint extends TypedConstraint {
 				float rel_vel;
 				rel_vel = normal.dot(vel);
 				// positional error (zeroth order error)
-				tmp.subHere(pivotAInW, pivotBInW);
+				VectorUtil.sub(tmp, pivotAInW, pivotBInW);
 				float depth = -(tmp).dot(normal); // this is the error projected on the normal
 				float impulse = depth * tau / timeStep * jacDiagABInv - rel_vel * jacDiagABInv;
 				appliedImpulse += impulse;
 				Vec3 impulse_vector = new Vec3();
-				impulse_vector.scale(impulse, normal);
+				VectorUtil.scale(impulse_vector, impulse, normal);
 
-				tmp.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+				VectorUtil.sub(tmp, pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 				rbA.applyImpulse(impulse_vector, tmp);
 
-				tmp.negateHere(impulse_vector);
-				tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+				VectorUtil.negate(tmp, impulse_vector);
+				VectorUtil.sub(tmp2, pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 				rbB.applyImpulse(tmp, tmp2);
 			}
 		}
@@ -331,7 +332,7 @@ public class ConeTwistConstraint extends TypedConstraint {
 
 			// solve swing limit
 			if (solveSwingLimit) {
-				tmp.subHere(angVelB, angVelA);
+				VectorUtil.sub(tmp, angVelB, angVelA);
 				float amplitude = ((tmp).dot(swingAxis) * relaxationFactor * relaxationFactor + swingCorrection * (1f / timeStep) * biasFactor);
 				float impulseMag = amplitude * kSwing;
 
@@ -341,17 +342,17 @@ public class ConeTwistConstraint extends TypedConstraint {
 				impulseMag = accSwingLimitImpulse - temp;
 
 				Vec3 impulse = new Vec3();
-				impulse.scale(impulseMag, swingAxis);
+				VectorUtil.scale(impulse, impulseMag, swingAxis);
 
 				rbA.applyTorqueImpulse(impulse);
 
-				tmp.negateHere(impulse);
+				VectorUtil.negate(tmp, impulse);
 				rbB.applyTorqueImpulse(tmp);
 			}
 
 			// solve twist limit
 			if (solveTwistLimit) {
-				tmp.subHere(angVelB, angVelA);
+				VectorUtil.sub(tmp, angVelB, angVelA);
 				float amplitude = ((tmp).dot(twistAxis) * relaxationFactor * relaxationFactor + twistCorrection * (1f / timeStep) * biasFactor);
 				float impulseMag = amplitude * kTwist;
 
@@ -361,11 +362,11 @@ public class ConeTwistConstraint extends TypedConstraint {
 				impulseMag = accTwistLimitImpulse - temp;
 
 				Vec3 impulse = new Vec3();
-				impulse.scale(impulseMag, twistAxis);
+				VectorUtil.scale(impulse, impulseMag, twistAxis);
 
 				rbA.applyTorqueImpulse(impulse);
 
-				tmp.negateHere(impulse);
+				VectorUtil.negate(tmp, impulse);
 				rbB.applyTorqueImpulse(tmp);
 			}
 		}

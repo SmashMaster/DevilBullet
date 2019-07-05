@@ -38,7 +38,7 @@ import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 /*!
 
 */
@@ -192,9 +192,9 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Vec3 axis2 = new Vec3();
 		MatrixUtil.getColumn(calculatedTransformA.basis, 2, axis2);
 
-		calculatedAxis[1].crossHere(axis2, axis0);
-		calculatedAxis[0].crossHere(calculatedAxis[1], axis2);
-		calculatedAxis[2].crossHere(axis0, calculatedAxis[1]);
+		VectorUtil.cross(calculatedAxis[1], axis2, axis0);
+		VectorUtil.cross(calculatedAxis[0], calculatedAxis[1], axis2);
+		VectorUtil.cross(calculatedAxis[2], axis0, calculatedAxis[1]);
 
 		//    if(m_debugDrawer)
 		//    {
@@ -234,10 +234,10 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Vec3 tmpVec = new Vec3();
 		
 		Vec3 tmp1 = new Vec3();
-		tmp1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(tmp1, pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 
 		Vec3 tmp2 = new Vec3();
-		tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+		VectorUtil.sub(tmp2, pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
 		jacLinear[jacLinear_index].init(
 				mat1,
@@ -510,9 +510,9 @@ public class Generic6DofConstraint extends TypedConstraint {
 		Vec3 tmp1 = new Vec3();
 		Vec3 tmp2 = new Vec3();
 
-		tmp1.scale(weight, pA);
-		tmp2.scale(1f - weight, pB);
-		anchorPos.addHere(tmp1, tmp2);
+		VectorUtil.scale(tmp1, weight, pA);
+		VectorUtil.scale(tmp2, 1f - weight, pB);
+		VectorUtil.add(anchorPos, tmp1, tmp2);
 	}
 	
 }

@@ -34,9 +34,10 @@ import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Hinge constraint between two rigid bodies each with a pivot point that descibes
@@ -101,8 +102,8 @@ public class HingeConstraint extends TypedConstraint {
 			MatrixUtil.getColumn(centerOfMassA.basis, 2, rbAxisA1);                            
 			MatrixUtil.getColumn(centerOfMassA.basis, 1, rbAxisA2);
 		} else {
-			rbAxisA2.crossHere(axisInA, rbAxisA1);                                                                
-			rbAxisA1.crossHere(rbAxisA2, axisInA);                                                                                            
+			VectorUtil.cross(rbAxisA2, axisInA, rbAxisA1);                                                                
+			VectorUtil.cross(rbAxisA1, rbAxisA2, axisInA);                                                                                            
 		}
 
 		MatrixUtil.setRow(rbAFrame.basis, 0, new Vec3(rbAxisA1.x, rbAxisA2.x, axisInA.x));
@@ -112,7 +113,7 @@ public class HingeConstraint extends TypedConstraint {
 		Quat rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat());
 		Vec3 rbAxisB1 = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vec3());
 		Vec3 rbAxisB2 = new Vec3();
-		rbAxisB2.crossHere(axisInB, rbAxisB1);
+		VectorUtil.cross(rbAxisB2, axisInB, rbAxisB1);
 
 		rbBFrame.origin.set(pivotInB);
 		MatrixUtil.setRow(rbBFrame.basis, 0, new Vec3(rbAxisB1.x, rbAxisB2.x, -axisInB.x));
@@ -149,7 +150,7 @@ public class HingeConstraint extends TypedConstraint {
 		}
 
 		Vec3 rbAxisA2 = new Vec3();
-		rbAxisA2.crossHere(axisInA, rbAxisA1);
+		VectorUtil.cross(rbAxisA2, axisInA, rbAxisA1);
 
 		rbAFrame.origin.set(pivotInA);
 		MatrixUtil.setRow(rbAFrame.basis, 0, new Vec3(rbAxisA1.x, rbAxisA2.x, axisInA.x));
@@ -157,13 +158,13 @@ public class HingeConstraint extends TypedConstraint {
 		MatrixUtil.setRow(rbAFrame.basis, 2, new Vec3(rbAxisA1.z, rbAxisA2.z, axisInA.z));
 
 		Vec3 axisInB = new Vec3();
-		axisInB.negateHere(axisInA);
+		VectorUtil.negate(axisInB, axisInA);
 		MatrixUtil.transform(centerOfMassA.basis, axisInB);
 
 		Quat rotationArc = QuaternionUtil.shortestArcQuat(axisInA, axisInB, new Quat());
 		Vec3 rbAxisB1 = QuaternionUtil.quatRotate(rotationArc, rbAxisA1, new Vec3());
 		Vec3 rbAxisB2 = new Vec3();
-		rbAxisB2.crossHere(axisInB, rbAxisB1);
+		VectorUtil.cross(rbAxisB2, axisInB, rbAxisB1);
 
 		rbBFrame.origin.set(pivotInA);
 		centerOfMassA.transform(rbBFrame.origin);
@@ -249,7 +250,7 @@ public class HingeConstraint extends TypedConstraint {
 			centerOfMassB.transform(pivotBInW);
 
 			Vec3 relPos = new Vec3();
-			relPos.subHere(pivotBInW, pivotAInW);
+			VectorUtil.sub(relPos, pivotBInW, pivotAInW);
 
 			Vec3[] normal/*[3]*/ = new Vec3[]{new Vec3(), new Vec3(), new Vec3()};
 			if (relPos.squareLength() > BulletGlobals.FLT_EPSILON) {
@@ -266,8 +267,8 @@ public class HingeConstraint extends TypedConstraint {
                                 Mat3.transpose(centerOfMassA.basis, mat1);
                                 Mat3.transpose(centerOfMassB.basis, mat2);
 
-				tmp1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
-				tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+				VectorUtil.sub(tmp1, pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+				VectorUtil.sub(tmp2, pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
 				jac[i].init(
 						mat1,
@@ -378,15 +379,15 @@ public class HingeConstraint extends TypedConstraint {
 		// linear part
 		if (!angularOnly) {
 			Vec3 rel_pos1 = new Vec3();
-			rel_pos1.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+			VectorUtil.sub(rel_pos1, pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 
 			Vec3 rel_pos2 = new Vec3();
-			rel_pos2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+			VectorUtil.sub(rel_pos2, pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 
 			Vec3 vel1 = rbA.getVelocityInLocalPoint(rel_pos1, new Vec3());
 			Vec3 vel2 = rbB.getVelocityInLocalPoint(rel_pos2, new Vec3());
 			Vec3 vel = new Vec3();
-			vel.subHere(vel1, vel2);
+			VectorUtil.sub(vel, vel1, vel2);
 
 			for (int i = 0; i < 3; i++) {
 				Vec3 normal = jac[i].linearJointAxis;
@@ -395,18 +396,18 @@ public class HingeConstraint extends TypedConstraint {
 				float rel_vel;
 				rel_vel = normal.dot(vel);
 				// positional error (zeroth order error)
-				tmp.subHere(pivotAInW, pivotBInW);
+				VectorUtil.sub(tmp, pivotAInW, pivotBInW);
 				float depth = -(tmp).dot(normal); // this is the error projected on the normal
 				float impulse = depth * tau / timeStep * jacDiagABInv - rel_vel * jacDiagABInv;
 				appliedImpulse += impulse;
 				Vec3 impulse_vector = new Vec3();
-				impulse_vector.scale(impulse, normal);
+				VectorUtil.scale(impulse_vector, impulse, normal);
 
-				tmp.subHere(pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
+				VectorUtil.sub(tmp, pivotAInW, rbA.getCenterOfMassPosition(tmpVec));
 				rbA.applyImpulse(impulse_vector, tmp);
 
-				tmp.negateHere(impulse_vector);
-				tmp2.subHere(pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
+				VectorUtil.negate(tmp, impulse_vector);
+				VectorUtil.sub(tmp2, pivotBInW, rbB.getCenterOfMassPosition(tmpVec));
 				rbB.applyImpulse(tmp, tmp2);
 			}
 		}
@@ -428,19 +429,19 @@ public class HingeConstraint extends TypedConstraint {
 			Vec3 angVelB = getRigidBodyB().getAngularVelocity(new Vec3());
 
 			Vec3 angVelAroundHingeAxisA = new Vec3();
-			angVelAroundHingeAxisA.scale(axisA.dot(angVelA), axisA);
+			VectorUtil.scale(angVelAroundHingeAxisA, axisA.dot(angVelA), axisA);
 
 			Vec3 angVelAroundHingeAxisB = new Vec3();
-			angVelAroundHingeAxisB.scale(axisB.dot(angVelB), axisB);
+			VectorUtil.scale(angVelAroundHingeAxisB, axisB.dot(angVelB), axisB);
 
 			Vec3 angAorthog = new Vec3();
-			angAorthog.subHere(angVelA, angVelAroundHingeAxisA);
+			VectorUtil.sub(angAorthog, angVelA, angVelAroundHingeAxisA);
 
 			Vec3 angBorthog = new Vec3();
-			angBorthog.subHere(angVelB, angVelAroundHingeAxisB);
+			VectorUtil.sub(angBorthog, angVelB, angVelAroundHingeAxisB);
 
 			Vec3 velrelOrthog = new Vec3();
-			velrelOrthog.subHere(angAorthog, angBorthog);
+			VectorUtil.sub(velrelOrthog, angAorthog, angBorthog);
 
 			{
 				// solve orthogonal angular velocity correction
@@ -448,7 +449,7 @@ public class HingeConstraint extends TypedConstraint {
 				float len = velrelOrthog.length();
 				if (len > 0.00001f) {
 					Vec3 normal = new Vec3();
-					normal.normalizeHere(velrelOrthog);
+					VectorUtil.normalize(normal, velrelOrthog);
 
 					float denom = getRigidBodyA().computeAngularImpulseDenominator(normal) +
 							getRigidBodyB().computeAngularImpulseDenominator(normal);
@@ -461,29 +462,29 @@ public class HingeConstraint extends TypedConstraint {
 				// TODO: check
 				//Vec3 angularError = -axisA.cross(axisB) *(btScalar(1.)/timeStep);
 				Vec3 angularError = new Vec3();
-				angularError.crossHere(axisA, axisB);
+				VectorUtil.cross(angularError, axisA, axisB);
 				angularError.negate();
 				angularError.mult(1f / timeStep);
 				float len2 = angularError.length();
 				if (len2 > 0.00001f) {
 					Vec3 normal2 = new Vec3();
-					normal2.normalizeHere(angularError);
+					VectorUtil.normalize(normal2, angularError);
 
 					float denom2 = getRigidBodyA().computeAngularImpulseDenominator(normal2) +
 							getRigidBodyB().computeAngularImpulseDenominator(normal2);
 					angularError.mult((1f / denom2) * relaxation);
 				}
 
-				tmp.negateHere(velrelOrthog);
+				VectorUtil.negate(tmp, velrelOrthog);
 				tmp.add(angularError);
 				rbA.applyTorqueImpulse(tmp);
 
-				tmp.subHere(velrelOrthog, angularError);
+				VectorUtil.sub(tmp, velrelOrthog, angularError);
 				rbB.applyTorqueImpulse(tmp);
 
 				// solve limit
 				if (solveLimit) {
-					tmp.subHere(angVelB, angVelA);
+					VectorUtil.sub(tmp, angVelB, angVelA);
 					float amplitude = ((tmp).dot(axisA) * relaxationFactor + correction * (1f / timeStep) * biasFactor) * limitSign;
 
 					float impulseMag = amplitude * kHinge;
@@ -494,11 +495,11 @@ public class HingeConstraint extends TypedConstraint {
 					impulseMag = accLimitImpulse - temp;
 
 					Vec3 impulse = new Vec3();
-					impulse.scale(impulseMag * limitSign, axisA);
+					VectorUtil.scale(impulse, impulseMag * limitSign, axisA);
 
 					rbA.applyTorqueImpulse(impulse);
 
-					tmp.negateHere(impulse);
+					VectorUtil.negate(tmp, impulse);
 					rbB.applyTorqueImpulse(tmp);
 				}
 			}
@@ -510,7 +511,7 @@ public class HingeConstraint extends TypedConstraint {
 				angularLimit.set(0f, 0f, 0f);
 
 				Vec3 velrel = new Vec3();
-				velrel.subHere(angVelAroundHingeAxisA, angVelAroundHingeAxisB);
+				VectorUtil.sub(velrel, angVelAroundHingeAxisA, angVelAroundHingeAxisB);
 				float projRelVel = velrel.dot(axisA);
 
 				float desiredMotorVel = motorTargetVelocity;
@@ -521,12 +522,12 @@ public class HingeConstraint extends TypedConstraint {
 				float clippedMotorImpulse = unclippedMotorImpulse > maxMotorImpulse ? maxMotorImpulse : unclippedMotorImpulse;
 				clippedMotorImpulse = clippedMotorImpulse < -maxMotorImpulse ? -maxMotorImpulse : clippedMotorImpulse;
 				Vec3 motorImp = new Vec3();
-				motorImp.scale(clippedMotorImpulse, axisA);
+				VectorUtil.scale(motorImp, clippedMotorImpulse, axisA);
 
-				tmp.addHere(motorImp, angularLimit);
+				VectorUtil.add(tmp, motorImp, angularLimit);
 				rbA.applyTorqueImpulse(tmp);
 
-				tmp.negateHere(motorImp);
+				VectorUtil.negate(tmp, motorImp);
 				tmp.sub(angularLimit);
 				rbB.applyTorqueImpulse(tmp);
 			}

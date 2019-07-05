@@ -36,7 +36,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.TransformUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Scrolls back and forth over terrain.
@@ -154,7 +154,7 @@ public class ConvexcastBatch {
 			direction[i].set(tmpQuat.x, tmpQuat.y, tmpQuat.z);
 			//direction[i].set(direction[i]);
 			source[i].set(min_x, max_y, z);
-			dest[i].scaleAddHere(ray_length, direction[i], source[i]);
+			VectorUtil.scaleAdd(dest[i], ray_length, direction[i], source[i]);
 			dest[i].y = min_y;
 			normal[i].set(1f, 0f, 0f);
 		}

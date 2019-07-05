@@ -39,9 +39,10 @@ import com.bulletphysics.collision.narrowphase.VoronoiSimplexSolver;
 import com.bulletphysics.collision.shapes.ConvexShape;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConvexConvexAlgorithm collision algorithm implements time of impact, convex
@@ -150,10 +151,10 @@ public class ConvexConvexAlgorithm extends CollisionAlgorithm {
 		// col0->m_worldTransform,
 		float resultFraction = 1f;
 
-		tmp.subHere(col0.getInterpolationWorldTransform(tmpTrans1).origin, col0.getWorldTransform(tmpTrans2).origin);
+		VectorUtil.sub(tmp, col0.getInterpolationWorldTransform(tmpTrans1).origin, col0.getWorldTransform(tmpTrans2).origin);
 		float squareMot0 = tmp.squareLength();
 
-		tmp.subHere(col1.getInterpolationWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
+		VectorUtil.sub(tmp, col1.getInterpolationWorldTransform(tmpTrans1).origin, col1.getWorldTransform(tmpTrans2).origin);
 		float squareMot1 = tmp.squareLength();
 
 		if (squareMot0 < col0.getCcdSquareMotionThreshold() &&

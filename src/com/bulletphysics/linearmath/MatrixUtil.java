@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.util.ArrayPool;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Utility functions for matrices.
@@ -48,10 +48,8 @@ public class MatrixUtil {
                 transform(matrix, vector, vector);
         }
         
-        public static void getRow(Mat3 m, int i, Vec3 r)
-        {
-            switch (i)
-            {
+        public static void getRow(Mat3 m, int i, Vec3 r) {
+            switch (i) {
                 case 0: r.x = m.a;
                         r.y = m.b;
                         r.z = m.c; return;
@@ -65,10 +63,8 @@ public class MatrixUtil {
             }
         }
         
-        public static void getColumn(Mat3 m, int i, Vec3 r)
-        {
-            switch (i)
-            {
+        public static void getColumn(Mat3 m, int i, Vec3 r) {
+            switch (i) {
                 case 0: r.x = m.a;
                         r.y = m.d;
                         r.z = m.g; return;
@@ -82,10 +78,8 @@ public class MatrixUtil {
             }
         }
         
-        public static void setRow(Mat3 m, int i, Vec3 v)
-        {
-            switch (i)
-            {
+        public static void setRow(Mat3 m, int i, Vec3 v) {
+            switch (i) {
                 case 0: m.a = v.x;
                         m.b = v.y;
                         m.c = v.z; return;
@@ -99,10 +93,8 @@ public class MatrixUtil {
             }
         }
         
-        public static void setColumn(Mat3 m, int i, Vec3 v)
-        {
-            switch (i)
-            {
+        public static void setColumn(Mat3 m, int i, Vec3 v) {
+            switch (i) {
                 case 0: m.a = v.x;
                         m.d = v.y;
                         m.g = v.z; return;

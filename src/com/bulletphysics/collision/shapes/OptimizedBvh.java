@@ -29,8 +29,8 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.MiscUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
+import com.samrj.devil.math.Vec3;
 import java.io.Serializable;
-import javax.vecmath.Vec3;
 
 // JAVA NOTE: OptimizedBvh still from 2.66, update it for 2.70b1
 
@@ -129,10 +129,10 @@ public class OptimizedBvh implements Serializable {
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
 		Vec3 clampValue = new Vec3();
 		clampValue.set(quantizationMargin,quantizationMargin,quantizationMargin);
-		bvhAabbMin.subHere(aabbMin, clampValue);
-		bvhAabbMax.addHere(aabbMax, clampValue);
+		VectorUtil.sub(bvhAabbMin, aabbMin, clampValue);
+		VectorUtil.add(bvhAabbMax, aabbMax, clampValue);
 		Vec3 aabbSize = new Vec3();
-		aabbSize.subHere(bvhAabbMax, bvhAabbMin);
+		VectorUtil.sub(aabbSize, bvhAabbMax, bvhAabbMin);
 		bvhQuantization.set(65535f, 65535f, 65535f);
 		VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
@@ -614,7 +614,7 @@ public class OptimizedBvh implements Serializable {
 		means.set(0f, 0f, 0f);
 		Vec3 center = new Vec3();
 		for (i = startIndex; i < endIndex; i++) {
-			center.addHere(getAabbMax(i), getAabbMin(i));
+			VectorUtil.add(center, getAabbMax(i), getAabbMin(i));
 			center.mult(0.5f);
 			means.add(center);
 		}
@@ -625,7 +625,7 @@ public class OptimizedBvh implements Serializable {
 		//sort leafNodes so all values larger then splitValue comes first, and smaller values start from 'splitIndex'.
 		for (i = startIndex; i < endIndex; i++) {
 			//Vec3 center = new Vec3();
-			center.addHere(getAabbMax(i), getAabbMin(i));
+			VectorUtil.add(center, getAabbMax(i), getAabbMin(i));
 			center.mult(0.5f);
 
 			if (VectorUtil.getCoord(center, splitAxis) > splitValue) {
@@ -668,7 +668,7 @@ public class OptimizedBvh implements Serializable {
 
 		Vec3 center = new Vec3();
 		for (i = startIndex; i < endIndex; i++) {
-			center.addHere(getAabbMax(i), getAabbMin(i));
+			VectorUtil.add(center, getAabbMax(i), getAabbMin(i));
 			center.mult(0.5f);
 			means.add(center);
 		}
@@ -676,9 +676,9 @@ public class OptimizedBvh implements Serializable {
 
 		Vec3 diff2 = new Vec3();
 		for (i = startIndex; i < endIndex; i++) {
-			center.addHere(getAabbMax(i), getAabbMin(i));
+			VectorUtil.add(center, getAabbMax(i), getAabbMin(i));
 			center.mult(0.5f);
-			diff2.subHere(center, means);
+			VectorUtil.sub(diff2, center, means);
 			//diff2 = diff2 * diff2;
 			VectorUtil.mul(diff2, diff2, diff2);
 			variance.add(diff2);
@@ -815,8 +815,8 @@ public class OptimizedBvh implements Serializable {
 		//#ifdef RAYAABB2
 		Vec3 rayFrom = new Vec3(raySource);
 		Vec3 rayDirection = new Vec3();
-		tmp.subHere(rayTarget, raySource);
-		rayDirection.normalizeHere(tmp);
+		VectorUtil.sub(tmp, rayTarget, raySource);
+		VectorUtil.normalize(rayDirection, tmp);
 		lambda_max = rayDirection.dot(tmp);
 		rayDirection.x = 1f / rayDirection.x;
 		rayDirection.y = 1f / rayDirection.y;
@@ -1015,7 +1015,7 @@ public class OptimizedBvh implements Serializable {
 		VectorUtil.setMin(clampedPoint, bvhAabbMax);
 
 		Vec3 v = new Vec3();
-		v.subHere(clampedPoint, bvhAabbMin);
+		VectorUtil.sub(v, clampedPoint, bvhAabbMin);
 		VectorUtil.mul(v, v, bvhQuantization);
 
 		int out0 = (int)(v.x + 0.5f) & 0xFFFF;

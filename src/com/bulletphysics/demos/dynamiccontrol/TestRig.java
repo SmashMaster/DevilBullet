@@ -39,8 +39,9 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.QuaternionUtil;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -118,7 +119,7 @@ public class TestRig {
 			toBone.sub(root);
 			toBone.normalize();
 			Vec3 axis = new Vec3();
-			axis.crossHere(toBone,up);
+			VectorUtil.cross(axis, toBone,up);
 			Quat q = new Quat();
 			QuaternionUtil.setRotation(q, axis, BulletGlobals.SIMD_HALF_PI);
 			transform.setRotation(q);

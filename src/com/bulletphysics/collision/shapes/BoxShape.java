@@ -32,8 +32,8 @@ import com.bulletphysics.linearmath.AabbUtil2;
 import com.bulletphysics.linearmath.ScalarUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  * BoxShape is a box primitive around the origin, its sides axis aligned with length
@@ -113,12 +113,12 @@ public class BoxShape extends PolyhedralConvexShape {
 		Vec3 oldMargin = new Vec3();
 		oldMargin.set(getMargin(), getMargin(), getMargin());
 		Vec3 implicitShapeDimensionsWithMargin = new Vec3();
-		implicitShapeDimensionsWithMargin.addHere(implicitShapeDimensions, oldMargin);
+		VectorUtil.add(implicitShapeDimensionsWithMargin, implicitShapeDimensions, oldMargin);
 
 		super.setMargin(margin);
 		Vec3 newMargin = new Vec3();
 		newMargin.set(getMargin(), getMargin(), getMargin());
-		implicitShapeDimensions.subHere(implicitShapeDimensionsWithMargin, newMargin);
+		VectorUtil.sub(implicitShapeDimensions, implicitShapeDimensionsWithMargin, newMargin);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class BoxShape extends PolyhedralConvexShape {
 		Vec3 oldMargin = new Vec3();
 		oldMargin.set(getMargin(), getMargin(), getMargin());
 		Vec3 implicitShapeDimensionsWithMargin = new Vec3();
-		implicitShapeDimensionsWithMargin.addHere(implicitShapeDimensions, oldMargin);
+		VectorUtil.add(implicitShapeDimensionsWithMargin, implicitShapeDimensions, oldMargin);
 		Vec3 unScaledImplicitShapeDimensionsWithMargin = new Vec3();
 		VectorUtil.div(unScaledImplicitShapeDimensionsWithMargin, implicitShapeDimensionsWithMargin, localScaling);
 
@@ -162,7 +162,7 @@ public class BoxShape extends PolyhedralConvexShape {
 		getPlaneEquation(plane, i);
 		planeNormal.set(plane.x, plane.y, plane.z);
 		Vec3 tmp = new Vec3();
-		tmp.negateHere(planeNormal);
+		VectorUtil.negate(tmp, planeNormal);
 		localGetSupportingVertex(tmp, planeSupport);
 	}
 

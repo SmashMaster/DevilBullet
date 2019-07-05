@@ -30,8 +30,9 @@ import com.bulletphysics.collision.narrowphase.DiscreteCollisionDetectorInterfac
 import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ManifoldResult is helper class to manage contact results.
@@ -95,7 +96,7 @@ public class ManifoldResult extends DiscreteCollisionDetectorInterface.Result {
 		boolean isSwapped = manifoldPtr.getBody0() != body0;
 
 		Vec3 pointA = new Vec3();
-		pointA.scaleAddHere(depth, normalOnBInWorld, pointInWorld);
+		VectorUtil.scaleAdd(pointA, depth, normalOnBInWorld, pointInWorld);
 
 		Vec3 localA = new Vec3();
 		Vec3 localB = new Vec3();

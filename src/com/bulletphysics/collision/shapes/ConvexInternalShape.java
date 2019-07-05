@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConvexInternalShape is an internal base class, shared by most convex shape implementations.
@@ -90,13 +90,13 @@ public abstract class ConvexInternalShape extends ConvexShape {
 				vecnorm.set(-1f, -1f, -1f);
 			}
 			vecnorm.normalize();
-			supVertex.scaleAddHere(getMargin(), vecnorm, supVertex);
+			VectorUtil.scaleAdd(supVertex, getMargin(), vecnorm, supVertex);
 		}
 		return out;
 	}
 	
 	public void setLocalScaling(Vec3 scaling) {
-		localScaling.absoluteHere(scaling);
+		VectorUtil.absolute(localScaling, scaling);
 	}
 	
 	public Vec3 getLocalScaling(Vec3 out) {

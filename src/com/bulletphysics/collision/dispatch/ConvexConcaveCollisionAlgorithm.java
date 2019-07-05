@@ -40,7 +40,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.bulletphysics.util.ObjectPool;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * ConvexConcaveCollisionAlgorithm supports collision between convex shapes
@@ -105,7 +105,7 @@ public class ConvexConcaveCollisionAlgorithm extends CollisionAlgorithm {
 
 		// only perform CCD above a certain threshold, this prevents blocking on the long run
 		// because object in a blocked ccd state (hitfraction<1) get their linear velocity halved each frame...
-		tmp.subHere(convexbody.getInterpolationWorldTransform(new Transform()).origin, convexbody.getWorldTransform(new Transform()).origin);
+		VectorUtil.sub(tmp, convexbody.getInterpolationWorldTransform(new Transform()).origin, convexbody.getWorldTransform(new Transform()).origin);
 		float squareMot0 = tmp.squareLength();
 		if (squareMot0 < convexbody.getCcdSquareMotionThreshold()) {
 			return 1f;

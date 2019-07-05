@@ -40,8 +40,9 @@ import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
 import com.bulletphysics.linearmath.Transform;
+import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * BspDemo shows the convex collision detection, by converting a Quake BSP file
@@ -87,7 +88,7 @@ public class BspDemo extends DemoApplication {
 		dynamicsWorld = new DiscreteDynamicsWorld(dispatcher,broadphase,solver,collisionConfiguration);
 
 		Vec3 gravity = new Vec3();
-		gravity.negateHere(cameraUp);
+		VectorUtil.negate(gravity, cameraUp);
 		gravity.mult(10f);
 		dynamicsWorld.setGravity(gravity);
 

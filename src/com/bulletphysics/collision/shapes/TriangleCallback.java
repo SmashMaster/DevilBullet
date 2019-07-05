@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.shapes;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * TriangleCallback provides a callback for each overlapping triangle when calling

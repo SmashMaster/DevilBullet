@@ -30,7 +30,7 @@
 package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.linearmath.VectorUtil;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  *
@@ -42,10 +42,10 @@ class Quantization {
 		// enlarge the AABB to avoid division by zero when initializing the quantization values
 		Vec3 clampValue = new Vec3();
 		clampValue.set(quantizationMargin, quantizationMargin, quantizationMargin);
-		outMinBound.subHere(srcMinBound, clampValue);
-		outMaxBound.addHere(srcMaxBound, clampValue);
+		VectorUtil.sub(outMinBound, srcMinBound, clampValue);
+		VectorUtil.add(outMaxBound, srcMaxBound, clampValue);
 		Vec3 aabbSize = new Vec3();
-		aabbSize.subHere(outMaxBound, outMinBound);
+		VectorUtil.sub(aabbSize, outMaxBound, outMinBound);
 		bvhQuantization.set(65535.0f, 65535.0f, 65535.0f);
 		VectorUtil.div(bvhQuantization, bvhQuantization, aabbSize);
 	}
@@ -56,7 +56,7 @@ class Quantization {
 		VectorUtil.setMin(clampedPoint, max_bound);
 
 		Vec3 v = new Vec3();
-		v.subHere(clampedPoint, min_bound);
+		VectorUtil.sub(v, clampedPoint, min_bound);
 		VectorUtil.mul(v, v, bvhQuantization);
 
 		out[0] = (short) (v.x + 0.5f);

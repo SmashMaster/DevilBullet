@@ -25,8 +25,8 @@
 
 package com.bulletphysics.collision.shapes;
 
+import com.samrj.devil.math.Vec3;
 import java.nio.ByteBuffer;
-import javax.vecmath.Vec3;
 
 /**
  *

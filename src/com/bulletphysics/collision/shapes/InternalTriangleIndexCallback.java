@@ -25,7 +25,7 @@
 
 package com.bulletphysics.collision.shapes;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Callback for internal processing of triangles.

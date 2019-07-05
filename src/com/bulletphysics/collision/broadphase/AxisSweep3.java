@@ -28,7 +28,7 @@
 
 package com.bulletphysics.collision.broadphase;
 
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * AxisSweep3 is an efficient implementation of the 3D axis sweep and prune broadphase.<p>

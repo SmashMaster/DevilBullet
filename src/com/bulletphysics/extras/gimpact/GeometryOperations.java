@@ -31,8 +31,8 @@ package com.bulletphysics.extras.gimpact;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 import com.samrj.devil.math.Vec4;
-import javax.vecmath.Vec3;
 
 /**
  *
@@ -52,8 +52,8 @@ class GeometryOperations {
 	 */
 	public static void edge_plane(Vec3 e1, Vec3 e2, Vec3 normal, Vec4 plane) {
 		Vec3 planenormal = new Vec3();
-		planenormal.subHere(e2, e1);
-		planenormal.crossHere(planenormal, normal);
+		VectorUtil.sub(planenormal, e2, e1);
+		VectorUtil.cross(planenormal, planenormal, normal);
 		planenormal.normalize();
 
 		plane.set(planenormal.x, planenormal.y, planenormal.z, e2.dot(planenormal));
@@ -64,8 +64,8 @@ class GeometryOperations {
 	 */
 	public static void closest_point_on_segment(Vec3 cp, Vec3 v, Vec3 e1, Vec3 e2) {
 		Vec3 n = new Vec3();
-		n.subHere(e2, e1);
-		cp.subHere(v, e1);
+		VectorUtil.sub(n, e2, e1);
+		VectorUtil.sub(cp, v, e1);
 		float _scalar = cp.dot(n) / n.dot(n);
 		if (_scalar < 0.0f) {
 			cp = e1;
@@ -74,7 +74,7 @@ class GeometryOperations {
 			cp = e2;
 		}
 		else {
-			cp.scaleAddHere(_scalar, n, e1);
+			VectorUtil.scaleAdd(cp, _scalar, n, e1);
 		}
 	}
 	
@@ -103,7 +103,7 @@ class GeometryOperations {
 			returnvalue = 0;
 			tparam[0] = tmax;
 		}
-		pout.scaleAddHere(tparam[0], vDir, vPoint);
+		VectorUtil.scaleAdd(pout, tparam[0], vDir, vPoint);
 		return returnvalue;
 	}
 	
@@ -112,13 +112,13 @@ class GeometryOperations {
 	 */
 	public static void segment_collision(Vec3 vA1, Vec3 vA2, Vec3 vB1, Vec3 vB2, Vec3 vPointA, Vec3 vPointB) {
 		Vec3 AD = new Vec3();
-		AD.subHere(vA2, vA1);
+		VectorUtil.sub(AD, vA2, vA1);
 
 		Vec3 BD = new Vec3();
-		BD.subHere(vB2, vB1);
+		VectorUtil.sub(BD, vB2, vB1);
 
 		Vec3 N = new Vec3();
-		N.crossHere(AD, BD);
+		VectorUtil.cross(N, AD, BD);
 		float[] tp = new float[] { N.squareLength() };
 
 		Vec4 _M = new Vec4();//plane
@@ -174,19 +174,19 @@ class GeometryOperations {
 			return;
 		}
 
-		N.crossHere(N, BD);
+		VectorUtil.cross(N, N, BD);
 		_M.set(N.x, N.y, N.z, vB1.dot(N));
 
 		// get point A as the plane collision point
 		line_plane_collision(_M, AD, vA1, vPointA, tp, 0f, 1f);
 
 		/*Closest point on segment*/
-		vPointB.subHere(vPointA, vB1);
+		VectorUtil.sub(vPointB, vPointA, vB1);
 		tp[0] = vPointB.dot(BD);
 		tp[0] /= BD.dot(BD);
 		tp[0] = CLAMP(tp[0], 0.0f, 1.0f);
 
-		vPointB.scaleAddHere(tp[0], BD, vB1);
+		VectorUtil.scaleAdd(vPointB, tp[0], BD, vB1);
 	}
 	
 }

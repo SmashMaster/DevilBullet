@@ -27,7 +27,7 @@ package com.bulletphysics;
 
 import com.bulletphysics.linearmath.CProfileManager;
 import com.bulletphysics.linearmath.Clock;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Bullet statistics and profile support.

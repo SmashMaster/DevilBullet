@@ -34,7 +34,8 @@ package com.bulletphysics.dynamics.constraintsolver;
 
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.dynamics.RigidBody;
-import javax.vecmath.Vec3;
+import com.bulletphysics.linearmath.VectorUtil;
+import com.samrj.devil.math.Vec3;
 
 /**
  * Rotation limit structure for generic joints.
@@ -190,7 +191,7 @@ public class RotationalLimitMotor {
 		clippedMotorImpulse = accumulatedImpulse - oldaccumImpulse;
 
 		Vec3 motorImp = new Vec3();
-		motorImp.scale(clippedMotorImpulse, axis);
+		VectorUtil.scale(motorImp, clippedMotorImpulse, axis);
 
 		body0.applyTorqueImpulse(motorImp);
 		if (body1 != null) {

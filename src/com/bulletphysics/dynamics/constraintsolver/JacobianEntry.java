@@ -29,7 +29,7 @@ import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.linearmath.MatrixUtil;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 
 //notes:
 // Another memory optimization would be to store m_1MinvJt in the remaining 3 w components
@@ -72,12 +72,12 @@ public class JacobianEntry {
 	{
 		linearJointAxis.set(jointAxis);
 
-		aJ.crossHere(rel_pos1, linearJointAxis);
+		VectorUtil.cross(aJ, rel_pos1, linearJointAxis);
 		MatrixUtil.transform(world2A, aJ);
 
 		bJ.set(linearJointAxis);
 		bJ.negate();
-		bJ.crossHere(rel_pos2, bJ);
+		VectorUtil.cross(bJ, rel_pos2, bJ);
 		MatrixUtil.transform(world2B, bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -145,12 +145,12 @@ public class JacobianEntry {
 	{
 		linearJointAxis.set(jointAxis);
 
-		aJ.crossHere(rel_pos1, jointAxis);
+		VectorUtil.cross(aJ, rel_pos1, jointAxis);
 		MatrixUtil.transform(world2A, aJ);
 
 		bJ.set(jointAxis);
 		bJ.negate();
-		bJ.crossHere(rel_pos2, bJ);
+		VectorUtil.cross(bJ, rel_pos2, bJ);
 		MatrixUtil.transform(world2A, bJ);
 
 		VectorUtil.mul(m_0MinvJt, inertiaInvA, aJ);
@@ -188,10 +188,10 @@ public class JacobianEntry {
 		VectorUtil.mul(ang1, jacA.m_1MinvJt, jacB.bJ);
 
 		Vec3 lin0 = new Vec3();
-		lin0.scale(massInvA, lin);
+		VectorUtil.scale(lin0, massInvA, lin);
 
 		Vec3 lin1 = new Vec3();
-		lin1.scale(massInvB, lin);
+		VectorUtil.scale(lin1, massInvB, lin);
 
 		Vec3 sum = new Vec3();
 		VectorUtil.add(sum, ang0, ang1, lin0, lin1);
@@ -201,7 +201,7 @@ public class JacobianEntry {
 
 	public float getRelativeVelocity(Vec3 linvelA, Vec3 angvelA, Vec3 linvelB, Vec3 angvelB) {
 		Vec3 linrel = new Vec3();
-		linrel.subHere(linvelA, linvelB);
+		VectorUtil.sub(linrel, linvelA, linvelB);
 
 		Vec3 angvela = new Vec3();
 		VectorUtil.mul(angvela, angvelA, aJ);

@@ -48,7 +48,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.samrj.devil.math.Mat3;
 import com.samrj.devil.math.Quat;
-import javax.vecmath.Vec3;
+import com.samrj.devil.math.Vec3;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -198,7 +198,7 @@ public abstract class DemoApplication {
 			forward.set(1f, 0f, 0f);
 		}
 		Vec3 right = new Vec3();
-		right.crossHere(cameraUp, forward);
+		VectorUtil.cross(right, cameraUp, forward);
 		Quat roll = new Quat();
 		QuaternionUtil.setRotation(roll, right, -rele);
 
@@ -574,7 +574,7 @@ public abstract class DemoApplication {
 
 		Vec3 rayFrom = new Vec3(getCameraPosition());
 		Vec3 rayForward = new Vec3();
-		rayForward.subHere(getCameraTargetPosition(), getCameraPosition());
+		VectorUtil.sub(rayForward, getCameraTargetPosition(), getCameraPosition());
 		rayForward.normalize();
 		float farPlane = 10000f;
 		rayForward.mult(farPlane);
@@ -584,10 +584,10 @@ public abstract class DemoApplication {
 
 		Vec3 hor = new Vec3();
 		// TODO: check: hor = rayForward.cross(vertical);
-		hor.crossHere(rayForward, vertical);
+		VectorUtil.cross(hor, rayForward, vertical);
 		hor.normalize();
 		// TODO: check: vertical = hor.cross(rayForward);
-		vertical.crossHere(hor, rayForward);
+		VectorUtil.cross(vertical, hor, rayForward);
 		vertical.normalize();
 
 		float tanfov = (float) Math.tan(0.5f * fov);
@@ -605,7 +605,7 @@ public abstract class DemoApplication {
 		}
 		
 		Vec3 rayToCenter = new Vec3();
-		rayToCenter.addHere(rayFrom, rayForward);
+		VectorUtil.add(rayToCenter, rayFrom, rayForward);
 		Vec3 dHor = new Vec3(hor);
 		dHor.mult(1f / (float) glutScreenWidth);
 		Vec3 dVert = new Vec3(vertical);
@@ -613,15 +613,15 @@ public abstract class DemoApplication {
 
 		Vec3 tmp1 = new Vec3();
 		Vec3 tmp2 = new Vec3();
-		tmp1.scale(0.5f, hor);
-		tmp2.scale(0.5f, vertical);
+		VectorUtil.scale(tmp1, 0.5f, hor);
+		VectorUtil.scale(tmp2, 0.5f, vertical);
 
 		Vec3 rayTo = new Vec3();
-		rayTo.subHere(rayToCenter, tmp1);
+		VectorUtil.sub(rayTo, rayToCenter, tmp1);
 		rayTo.add(tmp2);
 
-		tmp1.scale(x, dHor);
-		tmp2.scale(y, dVert);
+		VectorUtil.scale(tmp1, x, dHor);
+		VectorUtil.scale(tmp2, y, dVert);
 
 		rayTo.add(tmp1);
 		rayTo.sub(tmp2);
@@ -656,7 +656,7 @@ public abstract class DemoApplication {
 								float impulseStrength = 10f;
 								impulse.mult(impulseStrength);
 								Vec3 relPos = new Vec3();
-								relPos.subHere(rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vec3()));
+								VectorUtil.sub(relPos, rayCallback.hitPointWorld, body.getCenterOfMassPosition(new Vec3()));
 								body.applyImpulse(impulse, relPos);
 							}
 						}
@@ -696,7 +696,7 @@ public abstract class DemoApplication {
 									BulletStats.gOldPickingPos.set(rayTo);
 									Vec3 eyePos = new Vec3(cameraPosition);
 									Vec3 tmp = new Vec3();
-									tmp.subHere(pickPos, eyePos);
+									VectorUtil.sub(tmp, pickPos, eyePos);
 									BulletStats.gOldPickingDist = tmp.length();
 									// very weak constraint for picking
 									p2p.setting.tau = 0.1f;
@@ -735,12 +735,12 @@ public abstract class DemoApplication {
 				Vec3 newRayTo = new Vec3(getRayTo(x, y));
 				Vec3 eyePos = new Vec3(cameraPosition);
 				Vec3 dir = new Vec3();
-				dir.subHere(newRayTo, eyePos);
+				VectorUtil.sub(dir, newRayTo, eyePos);
 				dir.normalize();
 				dir.mult(BulletStats.gOldPickingDist);
 
 				Vec3 newPos = new Vec3();
-				newPos.addHere(eyePos, dir);
+				VectorUtil.add(newPos, eyePos, dir);
 				p2p.setPivotB(newPos);
 			}
 		}
