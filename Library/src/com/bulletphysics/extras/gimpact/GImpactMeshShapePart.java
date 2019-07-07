@@ -177,7 +177,7 @@ public class GImpactMeshShapePart extends GImpactShapeInterface {
 	}
 
 	@Override
-	void getBulletTetrahedron( int prim_index, TetrahedronShapeEx tetrahedron) {
+	public void getBulletTetrahedron( int prim_index, TetrahedronShapeEx tetrahedron) {
 		assert (false);
 	}
 

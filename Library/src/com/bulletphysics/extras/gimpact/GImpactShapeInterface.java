@@ -178,7 +178,7 @@ public abstract class GImpactShapeInterface extends ConcaveShape {
 
 	public abstract void getBulletTriangle(int prim_index, TriangleShapeEx triangle);
 
-	abstract void getBulletTetrahedron(int prim_index, TetrahedronShapeEx tetrahedron);
+	public abstract void getBulletTetrahedron(int prim_index, TetrahedronShapeEx tetrahedron);
 
 	/**
 	 * Call when reading child shapes.
