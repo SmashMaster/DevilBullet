@@ -30,6 +30,7 @@ import com.bulletphysics.collision.broadphase.BroadphaseNativeType;
 import com.bulletphysics.linearmath.VectorUtil;
 import com.bulletphysics.util.ObjectArrayList;
 import com.samrj.devil.math.Vec3;
+import java.util.List;
 
 /**
  * ConvexHullShape implements an implicit convex hull of an array of vertices.
@@ -53,6 +54,14 @@ public class ConvexHullShape extends PolyhedralConvexShape {
 		
 		for (int i=0; i<points.size(); i++) {
 			this.points.add(new Vec3(points.getQuick(i)));
+		}
+		
+		recalcLocalAabb();
+	}
+        
+        public ConvexHullShape(List<Vec3> points) {
+		for (int i=0; i<points.size(); i++) {
+			this.points.add(new Vec3(points.get(i)));
 		}
 		
 		recalcLocalAabb();
