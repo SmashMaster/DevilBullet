@@ -39,7 +39,7 @@ public class TransformUtil {
 	
 	public static final float SIMDSQRT12 = 0.7071067811865475244008443621048490f;
 	public static final float ANGULAR_MOTION_THRESHOLD = 0.5f*BulletGlobals.SIMD_HALF_PI;
-	
+        
 	public static float recipSqrt(float x) {
 		return 1f / (float)Math.sqrt(x);  /* reciprocal square root */
 	}

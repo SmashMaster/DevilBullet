@@ -40,7 +40,7 @@ import com.samrj.devil.math.Vec3;
  * @author jezek2
  */
 public class Transform {
-	
+    
 	//protected BulletStack stack;
 
 	/** Rotation matrix of this Transform. */
@@ -59,17 +59,26 @@ public class Transform {
 	public Transform(Transform tr) {
 		set(tr);
 	}
+        
+        public Transform(com.samrj.devil.math.Transform tr) {
+                set(tr);
+        }
 	
 	public void set(Transform tr) {
 		basis.set(tr.basis);
 		origin.set(tr.origin);
 	}
-	
+        
 	public void set(Mat3 mat) {
 		basis.set(mat);
 		origin.set(0f, 0f, 0f);
 	}
-
+        
+        public void set(com.samrj.devil.math.Transform tr) {
+            basis.setRotation(tr.rot);
+            origin.set(tr.pos);
+        }
+        
 	public void transform(Vec3 v) {
 		MatrixUtil.transform(basis, v);
 		v.add(origin);
