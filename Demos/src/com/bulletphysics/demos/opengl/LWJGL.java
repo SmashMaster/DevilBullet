@@ -97,7 +97,7 @@ public class LWJGL extends Game {
     }
     
     @Override
-    public void onCharacter(char character)
+    public void onCharacter(char character, int codepoint)
     {
         if (character != '\0') {
                 demoApp.keyboardCallback(character, mouseX, mouseY, 0);
