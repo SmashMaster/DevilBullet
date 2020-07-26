@@ -17,3 +17,6 @@ library/test/
 #Error logs
 hs_err_pid*
 /Demos/nbproject/private/
+/Library/nbproject/private/
+/Library/build/
+/Library/dist/
